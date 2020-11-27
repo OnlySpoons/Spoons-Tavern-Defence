@@ -1,7 +1,7 @@
 #include "Shader.h"
 
-//Read and build shader
-Shader::Shader(const char* vertexPath, const char* fragmentPath, const char* geometryPath = nullptr)
+//Constructor
+Shader::Shader(const char* vertexPath, const char* fragmentPath, const char* geometryPath)
 {
 	//Retrieve vertex/fragment/geometry source code from filePath
 	std::string vertexCode;

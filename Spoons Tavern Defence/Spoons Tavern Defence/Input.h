@@ -4,37 +4,40 @@
 
 #include"Camera.h"
 
-//A static class to handle user input (Must be static for callback functions to work correctly).
-class Input
-{
+namespace GameEngine{
 
-//Member variables
-private:
-	static bool _Initialised;
+	//A static class to handle user input (Must be static for callback functions to work correctly).
+	class Input
+	{
 
-	static Camera *_Camera;
-	static float _LastX;
-	static float _LastY;
-	static bool _FirstMouse;
+	//Member variables
+	public:
+		static bool _Initialised;
 
-//Functions
-public:
+		static Camera* _Camera;
+		static float _LastX;
+		static float _LastY;
+		static bool _FirstMouse;
 
-	//Initialisation function, to emulate a constructor
-	static void init(Camera *cam, unsigned int width, unsigned int height);
+	//Functions
+	public:
 
-	//Function to check if Input has been initialised
-	static void checkInit();
+		//Initialisation function, to emulate a constructor
+		static void init(Camera* camera);
 
-	//Function to process user input
-	static void processInput(GLFWwindow* window, float deltaTime);
+		//Function to check if Input has been initialised
+		static void checkInit();
 
-	//Window resizing callback
-	static void framebufferSizeCallback(GLFWwindow* window, int width, int height);
+		//Function to process user input
+		static void processInput(GLFWwindow* window, float deltaTime);
 
-	//Callback function to handle mouse movement
-	static void mouseCallback(GLFWwindow* window, double xPos, double yPos);
+		//Window resizing callback
+		static void framebufferSizeCallback(GLFWwindow* window, int width, int height);
 
-	//Callback function to handle scroll wheel usage
-	static void scrollCallback(GLFWwindow* window, double xOffset, double yOffset);
-};
+		//Callback function to handle mouse movement
+		static void mouseCallback(GLFWwindow* window, double xPos, double yPos);
+
+		//Callback function to handle scroll wheel usage
+		static void scrollCallback(GLFWwindow* window, double xOffset, double yOffset);
+	};
+}

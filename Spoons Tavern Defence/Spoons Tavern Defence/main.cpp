@@ -1,14 +1,9 @@
-#include <iostream>
-
-#include "Window.h"
-#include "Input.h"
-
 /*
 Conventions:
 
 ----Variables----
 constants = CAPITALISED_VARIABLE
-Member variables    = _Variable
+Member variables    = _CamelCase
 Function parameters = camelCase
 Temporary variables = camelCase
 
@@ -30,32 +25,36 @@ Struct declarations = StructName
 ----Comments----
 Access modifier headings should have comments if they are the start of variable declaration or functions declaration
 Functions should have comments above them with a brief description
+
+----Shaders----
+Shader names = shader_name.vs/fs/gs
 */
 
-//Constants for screen dimensions
-constexpr unsigned int SCR_WIDTH = 1280;
-constexpr unsigned int SCR_HEIGHT = 720;
+#include <iostream>
 
-//Move to player when created
-Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
+#include "Engine.h"
+
+using namespace GameEngine;
 
 int main()
 {
 	try {
-		//Move to player?
-		Input::init(&camera, SCR_WIDTH, SCR_HEIGHT);
+		Engine* engine = new Engine();
 
-		//Declare and create window instance
-		Window window(WindowProps("Spoons: Tavern Defence", SCR_WIDTH, SCR_HEIGHT));
-
-		while (!glfwWindowShouldClose(window._Instance))
+		while (engine->isRunning())
 		{
-			std::cout << "Window initialised and working!" << std::endl;
+			engine->runtimeLoop();
+
+			//std::cout << "Engine is running!" << std::endl;
 		}
+
+		delete engine;
+		return 0;
 	}
 	//Catch and display thrown exceptions in console
 	catch (const char* exceptionMessage)
 	{
 		std::cout << exceptionMessage << std::endl;
+		return -1;
 	}
 }

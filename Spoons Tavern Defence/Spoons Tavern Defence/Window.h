@@ -6,35 +6,45 @@
 
 #include "Input.h"
 
-struct WindowProps
-{
-	std::string Title;
-	unsigned int Width;
-	unsigned int Height;
+namespace GameEngine {
 
-	WindowProps(const std::string& title = "Window", unsigned int width = 1280, unsigned int height = 720)
-		: Title(title), Width(width), Height(height)
+	struct WindowProps
 	{
-	}
-};
+		std::string Title;
+		unsigned int Width;
+		unsigned int Height;
 
-//A wrapper class for the GLFWwindow creation and manipulation
-class Window
-{
+		WindowProps(const std::string& title = "Window", unsigned int width = 1280, unsigned int height = 720)
+			: Title(title), Width(width), Height(height)
+		{
+		}
+	};
 
-//Member variables
-public:
-	GLFWwindow *_Instance; //The GLFWwindow instance
+	//A wrapper class for the GLFWwindow creation and manipulation
+	class Window
+	{
 
-	//Variables for the screen width and height, set on construction
-	unsigned int _Width;
-	unsigned int _Height;
+	//Member variables
+	private:
+		GLFWwindow* _Instance; //The GLFWwindow instance
 
-//Functions
-public:
+		WindowProps _Properties; //Window Properties
 
-	//Constructor
-	Window(WindowProps properties);
+	//Functions
+	public:
 
-	//TODO: add getWidth & getHeight
-};
+		//Constructor
+		Window() {}
+
+		Window(WindowProps properties);
+
+		//Function to get instance
+		GLFWwindow* getInstance() const;
+
+		//Function to get width
+		unsigned int getWidth() const;
+
+		//Function to get height
+		unsigned int getHeight() const;
+	};
+}

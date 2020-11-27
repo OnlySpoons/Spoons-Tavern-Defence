@@ -19,7 +19,9 @@ private:
 //Functions
 public:
 
-	//Read and build shader
+	//Constructor
+	Shader(){}
+
 	Shader(const char* vertexPath, const char* fragmentPath, const char* geometryPath = nullptr);
 
 	//Use the shader

@@ -1,15 +1,43 @@
 #pragma once
 
-class Engine
-{
-private:
-	float _LastTime;
+#include "Window.h"
+#include "Camera.h"
+#include "Renderer.h"
+#include "Input.h"
 
-public:
-	float _DeltaTime;
+namespace GameEngine {
 
-public:
+	class Engine
+	{
 
-	//Engine();
+	//Memeber variables
+	private:
+		Window _Window;
 
-};
+		Camera _Camera;
+
+		Renderer _Renderer;
+
+		//Game *_Game;
+		
+		float _LastFrame;
+
+	public:
+		float _DeltaTime;
+
+	//Functions
+	public:
+
+		//Constructor
+		Engine();
+
+		//Destructor
+		~Engine();
+
+		//Function for controlling runtime loop
+		void runtimeLoop();
+
+		//Function to check if the engine is running
+		bool isRunning() const;
+	};
+}

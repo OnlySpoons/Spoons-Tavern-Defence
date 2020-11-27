@@ -1,5 +1,10 @@
 Spoons-Tavern-Defence
 
+Change Log 27/11/2020
+
+- Created Engine class to control the engine, and better abstract game logic from game engine backend
+- Created Renderer class to render the scene each frame
+
 Change Log 26/11/2020
 
 - Established convensions and refactored code accordingly
