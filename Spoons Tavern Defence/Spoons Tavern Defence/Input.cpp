@@ -1,21 +1,26 @@
 #include "Input.h"
 
-Camera* Input::camera = nullptr;
-float Input::lastX = 0.0f;
-float Input::lastY = 0.0f;
-bool Input::firstMouse = true;
+//Initial variable declaration
+bool Input::_Initialised = false;
 
-//Initialisation function
-void Input::init(Camera* cam, unsigned int width, unsigned int height) {
-	camera = cam;
-	lastX = (float)width / 2.0f;
-	lastY = (float)height / 2.0f;
+//Initialisation function, to emulate a constructor
+void Input::init(Camera* cam, unsigned int width, unsigned int height)
+{
+	if (!_Initialised)
+	{
+		_Camera		 = cam;
+		_LastX		 = (float)width / 2.0f;
+		_LastY		 = (float)height / 2.0f;
+		_FirstMouse  = true;
+
+		_Initialised = true;
+	}
 }
 
 //Function to check if Input has been initialised
 void Input::checkInit()
 {
-	if (camera == nullptr)
+	if (!_Initialised)
 	{
 		throw "Input is not initialised";
 	}
@@ -30,67 +35,50 @@ void Input::processInput(GLFWwindow* window, float deltaTime)
 		glfwSetWindowShouldClose(window, true);
 
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-		camera->ProcessKeyboard(Camera_Movement::FORWARD, deltaTime);
+		_Camera->ProcessKeyboard(Camera_Movement::FORWARD, deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-		camera->ProcessKeyboard(Camera_Movement::BACKWARD, deltaTime);
+		_Camera->ProcessKeyboard(Camera_Movement::BACKWARD, deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-		camera->ProcessKeyboard(Camera_Movement::LEFT, deltaTime);
+		_Camera->ProcessKeyboard(Camera_Movement::LEFT, deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-		camera->ProcessKeyboard(Camera_Movement::RIGHT, deltaTime);
-
-	float heightScale = 0.1f;
-
-	if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
-	{
-		if (heightScale > 0.0f)
-			heightScale -= 0.0005f;
-		else
-			heightScale = 0.0f;
-	}
-	else if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
-	{
-		if (heightScale < 1.0f)
-			heightScale += 0.0005f;
-		else
-			heightScale = 1.0f;
-	}
+		_Camera->ProcessKeyboard(Camera_Movement::RIGHT, deltaTime);
 }
 
-//Window resizing Callback
-void Input::framebuffer_size_callback(GLFWwindow* window, int width, int height)
+//Window resizing callback
+void Input::framebufferSizeCallback(GLFWwindow* window, int width, int height)
 {
 	checkInit();
 
-	// make sure the viewport matches the new window dimensions; note that width and 
-	// height will be significantly larger than specified on retina displays.
+	//Make sure the viewport matches the new window dimensions; note that width and 
+	//height will be significantly larger than specified on retina displays.
 	glViewport(0, 0, width, height);
 }
 
-//Mouse Callback
-void Input::mouse_callback(GLFWwindow* window, double xpos, double ypos)
+//Callback function to handle mouse movement
+void Input::mouseCallback(GLFWwindow* window, double xPos, double yPos)
 {
 	checkInit();
 
-	if (Input::firstMouse)
+	if (Input::_FirstMouse)
 	{
-		lastX = (float)xpos;
-		lastY = (float)ypos;
-		firstMouse = false;
+		_LastX		= (float)xPos;
+		_LastY		= (float)yPos;
+		_FirstMouse = false;
 	}
 
-	float xoffset = (float)xpos - lastX;
-	float yoffset = lastY - (float)ypos; // reversed since y-coordinates go from bottom to top
+	float xOffset = (float)xPos - _LastX;
+	float yOffset = _LastY - (float)yPos; //Reversed since y-coordinates go from bottom to top
 
-	lastX = (float)xpos;
-	lastY = (float)ypos;
+	_LastX = (float)xPos;
+	_LastY = (float)yPos;
 
-	camera->ProcessMouseMovement(xoffset, yoffset);
+	_Camera->ProcessMouseMovement(xOffset, yOffset);
 }
 
-//Scroll wheel callback
-void Input::scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+//Callback function to handle scroll wheel usage
+void Input::scrollCallback(GLFWwindow* window, double xOffset, double yOffset)
 {
 	checkInit();
 
-	camera->ProcessMouseScroll((float)yoffset);
+	_Camera->ProcessMouseScroll((float)yOffset);
 }

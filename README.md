@@ -1,5 +1,8 @@
 Spoons-Tavern-Defence
 
+Change Log 26/11/2020
+
+- Established convensions and refactored code accordingly
 
 Change Log 25/11/2020
 
