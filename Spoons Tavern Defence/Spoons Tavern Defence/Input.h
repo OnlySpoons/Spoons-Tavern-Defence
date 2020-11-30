@@ -14,6 +14,9 @@ namespace GameEngine{
 	public:
 		static bool _Initialised;
 
+		//TODO - add player class
+		//static std::vector<Player*> players;
+
 		static Camera* _Camera;
 		static float _LastX;
 		static float _LastY;
