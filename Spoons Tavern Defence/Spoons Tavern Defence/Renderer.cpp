@@ -4,7 +4,8 @@ namespace GameEngine {
 
     //--------TEMPORARY----------
     void renderQuad();
-    void renderCube();
+    void renderCube(unsigned int texture);
+    unsigned int loadSkybox();
 
 	Renderer::Renderer(Window* window, Camera* camera)
         : _Window(window), _Camera(camera)
@@ -12,9 +13,10 @@ namespace GameEngine {
         _GeometryShader = Shader("Data/Shaders/geometry_shader.vs", "Data/Shaders/geometry_shader.fs");
         _LightingShader = Shader("Data/Shaders/lighting_shader.vs", "Data/Shaders/lighting_shader.fs");
         _LightsShader = Shader("Data/Shaders/light_shader.vs", "Data/Shaders/light_shader.fs");
+        _SkyboxShader = Shader("Data/Shaders/skybox_shader.vs", "Data/Shaders/skybox_shader.fs");
 
 		//Tell stb_image.h to flip loaded texture's on the y-axis (before loading model).
-		stbi_set_flip_vertically_on_load(true);
+		//stbi_set_flip_vertically_on_load(true);
 
 		//Configure global opengl state
 		glEnable(GL_DEPTH_TEST);
@@ -23,39 +25,19 @@ namespace GameEngine {
 		genBuffers();
 
         //Load models - TEMPORARY
-        backpack = Model("Data/Models/bank/bank.fbx");
-        //objectPositions.push_back(glm::vec3(-3.0, -0.5, -3.0));
-        //objectPositions.push_back(glm::vec3(0.0, -0.5, -3.0));
-        //objectPositions.push_back(glm::vec3(3.0, -0.5, -3.0));
-        //objectPositions.push_back(glm::vec3(-3.0, -0.5, 0.0));
-        objectPositions.push_back(glm::vec3(0.0, -0.5, 0.0));
-        //objectPositions.push_back(glm::vec3(3.0, -0.5, 0.0));
-        //objectPositions.push_back(glm::vec3(-3.0, -0.5, 3.0));
-        //objectPositions.push_back(glm::vec3(0.0, -0.5, 3.0));
-        //objectPositions.push_back(glm::vec3(3.0, -0.5, 3.0));
+        backpack = Model("Data/Models/bank/SyntyStudios/PolygonHeist/Polygon_Heist_Demo_Scene.fbx");
+        objectPositions.push_back(glm::vec3(0.0, 0.0, 0.0));
 
-        // TODO: make not bad
-        const unsigned int NR_LIGHTS = 32;        
-        srand(13);
-        for (unsigned int i = 0; i < NR_LIGHTS; i++)
-        {
-            // calculate slightly random offsets
-            float xPos = ((rand() % 100) / 100.0) * 6.0 - 3.0;
-            float yPos = ((rand() % 100) / 100.0) * 6.0 - 4.0;
-            float zPos = ((rand() % 100) / 100.0) * 6.0 - 3.0;
-            lightPositions.push_back(glm::vec3(xPos, yPos, zPos));
-            // also calculate random color
-            float rColor = ((rand() % 100) / 200.0f) + 0.5; // between 0.5 and 1.0
-            float gColor = ((rand() % 100) / 200.0f) + 0.5; // between 0.5 and 1.0
-            float bColor = ((rand() % 100) / 200.0f) + 0.5; // between 0.5 and 1.0
-            lightColors.push_back(glm::vec3(rColor, gColor, bColor));
-        }
+        _SkyboxTexture = loadSkybox();
 
         //Shader Config
         _LightingShader.use();
         _LightingShader.setInt("gPosition", 0);
         _LightingShader.setInt("gNormal", 1);
         _LightingShader.setInt("gAlbedoSpec", 2);
+
+        _SkyboxShader.use();
+        _SkyboxShader.setInt("skybox", 0);
 	}
 
 	//Function for configuring buffers
@@ -117,8 +99,11 @@ namespace GameEngine {
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
         // 1. geometry pass: render scene's geometry/color data into gbuffer
         glBindFramebuffer(GL_FRAMEBUFFER, _gBuffer);
+
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glm::mat4 projection = glm::perspective(glm::radians(_Camera->_Zoom), (float)_Window->getWidth() / (float)_Window->getHeight(), 0.1f, 100.0f);
         glm::mat4 view = _Camera->GetViewMatrix();
@@ -129,12 +114,19 @@ namespace GameEngine {
         for (unsigned int i = 0; i < objectPositions.size(); i++)
         {
             model = glm::mat4(1.0f);
-            //model = glm::translate(model, objectPositions[i]);
-            //model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+            model = glm::translate(model, objectPositions[i]);
+            model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
             model = glm::scale(model, glm::vec3(0.005f));
-            _GeometryShader.setMat4("model", model);
             backpack.Draw(_GeometryShader, &model);
         }
+
+        glDepthFunc(GL_LEQUAL); // change depth function so skybox is always behind
+        _SkyboxShader.use();
+        view = glm::mat4(glm::mat3(_Camera->GetViewMatrix()));
+        _SkyboxShader.setMat4("view", view);
+        _SkyboxShader.setMat4("projection", projection);
+        renderCube(_SkyboxTexture);
+
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
         // 2. lighting pass: calculate lighting by iterating over a screen filled quad pixel-by-pixel using the gbuffer's content.
@@ -147,22 +139,22 @@ namespace GameEngine {
         glActiveTexture(GL_TEXTURE2);
         glBindTexture(GL_TEXTURE_2D, _gAlbedoSpec);
         //Send light relevant uniforms
-        for (unsigned int i = 0; i < lightPositions.size(); i++)
-        {
-            _LightingShader.setVec3("lights[" + std::to_string(i) + "].Position", lightPositions[i]);
-            _LightingShader.setVec3("lights[" + std::to_string(i) + "].Color", lightColors[i]);
-            // update attenuation parameters and calculate radius
-            const float constant = 1.0f; // note that we don't send this to the shader, we assume it is always 1.0 (in our case)
-            const float linear = 0.7f;
-            const float quadratic = 1.8f;
-            _LightingShader.setFloat("lights[" + std::to_string(i) + "].Linear", linear);
-            _LightingShader.setFloat("lights[" + std::to_string(i) + "].Quadratic", quadratic);
-            // then calculate radius of light volume/sphere
-            const float maxBrightness = std::fmaxf(std::fmaxf(lightColors[i].r, lightColors[i].g), lightColors[i].b);
-            float radius = (-linear + std::sqrt(linear * linear - 4 * quadratic * (constant - (256.0f / 5.0f) * maxBrightness))) / (2.0f * quadratic);
-            _LightingShader.setFloat("lights[" + std::to_string(i) + "].Radius", radius);
-        }
+        _LightingShader.setVec3("lights[0].Position", _Camera->_Position);
+        _LightingShader.setVec3("lights[0].Color", glm::vec3(1.0f));
+        // update attenuation parameters and calculate radius
+        const float constant = 1.0f; // note that we don't send this to the shader, we assume it is always 1.0 (in our case)
+        const float linear = 0.7f;
+        const float quadratic = 1.8f;
+        _LightingShader.setFloat("lights[0].Linear", linear);
+        _LightingShader.setFloat("lights[0].Quadratic", quadratic);
+
+        // then calculate radius of light volume/sphere
+        const float maxBrightness = 1.0f;
+        float radius = (-linear + std::sqrt(linear * linear - 4 * quadratic * (constant - (256.0f / 5.0f) * maxBrightness))) / (2.0f * quadratic);
+        _LightingShader.setFloat("lights[0].Radius", radius);
+        
         _LightingShader.setVec3("viewPos", _Camera->_Position);
+
         // finally render quad
         renderQuad();
 
@@ -175,25 +167,52 @@ namespace GameEngine {
         glBlitFramebuffer(0, 0, _Window->getWidth(), _Window->getHeight(), 0, 0, _Window->getWidth(), _Window->getHeight(), GL_DEPTH_BUFFER_BIT, GL_NEAREST);
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-        //// 3. render lights on top of scene
-        //_LightsShader.use();
-        //_LightsShader.setMat4("projection", projection);
-        //_LightsShader.setMat4("view", view);
-        //for (unsigned int i = 0; i < lightPositions.size(); i++)
-        //{
-        //    model = glm::mat4(1.0f);
-        //    model = glm::translate(model, lightPositions[i]);
-        //    model = glm::scale(model, glm::vec3(0.125f));
-        //    _LightsShader.setMat4("model", model);
-        //    _LightsShader.setVec3("lightColor", lightColors[i]);
-        //    renderCube();
-        //}
-
-
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         glfwSwapBuffers(_Window->getInstance());
         glfwPollEvents();
 	}
+
+    unsigned int loadSkybox()
+    {
+        std::vector<std::string> faces
+        {
+            "Data/Textures/skybox/right.jpg",
+            "Data/Textures/skybox/left.jpg",
+            "Data/Textures/skybox/top.jpg",
+            "Data/Textures/skybox/bottom.jpg",
+            "Data/Textures/skybox/front.jpg",
+            "Data/Textures/skybox/back.jpg"
+        };
+
+        unsigned int textureID;
+        glGenTextures(1, &textureID);
+        glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
+
+        int width, height, nrChannels;
+        for (unsigned int i = 0; i < faces.size(); i++)
+        {
+            unsigned char* data = stbi_load(faces[i].c_str(), &width, &height, &nrChannels, 0);
+
+            if (data)
+            {
+                glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+                stbi_image_free(data);
+            }
+            else
+            {
+                std::cout << "Cubemap texture failed to load at path: " << faces[i] << std::endl;
+                stbi_image_free(data);
+            }
+        }
+
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+        return textureID;
+    }
 
     // renderQuad() renders a 1x1 XY quad in NDC
     // -----------------------------------------
@@ -229,7 +248,7 @@ namespace GameEngine {
     // renderCube() renders a 1x1 3D cube in NDC.
     unsigned int cubeVAO = 0;
     unsigned int cubeVBO = 0;
-    void renderCube()
+    void renderCube(unsigned int texture)
     {
         // initialize (if necessary)
         if (cubeVAO == 0)
@@ -296,6 +315,8 @@ namespace GameEngine {
         }
         // render Cube
         glBindVertexArray(cubeVAO);
+        glActiveTexture(GL_TEXTURE_CUBE_MAP);
+        glBindTexture(GL_TEXTURE_CUBE_MAP, texture);
         glDrawArrays(GL_TRIANGLES, 0, 36);
         glBindVertexArray(0);
     }

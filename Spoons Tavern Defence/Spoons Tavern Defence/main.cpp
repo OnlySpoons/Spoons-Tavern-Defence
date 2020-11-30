@@ -55,6 +55,7 @@ int main()
 	catch (const char* exceptionMessage)
 	{
 		std::cout << exceptionMessage << std::endl;
+		std::cin.get();
 		return -1;
 	}
 }

@@ -7,7 +7,7 @@ namespace GameEngine {
 	{
 		_Window = Window(WindowProps("Spoons: Tavern Defence"));
 
-		_Camera = Camera(glm::vec3(0.0f, 0.0f, 3.0f));
+		_Camera = Camera(glm::vec3(0.0f, 0.5f, 3.0f));
 
 		_Renderer = Renderer(&_Window, &_Camera);
 
