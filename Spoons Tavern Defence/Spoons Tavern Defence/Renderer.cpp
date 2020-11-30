@@ -130,10 +130,10 @@ namespace GameEngine {
         {
             model = glm::mat4(1.0f);
             //model = glm::translate(model, objectPositions[i]);
-            model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+            //model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
             model = glm::scale(model, glm::vec3(0.005f));
             _GeometryShader.setMat4("model", model);
-            backpack.Draw(_GeometryShader);
+            backpack.Draw(_GeometryShader, &model);
         }
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 

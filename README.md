@@ -1,5 +1,9 @@
 Spoons-Tavern-Defence
 
+Change Log 30/11/2020
+
+- Updated Model.h to account for local coordinates within object files
+
 Change Log 27/11/2020
 
 - Created Engine class to control the engine, and better abstract game logic from game engine backend
