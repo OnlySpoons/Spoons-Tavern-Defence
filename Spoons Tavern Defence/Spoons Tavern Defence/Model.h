@@ -94,11 +94,14 @@ namespace GameEngine {
 			// process each mesh located at the current node
 			for (unsigned int i = 0; i < node->mNumMeshes; i++)
 			{
-				//Store the node transform matrices for each mesh
-				if (node->mParent != NULL) //If the node is not the root, transform the locar reference system of the node into the reference system of its parent
-					transforms.push_back(node->mParent->mTransformation * node->mTransformation); // We are basically expressing each mesh in the same reference system of the root node
-				else
-					transforms.push_back(node->mTransformation); //If the node is the root leave it be
+				aiNode* navNode = node->mParent;
+				aiMatrix4x4 transform = node->mTransformation;
+				while (navNode != NULL)
+				{
+					transform = navNode->mTransformation * transform;
+					navNode = navNode->mParent;
+				}
+				transforms.push_back(transform);
 
 				// the node object only contains indices to index the actual objects in the scene. 
 				// the scene contains all the data, node is just to keep stuff organized (like relations between nodes).

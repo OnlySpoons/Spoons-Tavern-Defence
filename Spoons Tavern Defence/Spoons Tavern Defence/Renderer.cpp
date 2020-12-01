@@ -25,7 +25,7 @@ namespace GameEngine {
 		genBuffers();
 
         //Load models - TEMPORARY
-        backpack = Model("Data/Models/bank/SyntyStudios/PolygonHeist/Polygon_Heist_Demo_Scene.fbx");
+        _model = Model("Data/Models/SyntyStudios/PolygonHeist/Polygon_Heist_Demo_Scene.fbx");
         objectPositions.push_back(glm::vec3(0.0, 0.0, 0.0));
 
         _SkyboxTexture = loadSkybox();
@@ -117,7 +117,7 @@ namespace GameEngine {
             model = glm::translate(model, objectPositions[i]);
             model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
             model = glm::scale(model, glm::vec3(0.005f));
-            backpack.Draw(_GeometryShader, &model);
+            _model.Draw(_GeometryShader, &model);
         }
 
         glDepthFunc(GL_LEQUAL); // change depth function so skybox is always behind

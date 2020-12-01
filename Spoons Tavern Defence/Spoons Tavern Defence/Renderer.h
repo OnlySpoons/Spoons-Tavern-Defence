@@ -31,7 +31,7 @@ namespace GameEngine {
 
 		std::vector<glm::vec3> objectPositions;
 
-		Model backpack;
+		Model _model;
 
 	//Functions
 	public:
