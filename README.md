@@ -13,6 +13,7 @@ Change Log 27/11/2020 - Martin
 
 - Created Engine class to control the engine, and better abstract game logic from game engine backend
 - Created Renderer class to render the scene each frame
+- Added Model and Mesh classes to load models
 
 Change Log 26/11/2020 - Martin & Thomas
 
@@ -26,4 +27,4 @@ Change Log 25/11/2020 - Martin
 Change Log 24/11/2020 - Martin & Thomas
 
  - Created Window Class to control the creation of the window
- - added camera class for use with window class in future
+ - Added camera class for use with window class in future
