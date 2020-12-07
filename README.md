@@ -2,6 +2,11 @@ Spoons: Tavern Defence
 
 Change Log 7/12/2020 - Martin & Thomas
 
+- Added abstract GameObject class
+- Tweaked classes to fix warnings
+
+Change Log 7/12/2020 - Martin & Thomas
+
 - Refactored Mesh and Model classes to have both .h and .cpp files
 
 Change Log 2/12/2020 - Martin
