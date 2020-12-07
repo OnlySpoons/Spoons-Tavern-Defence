@@ -48,7 +48,7 @@ namespace GameEngine {
 		glm::mat4 GetViewMatrix() const;
 
 		//Processes the keyboard input to control camera movement
-		void ProcessKeyboard(Camera_Movement direction, float deltaTime);
+		void ProcessKeyboard(Camera_Movement direction, float deltaTime, bool isSptinting);
 
 		//Processes the mouse movement to control where the camera is facing
 		void ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true);

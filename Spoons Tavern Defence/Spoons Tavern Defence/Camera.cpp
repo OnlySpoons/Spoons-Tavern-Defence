@@ -21,17 +21,19 @@ namespace GameEngine {
 	}
 
 	//Processes the keyboard input to control camera movement
-	void Camera::ProcessKeyboard(Camera_Movement direction, float deltaTime)
+	void Camera::ProcessKeyboard(Camera_Movement direction, float deltaTime, bool isSprinting)
 	{
-		float tempVelocity = _MovementSpeed * deltaTime;
+		float velocity = _MovementSpeed * deltaTime;
+		if (isSprinting)
+			velocity *= 2;
 		if (direction == Camera_Movement::FORWARD)
-			_Position += _Front * tempVelocity;
+			_Position += _Front * velocity;
 		if (direction == Camera_Movement::BACKWARD)
-			_Position -= _Front * tempVelocity;
+			_Position -= _Front * velocity;
 		if (direction == Camera_Movement::LEFT)
-			_Position -= _Right * tempVelocity;
+			_Position -= _Right * velocity;
 		if (direction == Camera_Movement::RIGHT)
-			_Position += _Right * tempVelocity;
+			_Position += _Right * velocity;
 
 		//keep player on ground level
 		//_Position.y = 0.0f;

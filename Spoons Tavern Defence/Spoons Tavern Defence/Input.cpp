@@ -30,6 +30,7 @@ namespace GameEngine {
 		}
 	}
 
+	static bool isSprinting = false;
 	//Function to process user input
 	void Input::processInput(GLFWwindow* window, float deltaTime)
 	{
@@ -38,14 +39,19 @@ namespace GameEngine {
 		if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 			glfwSetWindowShouldClose(window, true);
 
+		if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+			isSprinting = true;
+		else
+			isSprinting = false;
+
 		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-			_Camera->ProcessKeyboard(Camera_Movement::FORWARD, deltaTime);
+			_Camera->ProcessKeyboard(Camera_Movement::FORWARD, deltaTime, isSprinting);
 		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-			_Camera->ProcessKeyboard(Camera_Movement::BACKWARD, deltaTime);
+			_Camera->ProcessKeyboard(Camera_Movement::BACKWARD, deltaTime, isSprinting);
 		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-			_Camera->ProcessKeyboard(Camera_Movement::LEFT, deltaTime);
+			_Camera->ProcessKeyboard(Camera_Movement::LEFT, deltaTime, isSprinting);
 		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-			_Camera->ProcessKeyboard(Camera_Movement::RIGHT, deltaTime);
+			_Camera->ProcessKeyboard(Camera_Movement::RIGHT, deltaTime, isSprinting);
 	}
 
 	//Window resizing callback

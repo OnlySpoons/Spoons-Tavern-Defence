@@ -5,7 +5,7 @@ namespace GameEngine {
 	Engine::Engine()
 		: _LastFrame(0.0f), _DeltaTime(0.0f)
 	{
-		_Window = Window(WindowProps("Spoons: Tavern Defence"));
+		_Window = Window(WindowProps("Spoons: Tavern Defence", 1920, 1080));
 
 		_Camera = Camera(glm::vec3(0.0f, 0.5f, 3.0f));
 
