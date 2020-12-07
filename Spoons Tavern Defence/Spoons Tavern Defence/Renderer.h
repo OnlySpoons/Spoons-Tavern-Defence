@@ -36,8 +36,8 @@ namespace GameEngine {
 	//Functions
 	public:
 
-		//Constructor
-		Renderer() {}
+		//Constructors
+		Renderer() : _Window(nullptr), _Camera(nullptr), _gBuffer(0), _gPosition(0), _gNormal(0), _gAlbedoSpec(0), _SkyboxTexture(0) {}
 
 		Renderer(Window* window, Camera* camera);
 
