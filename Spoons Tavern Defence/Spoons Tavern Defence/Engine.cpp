@@ -13,6 +13,9 @@ namespace GameEngine {
 
 		//Initialise input
 		Input::init(&_Camera);
+
+		/* This will be moved to Scene */
+
 	}
 
 	Engine::~Engine()
@@ -24,7 +27,7 @@ namespace GameEngine {
 	void Engine::runtimeLoop()
 	{
 		//Per-frame time logic
-		float currentFrame = glfwGetTime();
+		float currentFrame = (float)glfwGetTime();
 		_DeltaTime = currentFrame - _LastFrame;
 		_LastFrame = currentFrame;
 

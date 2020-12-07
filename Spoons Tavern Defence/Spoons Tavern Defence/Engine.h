@@ -17,8 +17,6 @@ namespace GameEngine {
 		Camera _Camera;
 
 		Renderer _Renderer;
-
-		//Game *_Game;
 		
 		float _LastFrame;
 

@@ -36,7 +36,7 @@ namespace GameEngine {
 	public:
 
 		//Constructors
-		Model() : _GammaCorrection(false) {}
+		Model();
 
 		Model(std::string const& path, bool gamma = false);
 

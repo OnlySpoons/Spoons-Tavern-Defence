@@ -34,7 +34,7 @@ namespace GameEngine {
 	public:
 
 		//Constructor
-		Window() {}
+		Window();
 
 		Window(WindowProps properties);
 

@@ -2,7 +2,12 @@
 
 namespace GameEngine {
 
-	//Constructor
+	//Constructors
+	Window::Window()
+		: _Instance(NULL)
+	{
+	}
+
 	Window::Window(WindowProps properties)
 		: _Properties(properties)
 	{

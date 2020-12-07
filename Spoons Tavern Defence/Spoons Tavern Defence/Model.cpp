@@ -2,7 +2,12 @@
 
 namespace GameEngine
 {
-	//Constructor
+	//Constructors
+	Model::Model()
+		: _GammaCorrection(false)
+	{
+	}
+
 	Model::Model(std::string const& path, bool gamma) : _GammaCorrection(gamma)
 	{
 		loadModel(path);

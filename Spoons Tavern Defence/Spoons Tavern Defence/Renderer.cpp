@@ -7,6 +7,11 @@ namespace GameEngine {
     void renderCube(unsigned int texture);
     unsigned int loadSkybox();
 
+    Renderer::Renderer()
+        : _Window(nullptr), _Camera(nullptr), _gBuffer(0), _gPosition(0), _gNormal(0), _gAlbedoSpec(0), _SkyboxTexture(0)
+    {
+    }
+
 	Renderer::Renderer(Window* window, Camera* camera)
         : _Window(window), _Camera(camera)
 	{
@@ -15,7 +20,7 @@ namespace GameEngine {
         _LightsShader = Shader("Data/Shaders/light_shader.vs", "Data/Shaders/light_shader.fs");
         _SkyboxShader = Shader("Data/Shaders/skybox_shader.vs", "Data/Shaders/skybox_shader.fs");
 
-		//Tell stb_image.h to flip loaded texture's on the y-axis (before loading model).
+		//Tell stb_image.h to flip loaded texture's on the y-axis (before loading model)
 		//stbi_set_flip_vertically_on_load(true);
 
 		//Configure global opengl state
@@ -125,6 +130,7 @@ namespace GameEngine {
         view = glm::mat4(glm::mat3(_Camera->GetViewMatrix()));
         _SkyboxShader.setMat4("view", view);
         _SkyboxShader.setMat4("projection", projection);
+
         renderCube(_SkyboxTexture);
 
         glBindFramebuffer(GL_FRAMEBUFFER, 0);

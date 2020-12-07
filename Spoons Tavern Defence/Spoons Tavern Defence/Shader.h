@@ -20,9 +20,9 @@ private:
 public:
 
 	//Constructor
-	Shader(){}
+	Shader();
 
-	Shader(const char* vertexPath, const char* fragmentPath, const char* geometryPath = nullptr);
+	Shader(std::string const &&vertexPath, std::string const &&fragmentPath, std::string const &&geometryPath = "");
 
 	//Use the shader
 	void use() const;
