@@ -1,5 +1,10 @@
 Spoons: Tavern Defence
 
+Change Log 8/12/2020 - Martin & Thomas
+
+- Added Skybox class to inherit from GameObject
+- Tweaked classes to accomodate Skybox
+
 Change Log 7/12/2020 - Martin & Thomas
 
 - Added abstract GameObject class
