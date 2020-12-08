@@ -31,6 +31,7 @@ Shader names = shader_name.vs/fs/gs
 */
 
 #include <iostream>
+#include <vector>
 
 #include "Engine.h"
 
@@ -39,6 +40,7 @@ using namespace GameEngine;
 int main()
 {
 	try {
+
 		Engine* engine = new Engine();
 
 		while (engine->isRunning())

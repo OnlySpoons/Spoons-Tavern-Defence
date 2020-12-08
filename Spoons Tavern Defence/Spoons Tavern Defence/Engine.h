@@ -23,6 +23,9 @@ namespace GameEngine {
 	public:
 		float _DeltaTime;
 
+		/* Move to Scene*/
+		Skybox sky;
+
 	//Functions
 	public:
 

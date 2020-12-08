@@ -8,8 +8,8 @@
 
 #include "Window.h"
 #include "Shader.h"
-
-#include "Model.h"
+#include "GameObject.h"
+#include "Skybox.h"
 
 namespace GameEngine {
 
@@ -21,9 +21,11 @@ namespace GameEngine {
 		Window* _Window;
 		Camera* _Camera;
 
-		Shader _GeometryShader, _LightingShader, _LightsShader, _PostProcessShader, /*temp*/_SkyboxShader;
+		Shader _GeometryShader, _LightingShader, _LightsShader, _PostProcessShader;
 
-		unsigned int _gBuffer, _gPosition, _gNormal, _gAlbedoSpec, /* temp */_SkyboxTexture;
+		unsigned int _gBuffer, _gPosition, _gNormal, _gAlbedoSpec;
+
+		std::vector<GameObject*> _GameObjects;
 
 		//TODO: lighting class/rename
 		std::vector<glm::vec3> lightPositions;
@@ -46,5 +48,9 @@ namespace GameEngine {
 
 		//Render the scene
 		void renderScene();
+
+		//Functions to control the objects to render
+		void addObject(GameObject* obj);
+		void removeObject();
 	};
 }

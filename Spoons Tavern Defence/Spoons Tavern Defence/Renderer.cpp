@@ -4,11 +4,9 @@ namespace GameEngine {
 
     //--------TEMPORARY----------
     void renderQuad();
-    void renderCube(unsigned int texture);
-    unsigned int loadSkybox();
 
     Renderer::Renderer()
-        : _Window(nullptr), _Camera(nullptr), _gBuffer(0), _gPosition(0), _gNormal(0), _gAlbedoSpec(0), _SkyboxTexture(0)
+        : _Window(nullptr), _Camera(nullptr), _gBuffer(0), _gPosition(0), _gNormal(0), _gAlbedoSpec(0)
     {
     }
 
@@ -18,7 +16,6 @@ namespace GameEngine {
         _GeometryShader = Shader("Data/Shaders/geometry_shader.vs", "Data/Shaders/geometry_shader.fs");
         _LightingShader = Shader("Data/Shaders/lighting_shader.vs", "Data/Shaders/lighting_shader.fs");
         _LightsShader = Shader("Data/Shaders/light_shader.vs", "Data/Shaders/light_shader.fs");
-        _SkyboxShader = Shader("Data/Shaders/skybox_shader.vs", "Data/Shaders/skybox_shader.fs");
 
 		//Tell stb_image.h to flip loaded texture's on the y-axis (before loading model)
 		//stbi_set_flip_vertically_on_load(true);
@@ -31,9 +28,8 @@ namespace GameEngine {
 
         //Load models - TEMPORARY
         _model = Model("Data/Models/SyntyStudios/PolygonHeist/Polygon_Heist_Demo_Scene.fbx");
-        objectPositions.push_back(glm::vec3(0.0, 0.0, 0.0));
 
-        _SkyboxTexture = loadSkybox();
+        objectPositions.push_back(glm::vec3(0.0, 0.0, 0.0));
 
         //Shader Config
         _LightingShader.use();
@@ -41,8 +37,7 @@ namespace GameEngine {
         _LightingShader.setInt("gNormal", 1);
         _LightingShader.setInt("gAlbedoSpec", 2);
 
-        _SkyboxShader.use();
-        _SkyboxShader.setInt("skybox", 0);
+        
 	}
 
 	//Function for configuring buffers
@@ -125,13 +120,8 @@ namespace GameEngine {
             _model.Draw(_GeometryShader, &model);
         }
 
-        glDepthFunc(GL_LEQUAL); // change depth function so skybox is always behind
-        _SkyboxShader.use();
         view = glm::mat4(glm::mat3(_Camera->GetViewMatrix()));
-        _SkyboxShader.setMat4("view", view);
-        _SkyboxShader.setMat4("projection", projection);
-
-        renderCube(_SkyboxTexture);
+        dynamic_cast<Skybox*>(_GameObjects[0])->Draw(projection, view, model);
 
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
@@ -178,46 +168,13 @@ namespace GameEngine {
         glfwPollEvents();
 	}
 
-    unsigned int loadSkybox()
+    void Renderer::addObject(GameObject *obj)
     {
-        std::vector<std::string> faces
-        {
-            "Data/Textures/skybox/right.jpg",
-            "Data/Textures/skybox/left.jpg",
-            "Data/Textures/skybox/top.jpg",
-            "Data/Textures/skybox/bottom.jpg",
-            "Data/Textures/skybox/front.jpg",
-            "Data/Textures/skybox/back.jpg"
-        };
+        _GameObjects.emplace_back(std::move(obj));
+    }
 
-        unsigned int textureID;
-        glGenTextures(1, &textureID);
-        glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
-
-        int width, height, nrChannels;
-        for (unsigned int i = 0; i < faces.size(); i++)
-        {
-            unsigned char* data = stbi_load(faces[i].c_str(), &width, &height, &nrChannels, 0);
-
-            if (data)
-            {
-                glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-                stbi_image_free(data);
-            }
-            else
-            {
-                std::cout << "Cubemap texture failed to load at path: " << faces[i] << std::endl;
-                stbi_image_free(data);
-            }
-        }
-
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-
-        return textureID;
+    void Renderer::removeObject()
+    {
     }
 
     // renderQuad() renders a 1x1 XY quad in NDC
@@ -248,82 +205,6 @@ namespace GameEngine {
         }
         glBindVertexArray(quadVAO);
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-        glBindVertexArray(0);
-    }
-
-    // renderCube() renders a 1x1 3D cube in NDC.
-    unsigned int cubeVAO = 0;
-    unsigned int cubeVBO = 0;
-    void renderCube(unsigned int texture)
-    {
-        // initialize (if necessary)
-        if (cubeVAO == 0)
-        {
-            float vertices[] = {
-                // back face
-                -1.0f, -1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 0.0f, 0.0f, // bottom-left
-                 1.0f,  1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 1.0f, 1.0f, // top-right
-                 1.0f, -1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 1.0f, 0.0f, // bottom-right         
-                 1.0f,  1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 1.0f, 1.0f, // top-right
-                -1.0f, -1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 0.0f, 0.0f, // bottom-left
-                -1.0f,  1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 0.0f, 1.0f, // top-left
-                // front face
-                -1.0f, -1.0f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f, 0.0f, // bottom-left
-                 1.0f, -1.0f,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f, 0.0f, // bottom-right
-                 1.0f,  1.0f,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f, 1.0f, // top-right
-                 1.0f,  1.0f,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f, 1.0f, // top-right
-                -1.0f,  1.0f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f, 1.0f, // top-left
-                -1.0f, -1.0f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f, 0.0f, // bottom-left
-                // left face
-                -1.0f,  1.0f,  1.0f, -1.0f,  0.0f,  0.0f, 1.0f, 0.0f, // top-right
-                -1.0f,  1.0f, -1.0f, -1.0f,  0.0f,  0.0f, 1.0f, 1.0f, // top-left
-                -1.0f, -1.0f, -1.0f, -1.0f,  0.0f,  0.0f, 0.0f, 1.0f, // bottom-left
-                -1.0f, -1.0f, -1.0f, -1.0f,  0.0f,  0.0f, 0.0f, 1.0f, // bottom-left
-                -1.0f, -1.0f,  1.0f, -1.0f,  0.0f,  0.0f, 0.0f, 0.0f, // bottom-right
-                -1.0f,  1.0f,  1.0f, -1.0f,  0.0f,  0.0f, 1.0f, 0.0f, // top-right
-                // right face
-                 1.0f,  1.0f,  1.0f,  1.0f,  0.0f,  0.0f, 1.0f, 0.0f, // top-left
-                 1.0f, -1.0f, -1.0f,  1.0f,  0.0f,  0.0f, 0.0f, 1.0f, // bottom-right
-                 1.0f,  1.0f, -1.0f,  1.0f,  0.0f,  0.0f, 1.0f, 1.0f, // top-right         
-                 1.0f, -1.0f, -1.0f,  1.0f,  0.0f,  0.0f, 0.0f, 1.0f, // bottom-right
-                 1.0f,  1.0f,  1.0f,  1.0f,  0.0f,  0.0f, 1.0f, 0.0f, // top-left
-                 1.0f, -1.0f,  1.0f,  1.0f,  0.0f,  0.0f, 0.0f, 0.0f, // bottom-left     
-                // bottom face
-                -1.0f, -1.0f, -1.0f,  0.0f, -1.0f,  0.0f, 0.0f, 1.0f, // top-right
-                 1.0f, -1.0f, -1.0f,  0.0f, -1.0f,  0.0f, 1.0f, 1.0f, // top-left
-                 1.0f, -1.0f,  1.0f,  0.0f, -1.0f,  0.0f, 1.0f, 0.0f, // bottom-left
-                 1.0f, -1.0f,  1.0f,  0.0f, -1.0f,  0.0f, 1.0f, 0.0f, // bottom-left
-                -1.0f, -1.0f,  1.0f,  0.0f, -1.0f,  0.0f, 0.0f, 0.0f, // bottom-right
-                -1.0f, -1.0f, -1.0f,  0.0f, -1.0f,  0.0f, 0.0f, 1.0f, // top-right
-                // top face
-                -1.0f,  1.0f, -1.0f,  0.0f,  1.0f,  0.0f, 0.0f, 1.0f, // top-left
-                 1.0f,  1.0f , 1.0f,  0.0f,  1.0f,  0.0f, 1.0f, 0.0f, // bottom-right
-                 1.0f,  1.0f, -1.0f,  0.0f,  1.0f,  0.0f, 1.0f, 1.0f, // top-right     
-                 1.0f,  1.0f,  1.0f,  0.0f,  1.0f,  0.0f, 1.0f, 0.0f, // bottom-right
-                -1.0f,  1.0f, -1.0f,  0.0f,  1.0f,  0.0f, 0.0f, 1.0f, // top-left
-                -1.0f,  1.0f,  1.0f,  0.0f,  1.0f,  0.0f, 0.0f, 0.0f  // bottom-left        
-            };
-            glGenVertexArrays(1, &cubeVAO);
-            glGenBuffers(1, &cubeVBO);
-            // fill buffer
-            glBindBuffer(GL_ARRAY_BUFFER, cubeVBO);
-            glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-            // link vertex attributes
-            glBindVertexArray(cubeVAO);
-            glEnableVertexAttribArray(0);
-            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-            glEnableVertexAttribArray(1);
-            glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-            glEnableVertexAttribArray(2);
-            glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-            glBindBuffer(GL_ARRAY_BUFFER, 0);
-            glBindVertexArray(0);
-        }
-        // render Cube
-        glBindVertexArray(cubeVAO);
-        glActiveTexture(GL_TEXTURE_CUBE_MAP);
-        glBindTexture(GL_TEXTURE_CUBE_MAP, texture);
-        glDrawArrays(GL_TRIANGLES, 0, 36);
         glBindVertexArray(0);
     }
 }

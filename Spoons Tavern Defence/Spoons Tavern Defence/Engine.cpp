@@ -3,18 +3,28 @@
 namespace GameEngine {
 
 	Engine::Engine()
-		: _LastFrame(0.0f), _DeltaTime(0.0f)
+		: _LastFrame(0.0f), _DeltaTime(0.0f),
+		_Window(Window(WindowProps("Spoons: Tavern Defence", 1920, 1080))),
+		_Camera(Camera(glm::vec3(0.0f, 0.5f, 3.0f))),
+		_Renderer(Renderer(&_Window, &_Camera)),
+		sky(Skybox(
+			ObjectData(),
+			std::vector<std::string>(
+				{
+					"Data/Textures/skybox/right.jpg",
+					"Data/Textures/skybox/left.jpg",
+					"Data/Textures/skybox/top.jpg",
+					"Data/Textures/skybox/bottom.jpg",
+					"Data/Textures/skybox/front.jpg",
+					"Data/Textures/skybox/back.jpg"
+				}),
+			Shader("Data/Shaders/skybox_shader.vs", "Data/Shaders/skybox_shader.fs")))
 	{
-		_Window = Window(WindowProps("Spoons: Tavern Defence", 1920, 1080));
-
-		_Camera = Camera(glm::vec3(0.0f, 0.5f, 3.0f));
-
-		_Renderer = Renderer(&_Window, &_Camera);
-
 		//Initialise input
 		Input::init(&_Camera);
 
 		/* This will be moved to Scene */
+		_Renderer.addObject(&sky);
 
 	}
 
