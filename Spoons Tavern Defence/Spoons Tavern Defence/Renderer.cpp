@@ -120,8 +120,7 @@ namespace GameEngine {
             _model.Draw(_GeometryShader, &model);
         }
 
-        view = glm::mat4(glm::mat3(_Camera->GetViewMatrix()));
-        dynamic_cast<Skybox*>(_GameObjects[0])->Draw(projection, view, model);
+        dynamic_cast<Skybox*>(_GameObjects[0])->draw(projection, view, model);
 
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 

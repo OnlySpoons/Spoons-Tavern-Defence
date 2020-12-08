@@ -23,19 +23,33 @@ namespace GameEngine {
 
 		Shader _Shader;
 
+		bool _IsEnabled;
+
 	//Functions
 	public:
 
 		//Constructors
-		GameObject(const ObjectData &data, const Shader &shader)
-			: _Data(data), _Shader(shader)
+		GameObject(const ObjectData &data, const Shader &shader, bool enabled)
+			: _Data(data), _Shader(shader), _IsEnabled(enabled)
 		{
 		}
 
-		//Draw the object
-		virtual void Draw(glm::mat4 projection, glm::mat4 view, glm::mat4 model) = 0;
+		//Render the object
+		virtual void draw(glm::mat4 projection, glm::mat4 view, glm::mat4 model) = 0;
 
 		//Update the object
-		virtual void Update() = 0;
+		virtual void update(float &deltaTime) = 0;
+
+		//Enable object to be rendered and process physics
+		void enable()
+		{
+			_IsEnabled = true;
+		}
+
+		//Disable object from being rendered and processing physics
+		void disable()
+		{
+			_IsEnabled = false;
+		}
 	};
 }

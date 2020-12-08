@@ -2,37 +2,45 @@
 
 namespace GameEngine {
 
+    //Constructor
     Skybox::Skybox(ObjectData data, std::vector<std::string> faces, Shader shader)
-        : GameObject(data, shader), _TextureFaces(faces)
+        : GameObject(data, shader, true), _TextureFaces(faces)
     {
-        _TextureCube = InitTextureCube();
+        //Initialise the cube texture
+        _CubeTexture = InitCubeTexture();
 
+        //Generate the buffers for rendering
         genBuffers();
 
+        //Configure the shader
         _Shader.use();
         _Shader.setInt("skybox", 0);
     }
 
-    void Skybox::Draw(glm::mat4 projection, glm::mat4 view, glm::mat4 model)
+    //Render the object
+    void Skybox::draw(glm::mat4 projection, glm::mat4 view, glm::mat4 model)
     {
-        glDepthFunc(GL_LEQUAL); // change depth function so skybox is always behind
-        _Shader.use();
-        _Shader.setMat4("view", view);
-        _Shader.setMat4("projection", projection);
+        if (_IsEnabled)
+        {
+            //Remove translation from the view matrix
+            view = glm::mat4(glm::mat3(view));
 
-        // render Cube
-        glBindVertexArray(_VAO);
-        glActiveTexture(GL_TEXTURE_CUBE_MAP);
-        glBindTexture(GL_TEXTURE_CUBE_MAP, _TextureCube);
-        glDrawArrays(GL_TRIANGLES, 0, 36);
-        glBindVertexArray(0);
+            //Change depth function so skybox is always behind
+            glDepthFunc(GL_LEQUAL);
+            _Shader.use();
+            _Shader.setMat4("view", view);
+            _Shader.setMat4("projection", projection);
+
+            //Render Cube
+            glBindVertexArray(_VAO);
+            glActiveTexture(GL_TEXTURE_CUBE_MAP);
+            glBindTexture(GL_TEXTURE_CUBE_MAP, _CubeTexture);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+            glBindVertexArray(0);
+        }
     }
 
-    void Skybox::Update()
-    {
-    }
-
-    unsigned int Skybox::InitTextureCube() const
+    unsigned int Skybox::InitCubeTexture() const
     {
         unsigned int textureID;
         glGenTextures(1, &textureID);
@@ -63,13 +71,14 @@ namespace GameEngine {
 
         return textureID;
     }
+
     void Skybox::genBuffers()
     {
         float vertices[] = {
             // back face
             -1.0f, -1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 0.0f, 0.0f, // bottom-left
              1.0f,  1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 1.0f, 1.0f, // top-right
-             1.0f, -1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 1.0f, 0.0f, // bottom-right         
+             1.0f, -1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 1.0f, 0.0f, // bottom-right
              1.0f,  1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 1.0f, 1.0f, // top-right
             -1.0f, -1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 0.0f, 0.0f, // bottom-left
             -1.0f,  1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 0.0f, 1.0f, // top-left
@@ -90,10 +99,10 @@ namespace GameEngine {
             // right face
              1.0f,  1.0f,  1.0f,  1.0f,  0.0f,  0.0f, 1.0f, 0.0f, // top-left
              1.0f, -1.0f, -1.0f,  1.0f,  0.0f,  0.0f, 0.0f, 1.0f, // bottom-right
-             1.0f,  1.0f, -1.0f,  1.0f,  0.0f,  0.0f, 1.0f, 1.0f, // top-right         
+             1.0f,  1.0f, -1.0f,  1.0f,  0.0f,  0.0f, 1.0f, 1.0f, // top-right
              1.0f, -1.0f, -1.0f,  1.0f,  0.0f,  0.0f, 0.0f, 1.0f, // bottom-right
              1.0f,  1.0f,  1.0f,  1.0f,  0.0f,  0.0f, 1.0f, 0.0f, // top-left
-             1.0f, -1.0f,  1.0f,  1.0f,  0.0f,  0.0f, 0.0f, 0.0f, // bottom-left     
+             1.0f, -1.0f,  1.0f,  1.0f,  0.0f,  0.0f, 0.0f, 0.0f, // bottom-left
             // bottom face
             -1.0f, -1.0f, -1.0f,  0.0f, -1.0f,  0.0f, 0.0f, 1.0f, // top-right
              1.0f, -1.0f, -1.0f,  0.0f, -1.0f,  0.0f, 1.0f, 1.0f, // top-left
@@ -104,20 +113,20 @@ namespace GameEngine {
             // top face
             -1.0f,  1.0f, -1.0f,  0.0f,  1.0f,  0.0f, 0.0f, 1.0f, // top-left
              1.0f,  1.0f , 1.0f,  0.0f,  1.0f,  0.0f, 1.0f, 0.0f, // bottom-right
-             1.0f,  1.0f, -1.0f,  0.0f,  1.0f,  0.0f, 1.0f, 1.0f, // top-right     
+             1.0f,  1.0f, -1.0f,  0.0f,  1.0f,  0.0f, 1.0f, 1.0f, // top-right
              1.0f,  1.0f,  1.0f,  0.0f,  1.0f,  0.0f, 1.0f, 0.0f, // bottom-right
             -1.0f,  1.0f, -1.0f,  0.0f,  1.0f,  0.0f, 0.0f, 1.0f, // top-left
-            -1.0f,  1.0f,  1.0f,  0.0f,  1.0f,  0.0f, 0.0f, 0.0f  // bottom-left        
+            -1.0f,  1.0f,  1.0f,  0.0f,  1.0f,  0.0f, 0.0f, 0.0f  // bottom-left
         };
 
         glGenVertexArrays(1, &_VAO);
         glGenBuffers(1, &_VBO);
 
-        // fill buffer
+        //Fill buffer
         glBindBuffer(GL_ARRAY_BUFFER, _VBO);
         glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-        // link vertex attributes
+        //Link vertex attributes
         glBindVertexArray(_VAO);
         glEnableVertexAttribArray(0);
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);

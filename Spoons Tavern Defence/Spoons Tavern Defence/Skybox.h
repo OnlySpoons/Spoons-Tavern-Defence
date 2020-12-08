@@ -13,23 +13,27 @@ namespace GameEngine {
 
 		//Skybox render data
 		std::vector<std::string> _TextureFaces;
-		unsigned int _VAO, _VBO, _TextureCube;
+		unsigned int _VAO, _VBO, _CubeTexture;
 
 
 	//Functions
 	public:
 
-		//Constructors
+		//Constructor
 		Skybox(ObjectData data, std::vector<std::string> faces, Shader shader);
 
-		void Draw(glm::mat4 projection, glm::mat4 view, glm::mat4 model) override;
+		//Render the object
+		void draw(glm::mat4 projection, glm::mat4 view, glm::mat4 model) override;
 
-		void Update() override;
+		//Unused by skybox
+		void update(float &deltaTime) override {}
 
 	private:
 
-		unsigned int InitTextureCube() const;
+		//Initialises the cube texture
+		unsigned int InitCubeTexture() const;
 
+		//Generates the buffers for rendering the skybox
 		void genBuffers();
 
 	};
