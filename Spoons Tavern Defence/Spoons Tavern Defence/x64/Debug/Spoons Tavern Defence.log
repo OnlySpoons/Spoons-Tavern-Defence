@@ -1,7 +1,5 @@
-﻿  Engine.cpp
-  main.cpp
-  Renderer.cpp
-  Scene.cpp
-  Skybox.cpp
-  Generating Code...
+﻿  main.cpp
+C:\Users\Martin\OneDrive - University of the West of Scotland\Paul\Spoons Tavern Defence\Spoons Tavern Defence\Spoons Tavern Defence\GameObject.h(34): warning C4114: same type qualifier used more than once
+C:\Users\Martin\OneDrive - University of the West of Scotland\Paul\Spoons Tavern Defence\Spoons Tavern Defence\Spoons Tavern Defence\GameObject.h(34,13): warning C4114: same type qualifier used more than once
+C:\Users\Martin\OneDrive - University of the West of Scotland\Paul\Spoons Tavern Defence\Spoons Tavern Defence\Spoons Tavern Defence\GameObject.h(62,22): warning C4114: same type qualifier used more than once
   Spoons Tavern Defence.vcxproj -> C:\Users\Martin\OneDrive - University of the West of Scotland\Paul\Spoons Tavern Defence\Spoons Tavern Defence\x64\Debug\Spoons Tavern Defence.exe

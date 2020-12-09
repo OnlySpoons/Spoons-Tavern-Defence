@@ -19,18 +19,23 @@ namespace GameEngine {
 	{
 	//Variables
 	protected:
+		bool _IsEnabled;
+
 		ObjectData _Data;
 
 		Shader _Shader;
 
-		bool _IsEnabled;
-
 	//Functions
 	public:
 
-		//Constructors
-		GameObject(const ObjectData &data, const Shader &shader, bool enabled)
+		//Constructor
+		GameObject(const ObjectData const &data, const Shader const &shader, bool enabled)
 			: _Data(data), _Shader(shader), _IsEnabled(enabled)
+		{
+		}
+
+		//Destructor
+		virtual ~GameObject()
 		{
 		}
 

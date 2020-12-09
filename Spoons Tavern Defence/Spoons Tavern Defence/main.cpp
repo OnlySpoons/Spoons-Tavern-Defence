@@ -39,9 +39,9 @@ using namespace GameEngine;
 
 int main()
 {
-	try {
+	Engine* engine = new Engine();
 
-		Engine* engine = new Engine();
+	try {
 
 		while (engine->isRunning())
 		{
@@ -56,7 +56,10 @@ int main()
 	//Catch and display thrown exceptions in console
 	catch (const char* exceptionMessage)
 	{
+		delete engine;
+
 		std::cout << exceptionMessage << std::endl;
+
 		std::cin.get();
 		return -1;
 	}

@@ -31,7 +31,7 @@ namespace GameEngine {
 	void Scene::addObject(GameObject* obj)
 	{
 		//Add the object to the list of objects in the scene
-		_SceneObjects.emplace_back(obj);
+		_SceneObjects.emplace_back(std::move(obj));
 	}
 
 	//Remove object to the scene
