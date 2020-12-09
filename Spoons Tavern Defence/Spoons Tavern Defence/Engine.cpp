@@ -18,7 +18,7 @@ namespace GameEngine {
 						"Data/Textures/skybox/front.jpg",
 						"Data/Textures/skybox/back.jpg"
 					}),
-				Shader("Data/Shaders/skybox_shader.vs", "Data/Shaders/skybox_shader.fs"))
+				Shader("Data/Shaders/skybox_shader.vs", "Data/Shaders/skybox_shader.fs")))
 	{
 		//Initialise input
 		Input::init(&_Camera);
