@@ -1,5 +1,11 @@
 #pragma once
+#include <vector>
+#include <string>
+
+#include "stb_image.h"
+
 #include "GameObject.h"
+#include "Shader.h"
 
 namespace GameEngine {
 
@@ -20,7 +26,7 @@ namespace GameEngine {
 	public:
 
 		//Constructor
-		Skybox(ObjectData data, std::vector<std::string> faces, Shader shader);
+		Skybox(const ObjectData const &data, const std::vector<std::string> const &faces, const Shader const &shader);
 
 		//Render the object
 		void draw(glm::mat4 projection, glm::mat4 view, glm::mat4 model) override;
@@ -35,6 +41,5 @@ namespace GameEngine {
 
 		//Generates the buffers for rendering the skybox
 		void genBuffers();
-
 	};
 }

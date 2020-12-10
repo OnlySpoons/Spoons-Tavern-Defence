@@ -14,7 +14,7 @@ namespace GameEngine
 	}
 
 	//Render the model
-	void Model::Draw(Shader shader, glm::mat4* model) const
+	void Model::draw(Shader shader, glm::mat4* model) const
 	{
 		for (unsigned int i = 0; i < _Meshes.size(); i++)
 		{

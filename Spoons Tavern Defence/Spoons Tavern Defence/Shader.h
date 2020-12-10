@@ -12,17 +12,17 @@
 class Shader
 {
 
-//Member Variables
+	//Member Variables
 private:
 	unsigned int _ID;
 
-//Functions
+	//Functions
 public:
 
 	//Constructor
 	Shader();
 
-	Shader(std::string const &&vertexPath, std::string const &&fragmentPath, std::string const &&geometryPath = "");
+	Shader(std::string const&& vertexPath, std::string const&& fragmentPath, std::string const&& geometryPath = "");
 
 	//Use the shader
 	void use() const;

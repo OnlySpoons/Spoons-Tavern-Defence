@@ -1,14 +1,12 @@
 #pragma once
 #include "Shader.h"
-#include "Model.h"
 
 struct ObjectData {
 	glm::vec3 position;
-	glm::vec3 direction;
 	glm::quat rotation;
 
-	ObjectData(const glm::vec3& pos = glm::vec3(0.0f), const glm::vec3& dir = glm::vec3(0.0f, 1.0f, 0.0f), const glm::quat& rot = glm::quat(0.0f, 1.0f, 0.0f, 0.0f))
-		: position(pos), direction(dir), rotation(rot)
+	ObjectData(const glm::vec3& pos = glm::vec3(0.0f), const glm::quat& rot = glm::quat(1.0f, 0.0f, 0.0f, 0.0f))
+		: position(pos), rotation(rot)
 	{
 	}
 };
@@ -29,7 +27,7 @@ namespace GameEngine {
 	public:
 
 		//Constructor
-		GameObject(const ObjectData const &data, const Shader const &shader, bool enabled)
+		GameObject(const ObjectData const &data, const Shader const &shader, const bool &enabled = false)
 			: _Data(data), _Shader(shader), _IsEnabled(enabled)
 		{
 		}

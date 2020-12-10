@@ -3,7 +3,7 @@
 namespace GameEngine {
 
     //Constructor
-    Skybox::Skybox(ObjectData data, std::vector<std::string> faces, Shader shader)
+    Skybox::Skybox(const ObjectData const& data, const std::vector<std::string> const& faces, const Shader const& shader)
         : GameObject(data, shader, true), _TextureFaces(faces)
     {
         //Initialise the cube texture

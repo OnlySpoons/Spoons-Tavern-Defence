@@ -41,7 +41,7 @@ namespace GameEngine {
 		Model(std::string const& path, bool gamma = false);
 
 		//Render the model
-		void Draw(Shader shader, glm::mat4* model) const;
+		void draw(Shader shader, glm::mat4* model) const;
 
 	private:
 

@@ -38,6 +38,8 @@ namespace GameEngine {
 		float _MouseSensitivity;
 		float _Zoom;
 
+		float _Height;
+
 		//Functions
 	public:
 

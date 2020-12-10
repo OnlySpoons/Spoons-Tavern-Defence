@@ -10,6 +10,7 @@ namespace GameEngine {
 		_WorldUp = up;
 		_Yaw = yaw;
 		_Pitch = pitch;
+		_Height = position.y;
 
 		updateCameraVectors();
 	}
@@ -36,7 +37,7 @@ namespace GameEngine {
 			_Position += _Right * velocity;
 
 		//keep player on ground level
-		//_Position.y = 0.0f;
+		_Position.y = _Height;
 	}
 
 	//Processes the mouse movement to control where the camera is facing
