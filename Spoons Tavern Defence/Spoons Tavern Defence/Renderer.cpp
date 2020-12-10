@@ -2,9 +2,6 @@
 
 namespace GameEngine {
 
-    //--------TEMPORARY----------
-    void renderQuad();
-
     Renderer::Renderer()
         : _Window(nullptr), _Camera(nullptr), _gBuffer(0), _gPosition(0), _gNormal(0), _gAlbedoSpec(0)
     {
@@ -13,7 +10,6 @@ namespace GameEngine {
 	Renderer::Renderer(Window* window, Camera* camera)
         : _Window(window), _Camera(camera)
 	{
-        _GeometryShader = Shader("Data/Shaders/geometry_shader.vs", "Data/Shaders/geometry_shader.fs");
         _LightingShader = Shader("Data/Shaders/lighting_shader.vs", "Data/Shaders/lighting_shader.fs");
         _LightsShader = Shader("Data/Shaders/light_shader.vs", "Data/Shaders/light_shader.fs");
 
@@ -25,11 +21,6 @@ namespace GameEngine {
 		
         //Initialise the shaders
 		genBuffers();
-
-        //Load models - TEMPORARY
-        _model = Model("Data/Models/SyntyStudios/PolygonHeist/Polygon_Heist_Demo_Scene.fbx");
-
-        objectPositions.push_back(glm::vec3(0.0, 0.0, 0.0));
 
         //Shader Config
         _LightingShader.use();
@@ -91,6 +82,24 @@ namespace GameEngine {
             throw "Framebuffer not complete!";
         }
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+        float quadVertices[] = {
+            // positions        // texture Coords
+            -1.0f,  1.0f, 0.0f, 0.0f, 1.0f,
+            -1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
+             1.0f,  1.0f, 0.0f, 1.0f, 1.0f,
+             1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
+        };
+        // setup plane VAO
+        glGenVertexArrays(1, &quadVAO);
+        glGenBuffers(1, &quadVBO);
+        glBindVertexArray(quadVAO);
+        glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+        glEnableVertexAttribArray(1);
+        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
 	}
 
 	void Renderer::renderScene()
@@ -105,22 +114,11 @@ namespace GameEngine {
         glBindFramebuffer(GL_FRAMEBUFFER, _gBuffer);
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glm::mat4 projection = glm::perspective(glm::radians(_Camera->_Zoom), (float)_Window->getWidth() / (float)_Window->getHeight(), 0.1f, 100.0f);
+        glm::mat4 projection = glm::perspective(glm::radians(_Camera->_Zoom), (float)_Window->getWidth() / (float)_Window->getHeight(), 0.1f, 500.0f);
         glm::mat4 view = _Camera->GetViewMatrix();
         glm::mat4 model = glm::mat4(1.0f);
-        _GeometryShader.use();
-        _GeometryShader.setMat4("projection", projection);
-        _GeometryShader.setMat4("view", view);
-        for (unsigned int i = 0; i < objectPositions.size(); i++)
-        {
-            model = glm::mat4(1.0f);
-            model = glm::translate(model, objectPositions[i]);
-            model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-            model = glm::scale(model, glm::vec3(0.005f));
-            _model.Draw(_GeometryShader, &model);
-        }
-
-        dynamic_cast<Skybox*>(_GameObjects[0])->draw(projection, view, model);
+        
+        _CurrentScene->draw(projection, view, model);
 
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
@@ -151,7 +149,9 @@ namespace GameEngine {
         _LightingShader.setVec3("viewPos", _Camera->_Position);
 
         // finally render quad
-        renderQuad();
+        glBindVertexArray(quadVAO);
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+        glBindVertexArray(0);
 
         // 2.5. copy content of geometry's depth buffer to default framebuffer's depth buffer
         glBindFramebuffer(GL_READ_FRAMEBUFFER, _gBuffer);
@@ -162,48 +162,15 @@ namespace GameEngine {
         glBlitFramebuffer(0, 0, _Window->getWidth(), _Window->getHeight(), 0, 0, _Window->getWidth(), _Window->getHeight(), GL_DEPTH_BUFFER_BIT, GL_NEAREST);
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
+        // TODO: 3 Post processing
+        //------------------------
+
+
+
+        //------------------------
+
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         glfwSwapBuffers(_Window->getInstance());
         glfwPollEvents();
 	}
-
-    void Renderer::addObject(GameObject *obj)
-    {
-        _GameObjects.emplace_back(std::move(obj));
-    }
-
-    void Renderer::removeObject()
-    {
-    }
-
-    // renderQuad() renders a 1x1 XY quad in NDC
-    // -----------------------------------------
-    unsigned int quadVAO = 0;
-    unsigned int quadVBO;
-    void renderQuad()
-    {
-        if (quadVAO == 0)
-        {
-            float quadVertices[] = {
-                // positions        // texture Coords
-                -1.0f,  1.0f, 0.0f, 0.0f, 1.0f,
-                -1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
-                 1.0f,  1.0f, 0.0f, 1.0f, 1.0f,
-                 1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
-            };
-            // setup plane VAO
-            glGenVertexArrays(1, &quadVAO);
-            glGenBuffers(1, &quadVBO);
-            glBindVertexArray(quadVAO);
-            glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
-            glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
-            glEnableVertexAttribArray(0);
-            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-            glEnableVertexAttribArray(1);
-            glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-        }
-        glBindVertexArray(quadVAO);
-        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-        glBindVertexArray(0);
-    }
 }
