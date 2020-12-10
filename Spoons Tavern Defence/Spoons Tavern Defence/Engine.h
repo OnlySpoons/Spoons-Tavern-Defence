@@ -11,7 +11,7 @@ namespace GameEngine {
 	{
 
 	//Memeber variables
-	private:
+	protected:
 		Window _Window;
 
 		Camera _Camera;
@@ -23,9 +23,6 @@ namespace GameEngine {
 	public:
 		float _DeltaTime;
 
-		/* Move to Scene*/
-		Skybox sky;
-
 	//Functions
 	public:
 
@@ -33,12 +30,15 @@ namespace GameEngine {
 		Engine();
 
 		//Destructor
-		~Engine();
+		virtual ~Engine();
+
+		//Function to check if the engine is running
+		bool isRunning() const;
 
 		//Function for controlling runtime loop
 		void runtimeLoop();
 
-		//Function to check if the engine is running
-		bool isRunning() const;
+	private:
+		virtual void gameLoop(float& deltaTime) = 0;
 	};
 }

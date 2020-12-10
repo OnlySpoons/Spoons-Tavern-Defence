@@ -3,7 +3,8 @@ Conventions:
 
 ----Variables----
 constants = CAPITALISED_VARIABLE
-Member variables    = _CamelCase
+Class Member variables    = _CamelCase
+Struct Member variables = camelCase
 Function parameters = camelCase
 Temporary variables = camelCase
 
@@ -14,6 +15,7 @@ Variable assignement in groups should be lined up vertically
 ----Functions----
 Function names = camelCase
 
+----Classes----
 Member variables and Functions have separate access modifier headings
 Functions called by other functions should be declared higher up
 Similar functions should be grouped together
@@ -34,12 +36,13 @@ Shader names = shader_name.vs/fs/gs
 #include <vector>
 
 #include "Engine.h"
+#include "Game.h"
 
 using namespace GameEngine;
 
 int main()
 {
-	Engine* engine = new Engine();
+	Engine* engine = new Game();
 
 	try {
 

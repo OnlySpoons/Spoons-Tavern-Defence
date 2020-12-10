@@ -4,15 +4,22 @@ namespace GameEngine {
 
 	//Constructor
 
-	Scene::Scene(std::vector<GameObject*> &objs)
+	Scene::Scene(Level id, std::vector<GameObject*> *objs)
+		: _ID(id), _SceneObjects(objs)
 	{
-		_SceneObjects = std::move(objs);
+	}
+
+	Scene::~Scene()
+	{
+		_SceneObjects->clear();
+
+		delete _SceneObjects;
 	}
 
 	//Draw the objects in the scene
 	void Scene::draw(glm::mat4 projection, glm::mat4 view, glm::mat4 model) const
 	{
-		for (GameObject* obj : _SceneObjects)
+		for (GameObject* obj : *_SceneObjects)
 		{
 			obj->draw(projection, view, model);
 		}
@@ -21,7 +28,7 @@ namespace GameEngine {
 	//Update the objects in the scene
 	void Scene::update(float &deltaTime) const
 	{
-		for (GameObject* obj : _SceneObjects)
+		for (GameObject* obj : *_SceneObjects)
 		{
 			obj->update(deltaTime);
 		}
@@ -31,20 +38,20 @@ namespace GameEngine {
 	void Scene::addObject(GameObject* obj)
 	{
 		//Add the object to the list of objects in the scene
-		_SceneObjects.emplace_back(std::move(obj));
+		_SceneObjects->emplace_back(std::move(obj));
 	}
 
 	//Remove object to the scene
 	bool Scene::removeObject(GameObject* obj)
 	{
 		//Find position of the object
-		auto it = std::find(_SceneObjects.begin(), _SceneObjects.end(), obj);
+		auto it = std::find(_SceneObjects->begin(), _SceneObjects->end(), obj);
 
 		//Check if the object was found
-		if (it != _SceneObjects.end())
+		if (it != _SceneObjects->end())
 		{
 			//Erase the object
-			_SceneObjects.erase(it);
+			_SceneObjects->erase(it);
 			return true;
 		}
 
@@ -53,9 +60,9 @@ namespace GameEngine {
 	}
 	void Scene::enableObject(GameObject* obj)
 	{
-		auto it = std::find(_SceneObjects.begin(), _SceneObjects.end(), obj);
+		auto it = std::find(_SceneObjects->begin(), _SceneObjects->end(), obj);
 
-		if (it != _SceneObjects.end())
+		if (it != _SceneObjects->end())
 		{
 			obj->enable();
 		}
@@ -63,9 +70,9 @@ namespace GameEngine {
 
 	void Scene::disableObject(GameObject* obj)
 	{
-		auto it = std::find(_SceneObjects.begin(), _SceneObjects.end(), obj);
+		auto it = std::find(_SceneObjects->begin(), _SceneObjects->end(), obj);
 
-		if (it != _SceneObjects.end())
+		if (it != _SceneObjects->end())
 		{
 			obj->disable();
 		}
