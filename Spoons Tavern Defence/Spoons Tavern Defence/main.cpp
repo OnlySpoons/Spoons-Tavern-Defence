@@ -38,7 +38,7 @@ Shader names = shader_name.vs/fs/gs
 #include "Engine.h"
 #include "Game.h"
 
-using namespace GameEngine;
+using namespace Spoonity;
 
 int main()
 {

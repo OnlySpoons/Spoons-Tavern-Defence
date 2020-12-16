@@ -1,6 +1,6 @@
 #include "Model.h"
 
-namespace GameEngine
+namespace Spoonity
 {
 	//Constructors
 	Model::Model()
@@ -16,11 +16,14 @@ namespace GameEngine
 	//Render the model
 	void Model::draw(Shader shader, glm::mat4* model) const
 	{
-		for (unsigned int i = 0; i < _Meshes.size(); i++)
+		if(!_Meshes.empty())
 		{
-			//Modifies the model matrix for the mesh's relative position
-			shader.setMat4("model", *model * _Transforms[i]);
-			_Meshes[i].Draw(shader);
+			for (unsigned int i = 0; i < _Meshes.size(); i++)
+			{
+				//Modifies the model matrix for the mesh's relative position
+				shader.setMat4("model", *model * _Transforms[i]);
+				_Meshes[i].Draw(shader);
+			}
 		}
 	}
 
@@ -243,7 +246,7 @@ namespace GameEngine
 		if (data)
 		{
 			//Check colour format
-			GLenum format;
+			GLenum format{};
 			if (nrComponents == 1)
 				format = GL_RED;
 			else if (nrComponents == 3)

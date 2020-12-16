@@ -6,7 +6,7 @@
 
 #include "Input.h"
 
-namespace GameEngine {
+namespace Spoonity {
 
 	struct WindowProps
 	{
@@ -34,9 +34,10 @@ namespace GameEngine {
 	public:
 
 		//Constructor
-		Window();
-
 		Window(WindowProps properties);
+
+		//Destructor
+		~Window();
 
 		//Function to get instance
 		GLFWwindow* getInstance() const;

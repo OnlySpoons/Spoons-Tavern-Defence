@@ -1,8 +1,9 @@
 #pragma once
 #include "GameObject.h"
+#include "Camera.h"
 #include "Model.h"
 
-namespace GameEngine {
+namespace Spoonity {
 
 	class Entity : public GameObject
 	{

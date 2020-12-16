@@ -2,9 +2,9 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include"Camera.h"
+#include"Actor.h"
 
-namespace GameEngine{
+namespace Spoonity{
 
 	//A static class to handle user input (Must be static for callback functions to work correctly).
 	class Input
@@ -17,7 +17,7 @@ namespace GameEngine{
 		//TODO - add player class
 		//static std::vector<Player*> players;
 
-		static Camera* _Camera;
+		static Actor* _Player;
 		static float _LastX;
 		static float _LastY;
 		static bool _FirstMouse;
@@ -26,7 +26,7 @@ namespace GameEngine{
 	public:
 
 		//Initialisation function, to emulate a constructor
-		static void init(Camera* camera);
+		static void init(Actor* player);
 
 		//Function to check if Input has been initialised
 		static void checkInit();

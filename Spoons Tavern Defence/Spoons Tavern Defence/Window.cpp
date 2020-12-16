@@ -1,13 +1,8 @@
 #include "Window.h"
 
-namespace GameEngine {
+namespace Spoonity {
 
-	//Constructors
-	Window::Window()
-		: _Instance(NULL)
-	{
-	}
-
+	//Constructor
 	Window::Window(WindowProps properties)
 		: _Properties(properties)
 	{
@@ -38,6 +33,11 @@ namespace GameEngine {
 		{
 			throw "Failed to initialize GLAD";
 		}
+	}
+
+	Window::~Window()
+	{
+		glfwTerminate();
 	}
 
 	//Function to get instance

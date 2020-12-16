@@ -1,22 +1,21 @@
 #pragma once
 
 #include "Window.h"
-#include "Camera.h"
 #include "Renderer.h"
-#include "Input.h"
+#include "Player.h"
 
-namespace GameEngine {
+namespace Spoonity {
 
 	class Engine
 	{
 
 	//Memeber variables
 	protected:
-		Window _Window;
+		Window* _Window;
 
-		Camera _Camera;
+		Renderer* _Renderer;
 
-		Renderer _Renderer;
+		Actor* _Player;
 		
 		float _LastFrame;
 
@@ -26,11 +25,15 @@ namespace GameEngine {
 	//Functions
 	public:
 
-		//Constructor
-		Engine();
+		//Constructors
+		Engine() {}
+
+		Engine(Actor* player);
 
 		//Destructor
 		virtual ~Engine();
+
+		void initEngine();
 
 		//Function to check if the engine is running
 		bool isRunning() const;

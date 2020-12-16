@@ -1,9 +1,9 @@
 #include "Input.h"
 
-namespace GameEngine {
+namespace Spoonity {
 
 	//Initial variable declaration
-	Camera* Input::_Camera = nullptr;
+	Actor* Input::_Player = nullptr;
 	float Input::_LastX = 0.0f;
 	float Input::_LastY = 0.0f;
 	bool Input::_FirstMouse = true;
@@ -11,11 +11,11 @@ namespace GameEngine {
 	bool Input::_Initialised = false;
 
 	//Initialisation function, to emulate a constructor
-	void Input::init(Camera* camera)
+	void Input::init(Actor* player)
 	{
 		if (!_Initialised)
 		{
-			_Camera = camera;
+			_Player = player;
 			
 			_Initialised = true;
 		}
@@ -45,13 +45,13 @@ namespace GameEngine {
 			isSprinting = false;
 
 		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-			_Camera->ProcessKeyboard(Camera_Movement::FORWARD, deltaTime, isSprinting);
+			_Player->ProcessKeyboard(Movement::FORWARD, deltaTime, isSprinting);
 		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-			_Camera->ProcessKeyboard(Camera_Movement::BACKWARD, deltaTime, isSprinting);
+			_Player->ProcessKeyboard(Movement::BACKWARD, deltaTime, isSprinting);
 		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-			_Camera->ProcessKeyboard(Camera_Movement::LEFT, deltaTime, isSprinting);
+			_Player->ProcessKeyboard(Movement::LEFT, deltaTime, isSprinting);
 		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-			_Camera->ProcessKeyboard(Camera_Movement::RIGHT, deltaTime, isSprinting);
+			_Player->ProcessKeyboard(Movement::RIGHT, deltaTime, isSprinting);
 	}
 
 	//Window resizing callback
@@ -82,7 +82,7 @@ namespace GameEngine {
 		_LastX = (float)xPos;
 		_LastY = (float)yPos;
 
-		_Camera->ProcessMouseMovement(xOffset, yOffset);
+		_Player->ProcessMouseMovement(xOffset, yOffset);
 	}
 
 	//Callback function to handle scroll wheel usage
@@ -90,6 +90,6 @@ namespace GameEngine {
 	{
 		checkInit();
 
-		_Camera->ProcessMouseScroll((float)yOffset);
+		_Player->ProcessMouseScroll((float)yOffset);
 	}
 }

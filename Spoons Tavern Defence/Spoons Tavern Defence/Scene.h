@@ -7,7 +7,7 @@ enum Level {
 	Overworld = 0
 };
 
-namespace GameEngine {
+namespace Spoonity {
 
 	class Scene
 	{

@@ -13,7 +13,7 @@
 #include "GameObject.h"
 #include "Skybox.h"
 
-namespace GameEngine {
+namespace Spoonity {
 
 	class Renderer
 	{
@@ -25,8 +25,8 @@ namespace GameEngine {
 		Scene* _CurrentScene;
 
 	private:
-		Window* _Window;
-		Camera* _Camera;
+		const Window* _Window;
+		const Camera* _Camera;
 
 		Shader _LightingShader, _LightsShader;
 
@@ -44,7 +44,7 @@ namespace GameEngine {
 		//Constructors
 		Renderer();
 
-		Renderer(Window* window, Camera* camera);
+		Renderer(const Window* window, const Camera* camera);
 
 		//Function for configuring buffers
 		void genBuffers();

@@ -1,21 +1,37 @@
 #include "Engine.h"
 
-namespace GameEngine {
+namespace Spoonity {
 
-	Engine::Engine()
+	Engine::Engine(Actor* player)
 		: _LastFrame(0.0f), _DeltaTime(0.0f),
-		_Window(Window(WindowProps("Spoons: Tavern Defence", 1920, 1080))),
-		_Camera(Camera(glm::vec3(0.0f, 0.7f, 3.0f))),
-		_Renderer(Renderer(&_Window, &_Camera))
+		_Player(player)
 	{
-		//Initialise input
-		Input::init(&_Camera);
+		_Window = new Window(WindowProps("Spoons: Tavern Defence", 1920, 1080));
 
+		_Renderer = new Renderer(_Window, _Player->_Camera);
+
+		//Initialize input
+		Input::init(_Player);
 	}
 
 	Engine::~Engine()
 	{
-		glfwTerminate();
+		delete _Renderer;
+		delete _Player;
+		delete _Window;
+	}
+
+	void Engine::initEngine()
+	{
+		_LastFrame = 0.0f;
+		_DeltaTime = 0.0f;
+
+		_Window = new Window(WindowProps("Spoons: Tavern Defence", 1920, 1080));
+
+		_Renderer = new Renderer(_Window, _Player->_Camera);
+
+		//Initialize input
+		Input::init(_Player);
 	}
 
 	//Function for controlling runtime loop
@@ -27,18 +43,18 @@ namespace GameEngine {
 		_LastFrame = currentFrame;
 
 		//Input
-		Input::processInput(_Window.getInstance(), _DeltaTime);
+		Input::processInput(_Window->getInstance(), _DeltaTime);
 
 		//Run gameloop
 		gameLoop(_DeltaTime);
 
 		//Render
-		_Renderer.renderScene();
+		_Renderer->renderScene();
 	}
 
 	//Function to check if the engine is running
 	bool Engine::isRunning() const
 	{
-		return !glfwWindowShouldClose(_Window.getInstance());
+		return !glfwWindowShouldClose(_Window->getInstance());
 	}
 }

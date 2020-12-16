@@ -1,6 +1,6 @@
 #include "Scene.h"
 
-namespace GameEngine {
+namespace Spoonity {
 
 	//Constructor
 

@@ -1,6 +1,6 @@
 #include "Skybox.h"
 
-namespace GameEngine {
+namespace Spoonity {
 
     //Constructor
     Skybox::Skybox(const ObjectData const& data, const std::vector<std::string> const& faces, const Shader const& shader)

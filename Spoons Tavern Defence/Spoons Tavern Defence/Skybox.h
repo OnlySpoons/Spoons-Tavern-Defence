@@ -7,7 +7,7 @@
 #include "GameObject.h"
 #include "Shader.h"
 
-namespace GameEngine {
+namespace Spoonity {
 
 	class Skybox : public GameObject
 	{

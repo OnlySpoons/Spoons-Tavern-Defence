@@ -1,7 +1,11 @@
 #include "Game.h"
 
-Game::Game() : Engine()
+//Constructor
+Game::Game() : Engine( new Player(Spoonity::ObjectData( glm::vec3(0.0f, 0.5f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(1.0f), 2.5f )) )
 {
+
+	//initEngine();
+
 	_Scenes.emplace_back(loadOverworld());
 
 	//Determine default scene, and pass it to the renderer.
@@ -9,25 +13,32 @@ Game::Game() : Engine()
 	{
 		if ((*it)->_ID == Overworld)
 		{
-			_Renderer._CurrentScene = *it;
+			_Renderer->_CurrentScene = *it;
 		}
 	}
+}
+
+//Destructor
+Game::~Game()
+{
+	_Scenes.clear();
 }
 
 //Overriding gameloop
 void Game::gameLoop(float& deltaTime)
 {
 	//TODO: Game logic
+	_Player->update(deltaTime);
 }
 
 //Load default scene
-GameEngine::Scene* Game::loadOverworld()
+Spoonity::Scene* Game::loadOverworld()
 {
 	//Create the objects vector to be passed to the scene
-	std::vector<GameEngine::GameObject*> *objs = new std::vector<GameEngine::GameObject*>();
+	std::vector<Spoonity::GameObject*> *objs = new std::vector<Spoonity::GameObject*>();
 
-	GameEngine::Skybox* sky = new GameEngine::Skybox(
-		ObjectData(),
+	Spoonity::Skybox* sky = new Spoonity::Skybox(
+		Spoonity::ObjectData(),
 		std::vector<std::string>(
 			{
 				"Data/Textures/skybox/right.jpg",
@@ -36,24 +47,31 @@ GameEngine::Scene* Game::loadOverworld()
 				"Data/Textures/skybox/bottom.jpg",
 				"Data/Textures/skybox/front.jpg",
 				"Data/Textures/skybox/back.jpg"
-			}),
-		Shader("Data/Shaders/skybox_shader.vs", "Data/Shaders/skybox_shader.fs")
+			}
+		),
+		Spoonity::Shader("Data/Shaders/skybox_shader.vs", "Data/Shaders/skybox_shader.fs")
 	);
 
 	//Add the objects to the scene
 	objs->emplace_back(sky);
 
-	GameEngine::Entity* town = new GameEngine::Entity(
-		ObjectData(glm::vec3(0.0f), glm::angleAxis(glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f))),
+	Spoonity::Entity* town = new Spoonity::Entity(
+		Spoonity::ObjectData(
+			glm::vec3(0.0f), 
+			glm::vec3(0.0f, -1.0f, 0.0f),
+			glm::vec3(0.005f)
+		),
 		"Data/Models/SyntyStudios/PolygonHeist/Polygon_Heist_Demo_Scene.fbx",
-		Shader("Data/Shaders/geometry_shader.vs", "Data/Shaders/geometry_shader.fs")
+		Spoonity::Shader("Data/Shaders/geometry_shader.vs", "Data/Shaders/geometry_shader.fs")
 	);
+
+	town->enable(); //enable the object to be drawn
 
 	objs->emplace_back(town);
 
-	//TODO: add glasses objects as required.
+	//TODO: add other objects as required.
 
 
 	//Return a scene with the added objects
-	return new GameEngine::Scene(Overworld, objs);
+	return new Spoonity::Scene(Overworld, objs);
 }

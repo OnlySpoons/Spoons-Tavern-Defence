@@ -3,7 +3,7 @@
 #include "Entity.h"
 #include "Renderer.h"
 
-namespace GameEngine {
+namespace Spoonity {
 
 	class Glasses : public Entity
 	{

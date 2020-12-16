@@ -18,7 +18,7 @@
 #include <map>
 #include <vector>
 
-namespace GameEngine {
+namespace Spoonity {
 
     class Model
     {

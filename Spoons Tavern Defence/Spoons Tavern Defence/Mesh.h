@@ -11,7 +11,7 @@
 #include <iostream>
 #include <vector>
 
-namespace GameEngine {
+namespace Spoonity {
 
     //Vertex data
     struct Vertex

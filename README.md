@@ -1,5 +1,13 @@
 Spoons: Tavern Defence
 
+Change Log 16/12/2020 - Martin & Thomas
+
+- Added Actor Class to allow for game side players to inherit from
+- Added game side Player class which inherits from Actor
+- Refactored Game, Engine, and Camera to accomodate an Actor.
+- **Most Important Change** Changed "GameEngine" namespace to "Spoonity".
+
+
 Change Log 9/12/2020 - Martin & Thomas
 
 - Updated GameObject class to better reflect it's usage

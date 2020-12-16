@@ -1,13 +1,16 @@
 #include "Renderer.h"
 
-namespace GameEngine {
+namespace Spoonity {
 
     Renderer::Renderer()
-        : _Window(nullptr), _Camera(nullptr), _gBuffer(0), _gPosition(0), _gNormal(0), _gAlbedoSpec(0)
+        : _Window(nullptr), _Camera(nullptr),
+        _gBuffer(0), _gPosition(0), _gNormal(0), _gAlbedoSpec(0),
+        _CurrentScene(nullptr),
+        quadVAO(0), quadVBO(0)
     {
     }
 
-	Renderer::Renderer(Window* window, Camera* camera)
+	Renderer::Renderer(const Window* window, const Camera* camera)
         : _Window(window), _Camera(camera)
 	{
         _LightingShader = Shader("Data/Shaders/lighting_shader.vs", "Data/Shaders/lighting_shader.fs");
@@ -114,7 +117,7 @@ namespace GameEngine {
         glBindFramebuffer(GL_FRAMEBUFFER, _gBuffer);
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glm::mat4 projection = glm::perspective(glm::radians(_Camera->_Zoom), (float)_Window->getWidth() / (float)_Window->getHeight(), 0.1f, 500.0f);
+        glm::mat4 projection = glm::perspective(glm::radians(90.0f), (float)_Window->getWidth() / (float)_Window->getHeight(), 0.1f, 500.0f);
         glm::mat4 view = _Camera->GetViewMatrix();
         glm::mat4 model = glm::mat4(1.0f);
         

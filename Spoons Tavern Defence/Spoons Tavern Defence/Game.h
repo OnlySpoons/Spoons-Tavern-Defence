@@ -7,14 +7,12 @@
 #include "GameObject.h"
 #include "Skybox.h"
 #include "Entity.h"
-#include "Glasses.h"
 
-class Game : public GameEngine::Engine
+class Game : public Spoonity::Engine
 {
 //Variables
 public:
-
-	std::vector<GameEngine::Scene*> _Scenes;
+	std::vector<Spoonity::Scene*> _Scenes;
 
 //Functions
 public:
@@ -22,11 +20,12 @@ public:
 	//Constructor
 	Game();
 
+	//Destructor
+	~Game();
+
 	//Overriding gameloop
 	void gameLoop(float& deltaTime) override;
 
 	//Load default scene
-	GameEngine::Scene* loadOverworld();
-
+	Spoonity::Scene* loadOverworld();
 };
-
