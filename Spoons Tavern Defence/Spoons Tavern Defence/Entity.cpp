@@ -1,4 +1,5 @@
 #include "Entity.h"
+#include <iostream>
 
 namespace Spoonity {
 
@@ -16,11 +17,11 @@ namespace Spoonity {
 			_Shader.setMat4("projection", projection);
 			_Shader.setMat4("view", view);
 
-			glm::vec3 lookPos = _Data.position + glm::vec3(_Data.direction.x, 0.0f, _Data.direction.z);
+			glm::vec3 lookPos = _Data.position + _Data.direction;
 
 			model = glm::mat4(1.0f);
 			model = glm::translate(model, _Data.position);
-			model *= glm::lookAt(_Data.position, lookPos, Camera::_WorldUp);
+			model = glm::rotate(model, _Data.angle, _Data.direction);
 			model = glm::scale(model, _Data.scale);
 
 			_Model.draw(_Shader, &model);

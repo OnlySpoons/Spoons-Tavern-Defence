@@ -4,16 +4,17 @@
 namespace Spoonity {
 
 	struct ObjectData {
-		float speed;
+		float speed, angle;
 		glm::vec3 position;
 		glm::vec3 direction;
 		glm::vec3 scale;
 
-		ObjectData(const glm::vec3& pos = glm::vec3(0.0f),
-				   const glm::vec3& dir = glm::vec3(1.0f, 0.0f, 0.0f),
-				   const glm::vec3& sca = glm::vec3(1.0f),
-				   const float spd = 0.0f)
-			: position(pos), direction(dir), scale(sca), speed(spd) {
+		ObjectData(const glm::vec3& position = glm::vec3(0.0f),
+				   const float angle = glm::radians(0.0f),
+				   const glm::vec3& direction = glm::vec3(1.0f, 0.0f, 0.0f),
+				   const glm::vec3& scale = glm::vec3(1.0f),
+				   const float speed = 0.0f)
+			: position(position), angle(angle), direction(direction), scale(scale), speed(speed) {
 		}
 	};
 

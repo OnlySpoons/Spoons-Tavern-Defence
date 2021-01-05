@@ -17,11 +17,9 @@ void Player::draw(glm::mat4 projection, glm::mat4 view, glm::mat4 model)
 		_Shader.setMat4("projection", projection);
 		_Shader.setMat4("view", view);
 
-		glm::vec3 lookPos = _Data.position + glm::vec3(_Data.direction.x, 0.0f, _Data.direction.z);
-
 		model = glm::mat4(1.0f);
 		model = glm::translate(model, _Data.position);
-		model *= glm::lookAt(_Data.position, lookPos, Spoonity::Camera::_WorldUp);
+		model = glm::rotate(model, _Data.angle, _Data.direction);
 		model = glm::scale(model, _Data.scale);
 
 		_Model.draw(_Shader, &model);

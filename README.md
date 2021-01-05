@@ -1,5 +1,9 @@
 Spoons: Tavern Defence
 
+Change Log 05/01/2021
+
+- Change ObjectData to take an angle and direction to simplify the rendering of objects.
+
 Change Log 16/12/2020 - Martin & Thomas
 
 - Added Actor Class to allow for game side players to inherit from

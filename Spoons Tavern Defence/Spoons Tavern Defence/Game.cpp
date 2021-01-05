@@ -1,7 +1,7 @@
 #include "Game.h"
 
 //Constructor
-Game::Game() : Engine( new Player(Spoonity::ObjectData( glm::vec3(0.0f, 0.5f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(1.0f), 2.5f )) )
+Game::Game() : Engine( new Player(Spoonity::ObjectData( glm::vec3(0.0f, 0.5f, 0.0f), glm::radians(0.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(1.0f), 2.5f )) )
 {
 
 	//initEngine();
@@ -55,19 +55,20 @@ Spoonity::Scene* Game::loadOverworld()
 	//Add the objects to the scene
 	objs->emplace_back(sky);
 
-	Spoonity::Entity* town = new Spoonity::Entity(
+	Spoonity::Entity* demo = new Spoonity::Entity(
 		Spoonity::ObjectData(
-			glm::vec3(0.0f), 
-			glm::vec3(0.0f, -1.0f, 0.0f),
+			glm::vec3(0.0f),
+			glm::radians(-90.0f),
+			glm::vec3(1.0f, 0.0f, 0.0f),
 			glm::vec3(0.005f)
 		),
 		"Data/Models/SyntyStudios/PolygonHeist/Polygon_Heist_Demo_Scene.fbx",
 		Spoonity::Shader("Data/Shaders/geometry_shader.vs", "Data/Shaders/geometry_shader.fs")
 	);
 
-	town->enable(); //enable the object to be drawn
+	demo->enable(); //enable the object to be drawn
 
-	objs->emplace_back(town);
+	objs->emplace_back(demo);
 
 	//TODO: add other objects as required.
 

@@ -1,19 +1,9 @@
-﻿  Camera.cpp
-  Game.cpp
-C:\Users\Martin\OneDrive - University of the West of Scotland\Paul\Spoons Tavern Defence\Spoons Tavern Defence\Spoons Tavern Defence\GameObject.h(34): warning C4114: same type qualifier used more than once
-C:\Users\Martin\OneDrive - University of the West of Scotland\Paul\Spoons Tavern Defence\Spoons Tavern Defence\Spoons Tavern Defence\GameObject.h(34,13): warning C4114: same type qualifier used more than once
-C:\Users\Martin\OneDrive - University of the West of Scotland\Paul\Spoons Tavern Defence\Spoons Tavern Defence\Spoons Tavern Defence\Skybox.h(29): warning C4114: same type qualifier used more than once
-C:\Users\Martin\OneDrive - University of the West of Scotland\Paul\Spoons Tavern Defence\Spoons Tavern Defence\Spoons Tavern Defence\Skybox.h(29,9): warning C4114: same type qualifier used more than once
-C:\Users\Martin\OneDrive - University of the West of Scotland\Paul\Spoons Tavern Defence\Spoons Tavern Defence\Spoons Tavern Defence\Player.h(15,8): warning C4227: anachronism used: qualifiers on reference are ignored
+﻿  Entity.cpp
+C:\Users\Martin\OneDrive - University of the West of Scotland\Paul\Spoons Tavern Defence\Spoons Tavern Defence\Spoons Tavern Defence\GameObject.h(35): warning C4114: same type qualifier used more than once
+C:\Users\Martin\OneDrive - University of the West of Scotland\Paul\Spoons Tavern Defence\Spoons Tavern Defence\Spoons Tavern Defence\GameObject.h(35,13): warning C4114: same type qualifier used more than once
 C:\Users\Martin\OneDrive - University of the West of Scotland\Paul\Spoons Tavern Defence\Spoons Tavern Defence\Spoons Tavern Defence\Entity.h(19): warning C4114: same type qualifier used more than once
 C:\Users\Martin\OneDrive - University of the West of Scotland\Paul\Spoons Tavern Defence\Spoons Tavern Defence\Spoons Tavern Defence\Entity.h(19,9): warning C4114: same type qualifier used more than once
-  main.cpp
-C:\Users\Martin\OneDrive - University of the West of Scotland\Paul\Spoons Tavern Defence\Spoons Tavern Defence\Spoons Tavern Defence\GameObject.h(34): warning C4114: same type qualifier used more than once
-C:\Users\Martin\OneDrive - University of the West of Scotland\Paul\Spoons Tavern Defence\Spoons Tavern Defence\Spoons Tavern Defence\GameObject.h(34,13): warning C4114: same type qualifier used more than once
-C:\Users\Martin\OneDrive - University of the West of Scotland\Paul\Spoons Tavern Defence\Spoons Tavern Defence\Spoons Tavern Defence\Skybox.h(29): warning C4114: same type qualifier used more than once
-C:\Users\Martin\OneDrive - University of the West of Scotland\Paul\Spoons Tavern Defence\Spoons Tavern Defence\Spoons Tavern Defence\Skybox.h(29,9): warning C4114: same type qualifier used more than once
-C:\Users\Martin\OneDrive - University of the West of Scotland\Paul\Spoons Tavern Defence\Spoons Tavern Defence\Spoons Tavern Defence\Player.h(15,8): warning C4227: anachronism used: qualifiers on reference are ignored
-C:\Users\Martin\OneDrive - University of the West of Scotland\Paul\Spoons Tavern Defence\Spoons Tavern Defence\Spoons Tavern Defence\Entity.h(19): warning C4114: same type qualifier used more than once
-C:\Users\Martin\OneDrive - University of the West of Scotland\Paul\Spoons Tavern Defence\Spoons Tavern Defence\Spoons Tavern Defence\Entity.h(19,9): warning C4114: same type qualifier used more than once
-  Generating Code...
+C:\Users\Martin\OneDrive - University of the West of Scotland\Paul\Spoons Tavern Defence\Spoons Tavern Defence\Spoons Tavern Defence\Entity.cpp(6,34): warning C4114: same type qualifier used more than once
+C:\Users\Martin\OneDrive - University of the West of Scotland\Paul\Spoons Tavern Defence\Spoons Tavern Defence\Spoons Tavern Defence\Entity.cpp(6,65): warning C4114: same type qualifier used more than once
+C:\Users\Martin\OneDrive - University of the West of Scotland\Paul\Spoons Tavern Defence\Spoons Tavern Defence\Spoons Tavern Defence\Entity.cpp(6,96): warning C4114: same type qualifier used more than once
   Spoons Tavern Defence.vcxproj -> C:\Users\Martin\OneDrive - University of the West of Scotland\Paul\Spoons Tavern Defence\Spoons Tavern Defence\x64\Debug\Spoons Tavern Defence.exe
