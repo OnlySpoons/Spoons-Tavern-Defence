@@ -11,6 +11,11 @@ namespace Spoonity {
 
 	Scene::~Scene()
 	{
+		for (auto it = _SceneObjects->begin(); it < _SceneObjects->end(); ++it)
+		{
+			delete* it;
+		}
+
 		_SceneObjects->clear();
 
 		delete _SceneObjects;

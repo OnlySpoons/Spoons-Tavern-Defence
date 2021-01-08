@@ -6,6 +6,20 @@ Player::Player(const Spoonity::ObjectData& const data,
 			   const Spoonity::Shader&	   const shader)
 	: Actor(data, new Spoonity::Camera(data.position, data.direction), modelPath, shader)
 {
+	_Data.position = glm::vec3(1.25f, 0.5f, 6.8f);
+	_Camera->_Position = _Data.position + glm::vec3(0.0f, 0.2f, 0.0f);
+
+	_Data.angle = -90.0f;
+	_Camera->_Yaw = _Data.angle;
+	
+	_Data.direction = _Camera->_Front;
+
+	_Data.scale = glm::vec3(1.0f);
+	_Data.speed = 1.5f;
+
+	_Camera->updateCameraVectors();
+
+	_FirstMouse = true;
 }
 
 //Render the player Model
@@ -19,7 +33,7 @@ void Player::draw(glm::mat4 projection, glm::mat4 view, glm::mat4 model)
 
 		model = glm::mat4(1.0f);
 		model = glm::translate(model, _Data.position);
-		model = glm::rotate(model, _Data.angle, _Data.direction);
+		model = glm::rotate(model, glm::radians(_Data.angle), _Data.direction);
 		model = glm::scale(model, _Data.scale);
 
 		_Model.draw(_Shader, &model);
@@ -29,60 +43,69 @@ void Player::draw(glm::mat4 projection, glm::mat4 view, glm::mat4 model)
 //Update the player
 void Player::update(float& deltaTime)
 {
-	Actor::update(deltaTime);
+	processInput(deltaTime);
 }
 
-//Processes the keyboard input to control camera movement
-void Player::ProcessKeyboard(Spoonity::Movement direction, float deltaTime, bool isSprinting)
+//Process the input for player controls
+void Player::processInput(float& deltaTime)
 {
-	//To prevent repetition
-	using Movement = Spoonity::Movement;
+	using namespace Spoonity;
 
+	//Escape closes the window
+	if (Input::isKeyPressed(KeyCode::Escape))
+		Input::closeWindow();
+
+	//Temporary variables
 	float velocity = _Data.speed * deltaTime;
 	glm::vec3 front = glm::vec3(_Data.direction.x, 0.0f, _Data.direction.z);
 	glm::vec3& right = _Camera->_Right;
 
-	if (isSprinting)
-		velocity *= 2;
-	if (direction == Movement::FORWARD)
-		_Data.position += front * velocity;
-	if (direction == Movement::BACKWARD)
-		_Data.position -= front * velocity;
-	if (direction == Movement::RIGHT)
-		_Data.position += right * velocity;
-	if (direction == Movement::LEFT)
-		_Data.position -= right * velocity;
-}
+	//Left shift is sprint key
+	if (Input::isKeyPressed(KeyCode::LeftShift))
+		velocity *= 1.4f;
 
-//Processes the mouse movement to control where the camera is facing
-void Player::ProcessMouseMovement(float xOffset, float yOffset, GLboolean constrainPitch)
-{
-	xOffset *= _MouseSensitivity;
-	yOffset *= _MouseSensitivity;
+	//Set the new position of the camera based on the keys W, A, S, & D
+	if (Input::isKeyPressed(KeyCode::W))
+		_Camera->_Position += front * velocity;
+	if (Input::isKeyPressed(KeyCode::S))
+		_Camera->_Position -= front * velocity;
+	if (Input::isKeyPressed(KeyCode::D))
+		_Camera->_Position += right * velocity;
+	if (Input::isKeyPressed(KeyCode::A))
+		_Camera->_Position -= right * velocity;
+
+	//Update the player position based on camera position
+	_Data.position = _Camera->_Position - glm::vec3(0.0f, 0.2f, 0.0f);
+
+	//Print player position when mouse button is pressed
+	if (Input::isButtonPressed(MouseCode::LeftButton))
+		std::cout << "(" << _Data.position.x << ", " << _Data.position.y << ", " << _Data.position.z << ")" << std::endl;
+
+	glm::vec2 mousePosition = Input::getCursorPos();
+
+	if (_FirstMouse)
+	{
+		_LastPos = mousePosition;
+		_FirstMouse = false;
+	}
+
+	float xOffset = mousePosition.x - _LastPos.x;
+	float yOffset = _LastPos.y - mousePosition.y; //Reversed since y-coordinates go from bottom to top
+
+	_LastPos = mousePosition;
+
+	xOffset *= 0.1f;
+	yOffset *= 0.1f;
 
 	_Camera->_Yaw += xOffset;
 	_Camera->_Pitch += yOffset;
 
-	if (constrainPitch)
-	{
-		if (_Camera->_Pitch > 89.0f)
-			_Camera->_Pitch = 89.0f;
-		if (_Camera->_Pitch < -89.0f)
-			_Camera->_Pitch = -89.0f;
-	}
+	if (_Camera->_Pitch > 89.0f)
+		_Camera->_Pitch = 89.0f;
+	if (_Camera->_Pitch < -89.0f)
+		_Camera->_Pitch = -89.0f;
 
 	_Camera->updateCameraVectors();
 
 	_Data.direction = _Camera->_Front;
-}
-
-//Processes the scroll wheel to control the zoom
-void Player::ProcessMouseScroll(float yOffset)
-{
-	if (_FOV >= 1.0f && _FOV <= 45.0f)
-		_FOV -= yOffset;
-	if (_FOV < 1.0f)
-		_FOV = 1.0f;
-	if (_FOV > 45.0f)
-		_FOV = 45.0f;
 }

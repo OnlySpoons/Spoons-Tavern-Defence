@@ -10,7 +10,7 @@ namespace Spoonity {
     {
     }
 
-	Renderer::Renderer(const Window* window, const Camera* camera)
+    Renderer::Renderer(const Window* window, const Camera* camera)
         : _Window(window), _Camera(camera)
 	{
         _LightingShader = Shader("Data/Shaders/lighting_shader.vs", "Data/Shaders/lighting_shader.fs");
@@ -30,9 +30,14 @@ namespace Spoonity {
         _LightingShader.setInt("gPosition", 0);
         _LightingShader.setInt("gNormal", 1);
         _LightingShader.setInt("gAlbedoSpec", 2);
-
-        
 	}
+
+    //Destructor
+    Renderer::~Renderer()
+    {
+        _Window = nullptr;
+        _Camera = nullptr;
+    }
 
 	//Function for configuring buffers
 	void Renderer::genBuffers()
@@ -117,7 +122,7 @@ namespace Spoonity {
         glBindFramebuffer(GL_FRAMEBUFFER, _gBuffer);
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glm::mat4 projection = glm::perspective(glm::radians(90.0f), (float)_Window->getWidth() / (float)_Window->getHeight(), 0.1f, 500.0f);
+        glm::mat4 projection = glm::perspective(glm::radians(_Camera->_FOV), (float)_Window->getWidth() / (float)_Window->getHeight(), 0.1f, 500.0f);
         glm::mat4 view = _Camera->GetViewMatrix();
         glm::mat4 model = glm::mat4(1.0f);
         
@@ -174,6 +179,5 @@ namespace Spoonity {
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         glfwSwapBuffers(_Window->getInstance());
-        glfwPollEvents();
 	}
 }

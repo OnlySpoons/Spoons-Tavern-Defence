@@ -3,8 +3,8 @@
 
 #include "GameObject.h"
 
-enum Level {
-	Overworld = 0
+enum class Level {
+	Overworld = 0,
 };
 
 namespace Spoonity {

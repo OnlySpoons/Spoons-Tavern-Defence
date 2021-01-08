@@ -22,7 +22,6 @@ namespace Spoonity {
 
 		glfwMakeContextCurrent(_Instance);
 		glfwSetFramebufferSizeCallback(_Instance, Input::framebufferSizeCallback);
-		glfwSetCursorPosCallback(_Instance, Input::mouseCallback);
 		glfwSetScrollCallback(_Instance, Input::scrollCallback);
 
 		//Tell GLFW to capture mouse
@@ -56,5 +55,9 @@ namespace Spoonity {
 	unsigned int Window::getHeight() const
 	{
 		return _Properties.Height;
+	}
+	void Window::close() const
+	{
+		glfwSetWindowShouldClose(_Instance, true);
 	}
 }

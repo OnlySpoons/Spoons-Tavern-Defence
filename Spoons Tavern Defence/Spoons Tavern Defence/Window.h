@@ -47,5 +47,7 @@ namespace Spoonity {
 
 		//Function to get height
 		unsigned int getHeight() const;
+
+		void close() const;
 	};
 }

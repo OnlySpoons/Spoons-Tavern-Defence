@@ -4,9 +4,11 @@
 
 class Player : public Spoonity::Actor
 {
-
 //Variables
-public:
+private:
+	//Used for mouse movement
+	glm::vec2 _LastPos;
+	bool _FirstMouse;
 
 //Functions
 public:
@@ -23,12 +25,6 @@ public:
 	//Update the player
 	void update(float& deltaTime) override;
 
-	//Processes the keyboard input to control camera movement
-	void ProcessKeyboard(Spoonity::Movement direction, float deltaTime, bool isSprinting) override;
-
-	//Processes the mouse movement to control where the camera is facing
-	void ProcessMouseMovement(float xOffset, float yOffset, GLboolean constrainPitch = true) override;
-
-	//Processes the scroll wheel to control the zoom
-	void ProcessMouseScroll(float yOffset) override;
+	//Process the input for player controls
+	void processInput(float& deltaTime);
 };

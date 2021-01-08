@@ -11,7 +11,7 @@ namespace Spoonity {
 		_Renderer = new Renderer(_Window, _Player->_Camera);
 
 		//Initialize input
-		Input::init(_Player);
+		Input::setWindow(_Window);
 	}
 
 	Engine::~Engine()
@@ -19,19 +19,6 @@ namespace Spoonity {
 		delete _Renderer;
 		delete _Player;
 		delete _Window;
-	}
-
-	void Engine::initEngine()
-	{
-		_LastFrame = 0.0f;
-		_DeltaTime = 0.0f;
-
-		_Window = new Window(WindowProps("Spoons: Tavern Defence", 1920, 1080));
-
-		_Renderer = new Renderer(_Window, _Player->_Camera);
-
-		//Initialize input
-		Input::init(_Player);
 	}
 
 	//Function for controlling runtime loop
@@ -43,7 +30,7 @@ namespace Spoonity {
 		_LastFrame = currentFrame;
 
 		//Input
-		Input::processInput(_Window->getInstance(), _DeltaTime);
+		glfwPollEvents();
 
 		//Run gameloop
 		gameLoop(_DeltaTime);

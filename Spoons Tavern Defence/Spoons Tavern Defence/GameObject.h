@@ -10,7 +10,7 @@ namespace Spoonity {
 		glm::vec3 scale;
 
 		ObjectData(const glm::vec3& position = glm::vec3(0.0f),
-				   const float angle = glm::radians(0.0f),
+				   const float angle = 0.0f,
 				   const glm::vec3& direction = glm::vec3(1.0f, 0.0f, 0.0f),
 				   const glm::vec3& scale = glm::vec3(1.0f),
 				   const float speed = 0.0f)
@@ -32,8 +32,8 @@ namespace Spoonity {
 	public:
 
 		//Constructor
-		GameObject(const ObjectData const &data,
-				   const Shader const &shader,
+		GameObject(const ObjectData &data,
+				   const Shader &shader,
 				   const bool &enabled = false)
 			: _Data(data), _Shader(shader), _IsEnabled(enabled) {
 		}

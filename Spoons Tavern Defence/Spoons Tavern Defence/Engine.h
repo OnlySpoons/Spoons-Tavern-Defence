@@ -25,15 +25,11 @@ namespace Spoonity {
 	//Functions
 	public:
 
-		//Constructors
-		Engine() {}
-
+		//Constructor
 		Engine(Actor* player);
 
 		//Destructor
 		virtual ~Engine();
-
-		void initEngine();
 
 		//Function to check if the engine is running
 		bool isRunning() const;

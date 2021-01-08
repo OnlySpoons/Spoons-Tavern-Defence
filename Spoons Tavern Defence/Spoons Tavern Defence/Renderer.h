@@ -7,6 +7,7 @@
 #include "stb_image.h"
 
 #include "Window.h"
+#include "Camera.h"
 #include "Shader.h"
 #include "Scene.h"
 
@@ -45,6 +46,9 @@ namespace Spoonity {
 		Renderer();
 
 		Renderer(const Window* window, const Camera* camera);
+
+		//Destructor
+		~Renderer();
 
 		//Function for configuring buffers
 		void genBuffers();

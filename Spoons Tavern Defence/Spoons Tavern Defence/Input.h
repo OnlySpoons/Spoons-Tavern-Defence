@@ -1,46 +1,61 @@
 #pragma once
 #include <glad/glad.h>
+#include <glm/glm.hpp>
 #include <GLFW/glfw3.h>
 
-#include"Actor.h"
+#include "KeyCode.h"
+#include "MouseCode.h"
 
 namespace Spoonity{
+
+	//A promise that the Window class will exist (avoids include loop)
+	class Window;
+	class Actor;
 
 	//A static class to handle user input (Must be static for callback functions to work correctly).
 	class Input
 	{
 
 	//Member variables
-	public:
-		static bool _Initialised;
+	private:
+		//Reference to the window
+		static Window* _Window;
 
-		//TODO - add player class
-		//static std::vector<Player*> players;
-
-		static Actor* _Player;
-		static float _LastX;
-		static float _LastY;
-		static bool _FirstMouse;
+		static glm::vec2 _ScrollOffset;
 
 	//Functions
 	public:
 
-		//Initialisation function, to emulate a constructor
-		static void init(Actor* player);
+		//Functions to set member variables
+		static void setWindow(Window* window);
 
-		//Function to check if Input has been initialised
-		static void checkInit();
+		//Functions to check if window is set
+		static void checkWindow();
 
-		//Function to process user input
-		static void processInput(GLFWwindow* window, float deltaTime);
+		//Functions to check for key input
+		static bool isKeyPressed(KeyCode key);
+		static bool isKeyHeld(KeyCode key);
+		static bool isKeyReleased(KeyCode key);
+
+		//Functions to get mouse button input
+		static bool isButtonPressed(MouseCode button);
+		static bool isButtonHeld(MouseCode button);
+		static bool isButtonReleased(MouseCode button);
+
+		//Function to get cursor positon
+		static glm::vec2 getCursorPos();
+
+		//Function to get scroll offset
+		static glm::vec2 getScrollOffset();
+
+		//TODO: remove this function when events are implimented
+		//Function to close the window
+		static void closeWindow();
 
 		//Window resizing callback
 		static void framebufferSizeCallback(GLFWwindow* window, int width, int height);
 
-		//Callback function to handle mouse movement
-		static void mouseCallback(GLFWwindow* window, double xPos, double yPos);
-
-		//Callback function to handle scroll wheel usage
+		//Used to set the _ScrollOffset vector
 		static void scrollCallback(GLFWwindow* window, double xOffset, double yOffset);
 	};
 }

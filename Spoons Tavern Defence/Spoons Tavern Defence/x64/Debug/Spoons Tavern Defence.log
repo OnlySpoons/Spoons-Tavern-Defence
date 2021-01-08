@@ -1,9 +1,6 @@
-﻿  Entity.cpp
-C:\Users\Martin\OneDrive - University of the West of Scotland\Paul\Spoons Tavern Defence\Spoons Tavern Defence\Spoons Tavern Defence\GameObject.h(35): warning C4114: same type qualifier used more than once
-C:\Users\Martin\OneDrive - University of the West of Scotland\Paul\Spoons Tavern Defence\Spoons Tavern Defence\Spoons Tavern Defence\GameObject.h(35,13): warning C4114: same type qualifier used more than once
-C:\Users\Martin\OneDrive - University of the West of Scotland\Paul\Spoons Tavern Defence\Spoons Tavern Defence\Spoons Tavern Defence\Entity.h(19): warning C4114: same type qualifier used more than once
-C:\Users\Martin\OneDrive - University of the West of Scotland\Paul\Spoons Tavern Defence\Spoons Tavern Defence\Spoons Tavern Defence\Entity.h(19,9): warning C4114: same type qualifier used more than once
-C:\Users\Martin\OneDrive - University of the West of Scotland\Paul\Spoons Tavern Defence\Spoons Tavern Defence\Spoons Tavern Defence\Entity.cpp(6,34): warning C4114: same type qualifier used more than once
-C:\Users\Martin\OneDrive - University of the West of Scotland\Paul\Spoons Tavern Defence\Spoons Tavern Defence\Spoons Tavern Defence\Entity.cpp(6,65): warning C4114: same type qualifier used more than once
-C:\Users\Martin\OneDrive - University of the West of Scotland\Paul\Spoons Tavern Defence\Spoons Tavern Defence\Spoons Tavern Defence\Entity.cpp(6,96): warning C4114: same type qualifier used more than once
+﻿  Player.cpp
+C:\Users\Martin\OneDrive - University of the West of Scotland\Paul\Spoons Tavern Defence\Spoons Tavern Defence\Spoons Tavern Defence\Player.h(17,8): warning C4227: anachronism used: qualifiers on reference are ignored
+C:\Users\Martin\OneDrive - University of the West of Scotland\Paul\Spoons Tavern Defence\Spoons Tavern Defence\Spoons Tavern Defence\Player.cpp(4,54): warning C4227: anachronism used: qualifiers on reference are ignored
+C:\Users\Martin\OneDrive - University of the West of Scotland\Paul\Spoons Tavern Defence\Spoons Tavern Defence\Spoons Tavern Defence\Player.cpp(5,45): warning C4227: anachronism used: qualifiers on reference are ignored
+C:\Users\Martin\OneDrive - University of the West of Scotland\Paul\Spoons Tavern Defence\Spoons Tavern Defence\Spoons Tavern Defence\Player.cpp(6,46): warning C4227: anachronism used: qualifiers on reference are ignored
   Spoons Tavern Defence.vcxproj -> C:\Users\Martin\OneDrive - University of the West of Scotland\Paul\Spoons Tavern Defence\Spoons Tavern Defence\x64\Debug\Spoons Tavern Defence.exe

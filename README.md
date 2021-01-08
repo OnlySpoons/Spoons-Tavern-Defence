@@ -1,6 +1,12 @@
 Spoons: Tavern Defence
 
-Change Log 05/01/2021
+Change Log 08/01/2021 - Martin
+
+- Abstracted input into the static input class
+- Changed Player to control reactions to input
+- **Warning** This build may have memory leaks
+
+Change Log 05/01/2021 - Martin
 
 - Change ObjectData to take an angle and direction to simplify the rendering of objects.
 

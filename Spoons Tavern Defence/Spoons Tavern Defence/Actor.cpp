@@ -18,10 +18,4 @@ namespace Spoonity {
 	{
 		delete _Camera;
 	}
-
-	//Update the object
-	void Actor::update(float& deltaTime)
-	{
-		_Camera->_Position = _Data.position + glm::vec3(0.0f, 0.2f, 0.0f);
-	}
 }

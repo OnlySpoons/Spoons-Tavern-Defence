@@ -1,95 +1,106 @@
 #include "Input.h"
+#include "Window.h"
+#include "Actor.h"
 
 namespace Spoonity {
 
 	//Initial variable declaration
-	Actor* Input::_Player = nullptr;
-	float Input::_LastX = 0.0f;
-	float Input::_LastY = 0.0f;
-	bool Input::_FirstMouse = true;
+	Window* Input::_Window = nullptr;
+	glm::vec2 Input::_ScrollOffset = glm::vec2(0.0f);
 
-	bool Input::_Initialised = false;
-
-	//Initialisation function, to emulate a constructor
-	void Input::init(Actor* player)
+	void Input::setWindow(Window* window)
 	{
-		if (!_Initialised)
-		{
-			_Player = player;
-			
-			_Initialised = true;
-		}
+		_Window = window;
 	}
 
 	//Function to check if Input has been initialised
-	void Input::checkInit()
+	void Input::checkWindow()
 	{
-		if (!_Initialised)
+		if (!_Window)
 		{
-			throw "Input is not initialised";
+			throw "Input has no assigned Window";
 		}
 	}
 
-	static bool isSprinting = false;
-	//Function to process user input
-	void Input::processInput(GLFWwindow* window, float deltaTime)
+	//Functions to check for key input
+	bool Input::isKeyPressed(KeyCode key)
 	{
-		checkInit();
+		checkWindow();
 
-		if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-			glfwSetWindowShouldClose(window, true);
+		return glfwGetKey(_Window->getInstance(), (int)key) == GLFW_PRESS;
+	}
 
-		if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
-			isSprinting = true;
-		else
-			isSprinting = false;
+	bool Input::isKeyHeld(KeyCode key)
+	{
+		return glfwGetKey(_Window->getInstance(), (int)key) == GLFW_REPEAT;
+	}
 
-		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-			_Player->ProcessKeyboard(Movement::FORWARD, deltaTime, isSprinting);
-		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-			_Player->ProcessKeyboard(Movement::BACKWARD, deltaTime, isSprinting);
-		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-			_Player->ProcessKeyboard(Movement::LEFT, deltaTime, isSprinting);
-		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-			_Player->ProcessKeyboard(Movement::RIGHT, deltaTime, isSprinting);
+	bool Input::isKeyReleased(KeyCode key)
+	{
+		checkWindow();
+
+		return glfwGetKey(_Window->getInstance(), (int)key) == GLFW_RELEASE;
+	}
+
+	//Functions to get mouse button input
+	bool Input::isButtonPressed(MouseCode button)
+	{
+		checkWindow();
+
+		return glfwGetMouseButton(_Window->getInstance(), (int)button) == GLFW_PRESS;
+	}
+
+	bool Input::isButtonHeld(MouseCode button)
+	{
+		checkWindow();
+
+		return glfwGetMouseButton(_Window->getInstance(), (int)button) == GLFW_REPEAT;
+	}
+
+	bool Input::isButtonReleased(MouseCode button)
+	{
+		checkWindow();
+
+		return glfwGetMouseButton(_Window->getInstance(), (int)button) == GLFW_RELEASE;
+	}
+
+	//Function to get cursor positon
+	glm::vec2 Input::getCursorPos()
+	{
+		checkWindow();
+
+		double xPos, yPos;
+
+		glfwGetCursorPos(_Window->getInstance(), &xPos, &yPos);
+
+		return glm::vec2((float)xPos, (float)yPos);
+	}
+
+	//Function to get scroll offset
+	glm::vec2 Input::getScrollOffset()
+	{
+		return _ScrollOffset;
+	}
+
+	//TODO: remove this function
+	//Function to close the window
+	void Input::closeWindow()
+	{
+		_Window->close();
 	}
 
 	//Window resizing callback
 	void Input::framebufferSizeCallback(GLFWwindow* window, int width, int height)
 	{
-		checkInit();
-
 		//Make sure the viewport matches the new window dimensions; note that width and 
 		//height will be significantly larger than specified on retina displays.
 		glViewport(0, 0, width, height);
 	}
 
-	//Callback function to handle mouse movement
-	void Input::mouseCallback(GLFWwindow* window, double xPos, double yPos)
-	{
-		checkInit();
-
-		if (_FirstMouse)
-		{
-			_LastX = (float)xPos;
-			_LastY = (float)yPos;
-			_FirstMouse = false;
-		}
-
-		float xOffset = (float)xPos - _LastX;
-		float yOffset = _LastY - (float)yPos; //Reversed since y-coordinates go from bottom to top
-
-		_LastX = (float)xPos;
-		_LastY = (float)yPos;
-
-		_Player->ProcessMouseMovement(xOffset, yOffset);
-	}
-
 	//Callback function to handle scroll wheel usage
 	void Input::scrollCallback(GLFWwindow* window, double xOffset, double yOffset)
 	{
-		checkInit();
-
-		_Player->ProcessMouseScroll((float)yOffset);
+		_ScrollOffset.x = (float)xOffset;
+		_ScrollOffset.y = (float)yOffset;
 	}
 }

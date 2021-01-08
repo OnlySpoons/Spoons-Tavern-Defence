@@ -6,8 +6,9 @@
 namespace Spoonity {
 
 	//Default values for major variables
-	constexpr float YAW = glm::radians(-90.0f);
-	constexpr float PITCH = glm::radians(0.0f);
+	constexpr float YAW = -90.0f;
+	constexpr float PITCH = 0.0f;
+	constexpr float FOV = 45.0f;
 
 	class Camera
 	{
@@ -24,11 +25,13 @@ namespace Spoonity {
 		float _Yaw;
 		float _Pitch;
 
+		float _FOV;
+
 	//Functions
 	public:
 
 		//Constructor
-		Camera(glm::vec3 position, glm::vec3 front, float yaw = YAW, float pitch = PITCH);
+		Camera(glm::vec3 position, glm::vec3 front, float yaw = YAW, float pitch = PITCH, float fov = FOV);
 
 		//Returns the direction the player is looking to translate objects into view space
 		glm::mat4 GetViewMatrix() const;

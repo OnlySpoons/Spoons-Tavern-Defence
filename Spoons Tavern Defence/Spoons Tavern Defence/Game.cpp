@@ -1,7 +1,7 @@
 #include "Game.h"
 
 //Constructor
-Game::Game() : Engine( new Player(Spoonity::ObjectData( glm::vec3(0.0f, 0.5f, 0.0f), glm::radians(0.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(1.0f), 2.5f )) )
+Game::Game() : Engine( new Player(Spoonity::ObjectData()))
 {
 
 	//initEngine();
@@ -11,7 +11,7 @@ Game::Game() : Engine( new Player(Spoonity::ObjectData( glm::vec3(0.0f, 0.5f, 0.
 	//Determine default scene, and pass it to the renderer.
 	for (auto it = _Scenes.begin(); it != _Scenes.end(); it++)
 	{
-		if ((*it)->_ID == Overworld)
+		if ((*it)->_ID == Level::Overworld)
 		{
 			_Renderer->_CurrentScene = *it;
 		}
@@ -21,6 +21,11 @@ Game::Game() : Engine( new Player(Spoonity::ObjectData( glm::vec3(0.0f, 0.5f, 0.
 //Destructor
 Game::~Game()
 {
+	for (auto it = _Scenes.begin(); it != _Scenes.end(); ++it)
+	{
+		delete *it;
+	}
+
 	_Scenes.clear();
 }
 
@@ -74,5 +79,5 @@ Spoonity::Scene* Game::loadOverworld()
 
 
 	//Return a scene with the added objects
-	return new Spoonity::Scene(Overworld, objs);
+	return new Spoonity::Scene(Level::Overworld, objs);
 }
