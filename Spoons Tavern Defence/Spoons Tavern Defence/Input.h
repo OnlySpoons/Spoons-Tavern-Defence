@@ -52,6 +52,9 @@ namespace Spoonity{
 		//Function to close the window
 		static void closeWindow();
 
+		//Function to clear the window pointer
+		static void clearWindow();
+
 		//Window resizing callback
 		static void framebufferSizeCallback(GLFWwindow* window, int width, int height);
 

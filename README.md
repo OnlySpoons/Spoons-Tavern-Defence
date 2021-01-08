@@ -1,5 +1,9 @@
 Spoons: Tavern Defence
 
+Change Log 08/01/2021 - Martin & Thomas
+
+- Fixed Memory leaks
+
 Change Log 08/01/2021 - Martin
 
 - Abstracted input into the static input class

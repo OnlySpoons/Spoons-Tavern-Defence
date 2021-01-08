@@ -89,6 +89,12 @@ namespace Spoonity {
 		_Window->close();
 	}
 
+	//Function to clear the window pointer
+	void Input::clearWindow()
+	{
+		_Window = nullptr;
+	}
+
 	//Window resizing callback
 	void Input::framebufferSizeCallback(GLFWwindow* window, int width, int height)
 	{

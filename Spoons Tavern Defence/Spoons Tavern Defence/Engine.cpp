@@ -16,9 +16,11 @@ namespace Spoonity {
 
 	Engine::~Engine()
 	{
+		Input::clearWindow();
+
 		delete _Renderer;
-		delete _Player;
 		delete _Window;
+		delete _Player;
 	}
 
 	//Function for controlling runtime loop
