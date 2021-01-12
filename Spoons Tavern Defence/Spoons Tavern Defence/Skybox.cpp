@@ -3,8 +3,10 @@
 namespace Spoonity {
 
     //Constructor
-    Skybox::Skybox(const ObjectData const& data, const std::vector<std::string> const& faces, const Shader const& shader)
-        : GameObject(data, shader, true), _TextureFaces(faces)
+    Skybox::Skybox(const ObjectData& data,
+                   const std::vector<std::string>& faces,
+                   const Shader& shader)
+        : GameObject(data, true), _TextureFaces(faces), _Shader(shader)
     {
         //Initialise the cube texture
         _CubeTexture = InitCubeTexture();
@@ -17,8 +19,15 @@ namespace Spoonity {
         _Shader.setInt("skybox", 0);
     }
 
+    //Destructor
+    Skybox::~Skybox()
+    {
+        glDeleteVertexArrays(1, &_VAO);
+        glDeleteBuffers(1, &_VBO);
+    }
+
     //Render the object
-    void Skybox::draw(glm::mat4 projection, glm::mat4 view, glm::mat4 model)
+    void Skybox::draw(const Shader& shader, glm::mat4 projection, glm::mat4 view, glm::mat4 model)
     {
         if (_IsEnabled)
         {
@@ -37,6 +46,7 @@ namespace Spoonity {
             glBindTexture(GL_TEXTURE_CUBE_MAP, _CubeTexture);
             glDrawArrays(GL_TRIANGLES, 0, 36);
             glBindVertexArray(0);
+            glDepthFunc(GL_LESS);
         }
     }
 

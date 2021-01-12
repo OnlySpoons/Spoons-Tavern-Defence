@@ -2,7 +2,7 @@
 
 #include "Window.h"
 #include "Renderer.h"
-#include "Player.h"
+#include "Actor.h"
 
 namespace Spoonity {
 

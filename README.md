@@ -1,5 +1,9 @@
 Spoons: Tavern Defence
 
+Change Log 12/01/2021 - Martin & Thomas
+
+- Changed how rendering works to abstract the shader from objects into the renderer
+
 Change Log 08/01/2021 - Martin & Thomas
 
 - Fixed Memory leaks

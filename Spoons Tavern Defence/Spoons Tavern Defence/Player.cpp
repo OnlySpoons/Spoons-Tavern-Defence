@@ -1,12 +1,11 @@
 #include "Player.h"
 
 //Constructor
-Player::Player(const Spoonity::ObjectData& const data,
-			   const std::string&		   const modelPath,
-			   const Spoonity::Shader&	   const shader)
-	: Actor(data, new Spoonity::Camera(data.position, data.direction), modelPath, shader)
+Player::Player(const Spoonity::ObjectData& data,
+			   const std::string& modelPath)
+	: Actor(data, new Spoonity::Camera(data.position, data.direction), modelPath)
 {
-	_Data.position = glm::vec3(1.25f, 0.5f, 6.8f);
+	_Data.position = glm::vec3(0.0f, 0.5f, 0.0f);
 	_Camera->_Position = _Data.position + glm::vec3(0.0f, 0.2f, 0.0f);
 
 	_Data.angle = -90.0f;
@@ -15,28 +14,29 @@ Player::Player(const Spoonity::ObjectData& const data,
 	_Data.direction = _Camera->_Front;
 
 	_Data.scale = glm::vec3(1.0f);
-	_Data.speed = 1.5f;
+	_Data.speed = 2.0f;
 
 	_Camera->updateCameraVectors();
 
 	_FirstMouse = true;
+	_LastPos = glm::vec2(0.0f);
 }
 
 //Render the player Model
-void Player::draw(glm::mat4 projection, glm::mat4 view, glm::mat4 model)
+void Player::draw(const Spoonity::Shader& shader, glm::mat4 projection, glm::mat4 view, glm::mat4 model) 
 {
 	if (_IsEnabled)
 	{
-		_Shader.use();
-		_Shader.setMat4("projection", projection);
-		_Shader.setMat4("view", view);
+		shader.use();
+		shader.setMat4("projection", projection);
+		shader.setMat4("view", view);
 
 		model = glm::mat4(1.0f);
 		model = glm::translate(model, _Data.position);
 		model = glm::rotate(model, glm::radians(_Data.angle), _Data.direction);
 		model = glm::scale(model, _Data.scale);
 
-		_Model.draw(_Shader, &model);
+		_Model.draw(shader, model);
 	}
 }
 

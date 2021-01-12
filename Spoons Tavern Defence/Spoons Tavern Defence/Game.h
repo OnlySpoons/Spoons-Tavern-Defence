@@ -5,6 +5,7 @@
 #include "Scene.h"
 
 #include "GameObject.h"
+#include "Player.h"
 #include "Skybox.h"
 #include "Entity.h"
 

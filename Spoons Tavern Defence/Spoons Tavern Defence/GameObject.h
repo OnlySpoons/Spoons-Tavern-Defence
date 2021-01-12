@@ -21,28 +21,27 @@ namespace Spoonity {
 	class GameObject
 	{
 	//Variables
-	protected:
-		bool _IsEnabled;
-
+	public:
 		ObjectData _Data;
 
-		Shader _Shader;
+	protected:
+		bool _IsEnabled;
 
 	//Functions
 	public:
 
 		//Constructor
 		GameObject(const ObjectData &data,
-				   const Shader &shader,
 				   const bool &enabled = false)
-			: _Data(data), _Shader(shader), _IsEnabled(enabled) {
+			: _Data(data), _IsEnabled(enabled)
+		{
 		}
 
 		//Destructor
 		virtual ~GameObject() {}
 
 		//Render the object
-		virtual void draw(glm::mat4 projection, glm::mat4 view, glm::mat4 model) = 0;
+		virtual void draw(const Shader &shader, glm::mat4 projection, glm::mat4 view, glm::mat4 model) = 0;
 
 		//Update the object
 		virtual void update(float &deltaTime) = 0;

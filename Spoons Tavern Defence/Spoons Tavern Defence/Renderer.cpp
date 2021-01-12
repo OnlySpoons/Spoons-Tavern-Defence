@@ -12,25 +12,28 @@ namespace Spoonity {
 
     Renderer::Renderer(const Window* window, const Camera* camera)
         : _Window(window), _Camera(camera)
-	{
-        _LightingShader = Shader("Data/Shaders/lighting_shader.vs", "Data/Shaders/lighting_shader.fs");
-        _LightsShader = Shader("Data/Shaders/light_shader.vs", "Data/Shaders/light_shader.fs");
+    {
+        _DepthShader = Shader("Data/Shaders/Depth/depth_shader.vs", "Data/Shaders/Depth/depth_shader.fs");
+        _GeometryShader = Shader("Data/Shaders/Geometry/geometry_shader.vs", "Data/Shaders/Geometry/geometry_shader.fs");
+        _LightingShader = Shader("Data/Shaders/Lighting/lighting_shader.vs", "Data/Shaders/Lighting/lighting_shader.fs");
 
-		//Tell stb_image.h to flip loaded texture's on the y-axis (before loading model)
-		//stbi_set_flip_vertically_on_load(true);
+        //_PostProcessShader = Shader("Data/Shaders/PostProcessing/default_shader.vs", "Data/Shaders/PostProcessing/default_shader.fs");
 
-		//Configure global opengl state
-		glEnable(GL_DEPTH_TEST);
-		
+        //Tell stb_image.h to flip loaded texture's on the y-axis (before loading model)
+        //stbi_set_flip_vertically_on_load(true);
+
+        //Configure global opengl state
+        glEnable(GL_DEPTH_TEST);
+
         //Initialise the shaders
-		genBuffers();
+        genBuffers();
 
         //Shader Config
         _LightingShader.use();
         _LightingShader.setInt("gPosition", 0);
         _LightingShader.setInt("gNormal", 1);
         _LightingShader.setInt("gAlbedoSpec", 2);
-	}
+    }
 
     //Destructor
     Renderer::~Renderer()
@@ -39,9 +42,9 @@ namespace Spoonity {
         _Camera = nullptr;
     }
 
-	//Function for configuring buffers
-	void Renderer::genBuffers()
-	{
+    //Function for configuring buffers
+    void Renderer::genBuffers()
+    {
         //Configure framebuffer
         glGenFramebuffers(1, &_gBuffer);
         glBindFramebuffer(GL_FRAMEBUFFER, _gBuffer);
@@ -60,7 +63,7 @@ namespace Spoonity {
         //Normal color buffer
         glGenTextures(1, &_gNormal);
         glBindTexture(GL_TEXTURE_2D, _gNormal);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, _Window->getWidth(), _Window->getHeight(), 0, GL_RGBA, GL_FLOAT, NULL);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, width, height, 0, GL_RGBA, GL_FLOAT, NULL);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, _gNormal, 0);
@@ -108,10 +111,10 @@ namespace Spoonity {
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
         glEnableVertexAttribArray(1);
         glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-	}
+    }
 
-	void Renderer::renderScene()
-	{
+    void Renderer::renderScene()
+    {
         //Render
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -125,8 +128,8 @@ namespace Spoonity {
         glm::mat4 projection = glm::perspective(glm::radians(_Camera->_FOV), (float)_Window->getWidth() / (float)_Window->getHeight(), 0.1f, 500.0f);
         glm::mat4 view = _Camera->GetViewMatrix();
         glm::mat4 model = glm::mat4(1.0f);
-        
-        _CurrentScene->draw(projection, view, model);
+
+        _CurrentScene->draw(_GeometryShader, projection, view, model);
 
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
@@ -153,7 +156,7 @@ namespace Spoonity {
         const float maxBrightness = 1.0f;
         float radius = (-linear + std::sqrt(linear * linear - 4 * quadratic * (constant - (256.0f / 5.0f) * maxBrightness))) / (2.0f * quadratic);
         _LightingShader.setFloat("lights[0].Radius", radius);
-        
+
         _LightingShader.setVec3("viewPos", _Camera->_Position);
 
         // finally render quad
@@ -170,7 +173,7 @@ namespace Spoonity {
         glBlitFramebuffer(0, 0, _Window->getWidth(), _Window->getHeight(), 0, 0, _Window->getWidth(), _Window->getHeight(), GL_DEPTH_BUFFER_BIT, GL_NEAREST);
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-        // TODO: 3 Post processing
+        // TODO: 3. Post processing
         //------------------------
 
 
@@ -179,5 +182,5 @@ namespace Spoonity {
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         glfwSwapBuffers(_Window->getInstance());
-	}
+    }
 }

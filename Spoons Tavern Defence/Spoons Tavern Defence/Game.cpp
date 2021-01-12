@@ -1,11 +1,8 @@
 #include "Game.h"
 
 //Constructor
-Game::Game() : Engine( new Player(Spoonity::ObjectData()))
+Game::Game() : Engine( new Player(Spoonity::ObjectData()) )
 {
-
-	//initEngine();
-
 	_Scenes.emplace_back(loadOverworld());
 
 	//Determine default scene, and pass it to the renderer.
@@ -54,7 +51,7 @@ Spoonity::Scene* Game::loadOverworld()
 				"Data/Textures/skybox/back.jpg"
 			}
 		),
-		Spoonity::Shader("Data/Shaders/skybox_shader.vs", "Data/Shaders/skybox_shader.fs")
+		Spoonity::Shader("Data/Shaders/Skybox/skybox_shader.vs", "Data/Shaders/Skybox/skybox_shader.fs")
 	);
 
 	//Add the objects to the scene
@@ -67,8 +64,7 @@ Spoonity::Scene* Game::loadOverworld()
 			glm::vec3(1.0f, 0.0f, 0.0f),
 			glm::vec3(0.005f)
 		),
-		"Data/Models/SyntyStudios/PolygonHeist/Polygon_Heist_Demo_Scene.fbx",
-		Spoonity::Shader("Data/Shaders/geometry_shader.vs", "Data/Shaders/geometry_shader.fs")
+		"Data/Models/SyntyStudios/PolygonHeist/Polygon_Heist_Demo_Scene.fbx"
 	);
 
 	demo->enable(); //enable the object to be drawn

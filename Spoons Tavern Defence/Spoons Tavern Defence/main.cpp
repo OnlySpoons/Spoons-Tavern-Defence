@@ -33,7 +33,6 @@ Shader names = shader_name.vs/fs/gs
 */
 
 #include <iostream>
-#include <vector>
 
 #include "Engine.h"
 #include "Game.h"

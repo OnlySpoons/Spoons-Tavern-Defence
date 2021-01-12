@@ -19,7 +19,7 @@ namespace Spoonity {
 	class Renderer
 	{
 
-	//Variables
+		//Variables
 	public:
 		Shader _PostProcessShader;
 
@@ -29,7 +29,7 @@ namespace Spoonity {
 		const Window* _Window;
 		const Camera* _Camera;
 
-		Shader _LightingShader, _LightsShader;
+		Shader _DepthShader, _GeometryShader, _LightingShader;
 
 		unsigned int _gBuffer, _gPosition, _gNormal, _gAlbedoSpec;
 
@@ -39,7 +39,7 @@ namespace Spoonity {
 		std::vector<glm::vec3> lightPositions;
 		std::vector<glm::vec3> lightColors;
 
-	//Functions
+		//Functions
 	public:
 
 		//Constructors
