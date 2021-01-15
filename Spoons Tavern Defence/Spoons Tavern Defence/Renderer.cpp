@@ -25,6 +25,11 @@ namespace Spoonity {
         //Configure global opengl state
         glEnable(GL_DEPTH_TEST);
 
+        //Set the light data
+        _LightPosition = glm::vec3(-10.0f, 10.0f, -10.0f);
+        _LightDirection = glm::vec3(1.0f, -1.0f, 1.0f);
+        _LightColor = glm::vec3(1.0f);
+
         //Initialise the shaders
         genBuffers();
 
@@ -143,8 +148,8 @@ namespace Spoonity {
         glActiveTexture(GL_TEXTURE2);
         glBindTexture(GL_TEXTURE_2D, _gAlbedoSpec);
         //Send light relevant uniforms
-        _LightingShader.setVec3("lights[0].Position", _Camera->_Position);
-        _LightingShader.setVec3("lights[0].Color", glm::vec3(1.0f));
+        _LightingShader.setVec3("lights[0].Position", _Camera->_Position); // TODO: change to _LightPosition
+        _LightingShader.setVec3("lights[0].Color", _LightColor);
         // update attenuation parameters and calculate radius
         const float constant = 1.0f; // note that we don't send this to the shader, we assume it is always 1.0 (in our case)
         const float linear = 0.7f;

@@ -5,7 +5,7 @@ Player::Player(const Spoonity::ObjectData& data,
 			   const std::string& modelPath)
 	: Actor(data, new Spoonity::Camera(data.position, data.direction), modelPath)
 {
-	_Data.position = glm::vec3(0.0f, 0.5f, 0.0f);
+	_Data.position = glm::vec3(1.25f, 0.5f, 6.85f);
 	_Camera->_Position = _Data.position + glm::vec3(0.0f, 0.2f, 0.0f);
 
 	_Data.angle = -90.0f;

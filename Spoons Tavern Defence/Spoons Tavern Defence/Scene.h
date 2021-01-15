@@ -5,7 +5,7 @@
 
 enum class Level {
 	None = -1,
-	Overworld = 0,
+	Overworld,
 };
 
 namespace Spoonity {

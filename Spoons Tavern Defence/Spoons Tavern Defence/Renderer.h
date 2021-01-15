@@ -36,8 +36,7 @@ namespace Spoonity {
 		unsigned int quadVAO, quadVBO;
 
 		//TODO: lighting class/rename
-		std::vector<glm::vec3> lightPositions;
-		std::vector<glm::vec3> lightColors;
+		glm::vec3 _LightPosition, _LightDirection, _LightColor;
 
 		//Functions
 	public:
