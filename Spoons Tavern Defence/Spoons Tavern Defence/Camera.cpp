@@ -5,8 +5,8 @@ namespace Spoonity {
 	//Constructor
 	Camera::Camera(glm::vec3 position, glm::vec3 front, float yaw, float pitch, float fov)
 		: _Position(position),
-		  _Front(front),
-		  _Yaw(yaw), _Pitch(pitch)
+		_Front(front),
+		_Yaw(yaw), _Pitch(pitch)
 	{
 		updateCameraVectors();
 	}

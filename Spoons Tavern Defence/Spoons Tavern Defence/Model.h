@@ -20,9 +20,9 @@
 
 namespace Spoonity {
 
-    class Model
-    {
-	//Variables
+	class Model
+	{
+		//Variables
 	private:
 		//Model Data
 		std::vector<Texture> _TexturesLoaded;	//Stores loaded textures
@@ -32,7 +32,7 @@ namespace Spoonity {
 		std::string _Directory;
 		bool _GammaCorrection;
 
-	//Functions
+		//Functions
 	public:
 
 		//Constructors
@@ -41,12 +41,12 @@ namespace Spoonity {
 		Model(std::string const& path, bool gamma = false);
 
 		//Render the model
-		void draw(const Shader shader, const glm::mat4 &model) const;
+		void draw(const Shader shader, const glm::mat4& model) const;
 
 	private:
 
 		//Converts aiMatrix4x4 to glm::mat4
-		inline glm::mat4 aiMatrix4x4ToGlm(const aiMatrix4x4 &from);
+		inline glm::mat4 aiMatrix4x4ToGlm(const aiMatrix4x4& from);
 
 		//Converts aiVector3D to glm::vec3
 		inline glm::vec3 aiVector3DToGlm(const aiVector3D& from);
@@ -65,5 +65,5 @@ namespace Spoonity {
 
 		//Loads a texture from a file path
 		unsigned int TextureFromFile(const char* path, bool gamma = false);
-    };
+	};
 }

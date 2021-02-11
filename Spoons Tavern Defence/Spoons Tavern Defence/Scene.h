@@ -5,32 +5,32 @@
 
 enum class Level {
 	None = -1,
-	Overworld,
+	Overworld = 0,
 };
 
 namespace Spoonity {
 
 	class Scene
 	{
-	//Variables
+		//Variables
 	public:
 		Level _ID;
 
-		std::vector<GameObject*> *_SceneObjects;
+		std::vector<GameObject*>* _SceneObjects;
 
-	//Functions
+		//Functions
 	public:
 
 		//Constructor
-		Scene(Level id, std::vector<GameObject*> *objs);
+		Scene(Level id, std::vector<GameObject*>* objs);
 
 		~Scene();
 
 		//Draw the objects in the scene
-		void draw(const Shader &shader, glm::mat4 projection, glm::mat4 view, glm::mat4 model) const;
+		void draw(const Shader& shader, glm::mat4 projection, glm::mat4 view, glm::mat4 model) const;
 
 		//Update the objects in the scene
-		void update(float &deltaTime) const;
+		void update(float& deltaTime) const;
 
 		//Add object to the scene
 		void addObject(GameObject* obj);

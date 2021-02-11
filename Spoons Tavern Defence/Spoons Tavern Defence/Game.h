@@ -3,19 +3,17 @@
 
 #include "Engine.h"
 #include "Scene.h"
-
-#include "GameObject.h"
-#include "Player.h"
-#include "Skybox.h"
-#include "Entity.h"
+#include "Shader.h"
 
 class Game : public Spoonity::Engine
 {
-//Variables
+	//Variables
 public:
 	std::vector<Spoonity::Scene*> _Scenes;
 
-//Functions
+	Spoonity::Shader _DefaultShader;
+
+	//Functions
 public:
 
 	//Constructor

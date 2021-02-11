@@ -2,16 +2,19 @@
 
 //Constructor
 Player::Player(const Spoonity::ObjectData& data,
-			   const std::string& modelPath)
-	: Actor(data, new Spoonity::Camera(data.position, data.direction), modelPath)
+	const std::string& modelPath)
+	: Actor(data, new Spoonity::Camera(data.position, data.front), modelPath)
 {
-	_Data.position = glm::vec3(1.25f, 0.5f, 6.85f);
+	_Data.position = glm::vec3(0.0f, 0.5f, 0.0f);
 	_Camera->_Position = _Data.position + glm::vec3(0.0f, 0.2f, 0.0f);
 
-	_Data.angle = -90.0f;
-	_Camera->_Yaw = _Data.angle;
-	
-	_Data.direction = _Camera->_Front;
+	_Data.angle = glm::vec2(-90.0f, 0.0f);
+	_Camera->_Yaw = _Data.angle.x;
+	_Camera->_Pitch = _Data.angle.y;
+
+	_Data.front = _Camera->_Front;
+	_Data.front = _Camera->_Up;
+	_Data.updateVectors();
 
 	_Data.scale = glm::vec3(1.0f);
 	_Data.speed = 2.0f;
@@ -23,7 +26,7 @@ Player::Player(const Spoonity::ObjectData& data,
 }
 
 //Render the player Model
-void Player::draw(const Spoonity::Shader& shader, glm::mat4 projection, glm::mat4 view, glm::mat4 model) 
+void Player::draw(const Spoonity::Shader& shader, glm::mat4 projection, glm::mat4 view, glm::mat4 model)
 {
 	if (_IsEnabled)
 	{
@@ -33,7 +36,7 @@ void Player::draw(const Spoonity::Shader& shader, glm::mat4 projection, glm::mat
 
 		model = glm::mat4(1.0f);
 		model = glm::translate(model, _Data.position);
-		model = glm::rotate(model, glm::radians(_Data.angle), _Data.direction);
+		model = glm::rotate(model, glm::radians(_Data.angle.x), _Data.up);
 		model = glm::scale(model, _Data.scale);
 
 		_Model.draw(shader, model);
@@ -57,12 +60,12 @@ void Player::processInput(float& deltaTime)
 
 	//Temporary variables
 	float velocity = _Data.speed * deltaTime;
-	glm::vec3 front = glm::vec3(_Data.direction.x, 0.0f, _Data.direction.z);
+	glm::vec3 front = glm::normalize(glm::vec3(_Data.front.x, 0.0f, _Data.front.z));
 	glm::vec3& right = _Camera->_Right;
 
 	//Left shift is sprint key
 	if (Input::isKeyPressed(KeyCode::LeftShift))
-		velocity *= 1.4f;
+		velocity *= 1.6f;
 
 	//Set the new position of the camera based on the keys W, A, S, & D
 	if (Input::isKeyPressed(KeyCode::W))
@@ -73,6 +76,18 @@ void Player::processInput(float& deltaTime)
 		_Camera->_Position += right * velocity;
 	if (Input::isKeyPressed(KeyCode::A))
 		_Camera->_Position -= right * velocity;
+
+	/*
+	//Flight controls
+	if (Input::isKeyPressed(KeyCode::Space))
+		_Camera->_Position += _Camera->_WorldUp * velocity;
+	if (Input::isKeyPressed(KeyCode::LeftControl))
+		_Camera->_Position -= _Camera->_WorldUp * velocity;
+
+	//Clamp Height
+	if (_Camera->_Position.y < 0.7f)
+		_Camera->_Position.y = 0.7f;
+	*/
 
 	//Update the player position based on camera position
 	_Data.position = _Camera->_Position - glm::vec3(0.0f, 0.2f, 0.0f);
@@ -107,5 +122,9 @@ void Player::processInput(float& deltaTime)
 
 	_Camera->updateCameraVectors();
 
-	_Data.direction = _Camera->_Front;
+	_Data.front = _Camera->_Front;
+	_Data.updateVectors();
+
+	_Data.angle.x = _Camera->_Yaw;
+	_Data.angle.y = _Camera->_Pitch;
 }

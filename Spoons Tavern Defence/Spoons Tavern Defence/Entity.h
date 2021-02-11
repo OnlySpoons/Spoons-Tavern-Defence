@@ -7,17 +7,19 @@ namespace Spoonity {
 
 	class Entity : public GameObject
 	{
-	//Variables
+		//Variables
 	private:
 		//Entities control their own model
 		Model _Model;
 
-	//Functions
+		//Functions
 	public:
 
-		//Constructor
+		//Constructors
+		Entity() {}
+
 		Entity(const ObjectData& data,
-			   const std::string& modelPath
+			const std::string& modelPath
 		);
 
 		//Render the object

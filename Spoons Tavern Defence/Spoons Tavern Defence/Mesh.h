@@ -38,7 +38,7 @@ namespace Spoonity {
 
     class Mesh {
 
-    //Variables
+        //Variables
     private:
         //Mesh Data
         std::vector<Vertex> _Vertices;
@@ -46,7 +46,7 @@ namespace Spoonity {
         std::vector<Texture> _Textures;
         unsigned int _VAO, _VBO, _EBO;
 
-    //Functions
+        //Functions
     public:
 
         //Constructor

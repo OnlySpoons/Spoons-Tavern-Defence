@@ -21,20 +21,22 @@ namespace Spoonity {
 	class Actor : public GameObject
 	{
 
-	//Member variables
+		//Member variables
 	public:
 		Camera* _Camera;
+
+		bool _IsSpeccyBastard;
 
 	protected:
 		Model _Model;
 
-	//Fuctions
+		//Fuctions
 	public:
 
 		//Constructor
 		Actor(const ObjectData& data,
-			  Camera* camera,
-			  const std::string& modelPath = ""
+			Camera* camera,
+			const std::string& modelPath = ""
 		);
 
 		//Destructor

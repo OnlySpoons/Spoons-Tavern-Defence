@@ -1,8 +1,14 @@
 #include "Game.h"
 
+#include "GameObject.h"
+#include "Skybox.h"
+#include "Entity.h"
+
 //Constructor
-Game::Game() : Engine( new Player(Spoonity::ObjectData()) )
+Game::Game() : Engine(new Player(Spoonity::ObjectData()))
 {
+	_DefaultShader = Spoonity::Shader("Data/Shaders/PostProcessing/Default/default_shader.vs", "Data/Shaders/PostProcessing/Default/default_shader.fs");
+
 	_Scenes.emplace_back(loadOverworld());
 
 	//Determine default scene, and pass it to the renderer.
@@ -20,7 +26,7 @@ Game::~Game()
 {
 	for (auto it = _Scenes.begin(); it != _Scenes.end(); ++it)
 	{
-		delete *it;
+		delete* it;
 	}
 
 	_Scenes.clear();
@@ -29,15 +35,23 @@ Game::~Game()
 //Overriding gameloop
 void Game::gameLoop(float& deltaTime)
 {
-	//TODO: Game logic
+	//Update the player
 	_Player->update(deltaTime);
+
+	for (auto it = _Scenes.begin(); it != _Scenes.end(); it++)
+	{
+		if ((*it)->_ID == Level::Overworld)
+		{
+			(*it)->update(deltaTime);
+		}
+	}
 }
 
 //Load default scene
 Spoonity::Scene* Game::loadOverworld()
 {
 	//Create the objects vector to be passed to the scene
-	std::vector<Spoonity::GameObject*> *objs = new std::vector<Spoonity::GameObject*>();
+	std::vector<Spoonity::GameObject*>* objs = new std::vector<Spoonity::GameObject*>();
 
 	Spoonity::Skybox* sky = new Spoonity::Skybox(
 		Spoonity::ObjectData(),
@@ -50,9 +64,11 @@ Spoonity::Scene* Game::loadOverworld()
 				"Data/Textures/skybox/front.jpg",
 				"Data/Textures/skybox/back.jpg"
 			}
-		),
+			),
 		Spoonity::Shader("Data/Shaders/Skybox/skybox_shader.vs", "Data/Shaders/Skybox/skybox_shader.fs")
 	);
+
+	_Renderer->_Skybox = sky;
 
 	//Add the objects to the scene
 	objs->emplace_back(sky);
@@ -60,8 +76,9 @@ Spoonity::Scene* Game::loadOverworld()
 	Spoonity::Entity* demo = new Spoonity::Entity(
 		Spoonity::ObjectData(
 			glm::vec3(0.0f),
-			glm::radians(-90.0f),
+			glm::vec2(-90.0f, 0.0f),
 			glm::vec3(1.0f, 0.0f, 0.0f),
+			glm::vec3(0.0f, 1.0f, 0.0f),
 			glm::vec3(0.005f)
 		),
 		"Data/Models/SyntyStudios/PolygonHeist/Polygon_Heist_Demo_Scene.fbx"
@@ -72,7 +89,6 @@ Spoonity::Scene* Game::loadOverworld()
 	objs->emplace_back(demo);
 
 	//TODO: add other objects as required.
-
 
 	//Return a scene with the added objects
 	return new Spoonity::Scene(Level::Overworld, objs);

@@ -2,27 +2,27 @@
 
 #include "Window.h"
 #include "Renderer.h"
-#include "Actor.h"
+#include "Player.h"
 
 namespace Spoonity {
 
 	class Engine
 	{
 
-	//Memeber variables
+		//Memeber variables
 	protected:
 		Window* _Window;
 
 		Renderer* _Renderer;
 
 		Actor* _Player;
-		
+
 		float _LastFrame;
 
 	public:
 		float _DeltaTime;
 
-	//Functions
+		//Functions
 	public:
 
 		//Constructor

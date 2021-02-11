@@ -1,21 +1,22 @@
 #pragma once
 #include "Actor.h"
+#include "Entity.h"
 #include "Camera.h"
 
 class Player : public Spoonity::Actor
 {
-//Variables
+	//Variables
 private:
 	//Used for mouse movement
 	glm::vec2 _LastPos;
 	bool _FirstMouse;
 
-//Functions
+	//Functions
 public:
 
 	//Constructor
 	Player(const Spoonity::ObjectData& data,
-		   const std::string& modelPath = ""
+		const std::string& modelPath = ""
 	);
 
 	//Render the player Model

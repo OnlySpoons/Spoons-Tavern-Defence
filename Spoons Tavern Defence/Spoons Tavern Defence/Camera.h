@@ -13,7 +13,7 @@ namespace Spoonity {
 	class Camera
 	{
 
-	//Member variables
+		//Member variables
 	public:
 		constexpr static glm::vec3 _WorldUp = glm::vec3(0.0f, 1.0f, 0.0f);
 
@@ -27,7 +27,7 @@ namespace Spoonity {
 
 		float _FOV;
 
-	//Functions
+		//Functions
 	public:
 
 		//Constructor

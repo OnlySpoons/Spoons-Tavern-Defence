@@ -69,13 +69,13 @@ namespace Spoonity {
 
 		LeftShift = GLFW_KEY_LEFT_SHIFT,
 		RightShift = GLFW_KEY_RIGHT_SHIFT,
-		
+
 		LeftControl = GLFW_KEY_LEFT_CONTROL,
 		RightControl = GLFW_KEY_RIGHT_CONTROL,
-		
+
 		Alt = GLFW_KEY_LEFT_ALT,
 		AltGr = GLFW_KEY_RIGHT_ALT,
-		
+
 		LeftSuper = GLFW_KEY_LEFT_SUPER,
 		RightSuper = GLFW_KEY_RIGHT_SUPER,
 		Windows = LeftSuper,
@@ -112,7 +112,7 @@ namespace Spoonity {
 		PrintScreen = GLFW_KEY_PRINT_SCREEN,
 		ScrollLock = GLFW_KEY_SCROLL_LOCK,
 		PauseBreak = GLFW_KEY_PAUSE,
-		
+
 		Home = GLFW_KEY_HOME,
 		End = GLFW_KEY_END,
 		Insert = GLFW_KEY_INSERT,

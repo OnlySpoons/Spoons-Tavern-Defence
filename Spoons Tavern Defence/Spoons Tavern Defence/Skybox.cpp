@@ -4,8 +4,8 @@ namespace Spoonity {
 
     //Constructor
     Skybox::Skybox(const ObjectData& data,
-                   const std::vector<std::string>& faces,
-                   const Shader& shader)
+        const std::vector<std::string>& faces,
+        const Shader& shader)
         : GameObject(data, true), _TextureFaces(faces), _Shader(shader)
     {
         //Initialise the cube texture

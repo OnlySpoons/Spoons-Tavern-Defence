@@ -6,7 +6,7 @@
 #include "KeyCode.h"
 #include "MouseCode.h"
 
-namespace Spoonity{
+namespace Spoonity {
 
 	//A promise that the Window class will exist (avoids include loop)
 	class Window;
@@ -16,14 +16,14 @@ namespace Spoonity{
 	class Input
 	{
 
-	//Member variables
+		//Member variables
 	private:
 		//Reference to the window
 		static Window* _Window;
 
 		static glm::vec2 _ScrollOffset;
 
-	//Functions
+		//Functions
 	public:
 
 		//Functions to set member variables

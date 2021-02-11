@@ -14,9 +14,9 @@ namespace Spoonity
 	}
 
 	//Render the model
-	void Model::draw(const Shader shader, const glm::mat4 &model) const
+	void Model::draw(const Shader shader, const glm::mat4& model) const
 	{
-		if(!_Meshes.empty())
+		if (!_Meshes.empty())
 		{
 			for (unsigned int i = 0; i < _Meshes.size(); i++)
 			{
@@ -108,10 +108,10 @@ namespace Spoonity
 		for (unsigned int i = 0; i < mesh->mNumVertices; i++)
 		{
 			Vertex vertex;
-			
+
 			//Positions
 			vertex.Position = aiVector3DToGlm(mesh->mVertices[i]);
-			
+
 			//Normals
 			if (mesh->HasNormals())
 			{
@@ -174,15 +174,15 @@ namespace Spoonity
 		//Diffuse maps
 		std::vector<Texture> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
 		textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
-		
+
 		//Specular maps
 		std::vector<Texture> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
 		textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
-		
+
 		//Normal maps
 		std::vector<Texture> normalMaps = loadMaterialTextures(material, aiTextureType_HEIGHT, "texture_normal");
 		textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
-		
+
 		//Height maps
 		std::vector<Texture> heightMaps = loadMaterialTextures(material, aiTextureType_AMBIENT, "texture_height");
 		textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
@@ -209,13 +209,13 @@ namespace Spoonity
 				if (std::strcmp(_TexturesLoaded[j].path.data(), str.C_Str()) == 0)
 				{
 					textures.push_back(_TexturesLoaded[j]);
-					skip = true;		
+					skip = true;
 					break;
 				}
 			}
 
 			if (!skip)
-			{   
+			{
 				//Load texture if not done previously
 				Texture texture;
 				texture.id = TextureFromFile(str.C_Str());
@@ -223,7 +223,7 @@ namespace Spoonity
 				texture.path = str.C_Str();
 				textures.push_back(texture);
 				//Store it as texture loaded to avoid duplicates
-				_TexturesLoaded.push_back(texture);  
+				_TexturesLoaded.push_back(texture);
 			}
 		}
 		return textures;

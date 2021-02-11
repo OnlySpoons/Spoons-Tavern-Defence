@@ -11,7 +11,7 @@ namespace Spoonity {
 
 	class Skybox : public GameObject
 	{
-	//Variables
+		//Variables
 	private:
 		//Inherited Variables
 		//_Data - position, direction, and rotation data
@@ -24,13 +24,13 @@ namespace Spoonity {
 		unsigned int _VAO, _VBO, _CubeTexture;
 
 
-	//Functions
+		//Functions
 	public:
 
 		//Constructor
-		Skybox(const ObjectData &data,
-			   const std::vector<std::string> &faces,
-			   const Shader &shader);
+		Skybox(const ObjectData& data,
+			const std::vector<std::string>& faces,
+			const Shader& shader);
 
 		//Destructor
 		~Skybox();
@@ -39,7 +39,7 @@ namespace Spoonity {
 		void draw(const Shader& shader, glm::mat4 projection, glm::mat4 view, glm::mat4 model) override;
 
 		//Unused by skybox
-		void update(float &deltaTime) override {}
+		void update(float& deltaTime) override {}
 
 	private:
 

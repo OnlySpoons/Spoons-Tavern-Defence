@@ -24,7 +24,7 @@ namespace Spoonity {
 	class Window
 	{
 
-	//Member variables
+		//Member variables
 	private:
 		GLFWwindow* _Instance; //The GLFWwindow instance
 

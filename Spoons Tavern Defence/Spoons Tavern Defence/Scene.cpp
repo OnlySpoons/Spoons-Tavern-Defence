@@ -3,7 +3,7 @@
 namespace Spoonity {
 
 	//Constructor
-	Scene::Scene(Level id, std::vector<GameObject*> *objs)
+	Scene::Scene(Level id, std::vector<GameObject*>* objs)
 		: _ID(id), _SceneObjects(objs)
 	{
 	}
@@ -21,7 +21,7 @@ namespace Spoonity {
 	}
 
 	//Draw the objects in the scene
-	void Scene::draw(const Shader &shader, glm::mat4 projection, glm::mat4 view, glm::mat4 model) const
+	void Scene::draw(const Shader& shader, glm::mat4 projection, glm::mat4 view, glm::mat4 model) const
 	{
 		for (GameObject* obj : *_SceneObjects)
 		{
@@ -30,7 +30,7 @@ namespace Spoonity {
 	}
 
 	//Update the objects in the scene
-	void Scene::update(float &deltaTime) const
+	void Scene::update(float& deltaTime) const
 	{
 		for (GameObject* obj : *_SceneObjects)
 		{

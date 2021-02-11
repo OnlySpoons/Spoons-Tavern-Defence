@@ -6,7 +6,7 @@ namespace Spoonity {
 		: _LastFrame(0.0f), _DeltaTime(0.0f),
 		_Player(player)
 	{
-		_Window = new Window(WindowProps("Spoons: Tavern Defence", 1920, 1080));
+		_Window = new Window(WindowProps("Advanced Graphics Project", 1920, 1080));
 
 		_Renderer = new Renderer(_Window, _Player->_Camera);
 

@@ -24,21 +24,30 @@ namespace Spoonity {
 		Shader _PostProcessShader;
 
 		Scene* _CurrentScene;
+		Skybox* _Skybox;
 
 	private:
 		const Window* _Window;
 		const Camera* _Camera;
 
-		Shader _DepthShader, _GeometryShader, _LightingShader;
+		Shader _DepthShader, _GeometryShader, _LightingShader, debugDepthShader;
+
+		const unsigned int SHADOW_WIDTH = 8192, SHADOW_HEIGHT = 8192;
+
+		unsigned int _DepthMapFBO, _DepthMap;
 
 		unsigned int _gBuffer, _gPosition, _gNormal, _gAlbedoSpec;
+
+		unsigned int _ScreenBuffer, _ScreenTexture, _StencilMask;
+
+		const char* _StencilPath;
 
 		unsigned int quadVAO, quadVBO;
 
 		//TODO: lighting class/rename
-		glm::vec3 _LightPosition, _LightDirection, _LightColor;
+		glm::vec3 _LightPosition, _LightDirection, _LightColor; // Note light position isn't used for directional lights and light direction isn't used for point lights
 
-		//Functions
+	//Functions
 	public:
 
 		//Constructors
