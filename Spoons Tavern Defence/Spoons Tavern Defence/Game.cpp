@@ -76,12 +76,12 @@ Spoonity::Scene* Game::loadOverworld()
 	Spoonity::Entity* demo = new Spoonity::Entity(
 		Spoonity::ObjectData(
 			glm::vec3(0.0f),
-			glm::vec2(-90.0f, 0.0f),
+			glm::vec2(0.0f, 0.0f),
 			glm::vec3(1.0f, 0.0f, 0.0f),
 			glm::vec3(0.0f, 1.0f, 0.0f),
 			glm::vec3(0.005f)
 		),
-		"Data/Models/SyntyStudios/PolygonHeist/Polygon_Heist_Demo_Scene.fbx"
+		"Data/Models/SyntyStudios/PolygonHeist/bank.fbx"
 	);
 
 	demo->enable(); //enable the object to be drawn
