@@ -3,6 +3,7 @@
 #include "Window.h"
 #include "Renderer.h"
 #include "Player.h"
+#include "Physics.h"
 
 namespace Spoonity {
 
@@ -14,6 +15,8 @@ namespace Spoonity {
 		Window* _Window;
 
 		Renderer* _Renderer;
+
+		Physics* _PhysicsEngine;
 
 		Actor* _Player;
 

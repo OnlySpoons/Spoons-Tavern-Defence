@@ -1,5 +1,14 @@
 Spoons: Tavern Defence
 
+Change Log 18/02/2021 - Martin, Thomas & Harry 
+
+- Implemented Bullet physics world
+
+Change Log 11/02/2021 - Martin & Thomas
+
+- Implemented shadows
+- Implemented post-processing
+
 Change Log 12/01/2021 - Martin & Thomas
 
 - Changed how rendering works to abstract the shader from objects into the renderer

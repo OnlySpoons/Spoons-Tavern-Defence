@@ -10,6 +10,8 @@ namespace Spoonity {
 
 		_Renderer = new Renderer(_Window, _Player->_Camera);
 
+		_PhysicsEngine = new Physics();
+
 		//Initialize input
 		Input::setWindow(_Window);
 	}
@@ -18,6 +20,7 @@ namespace Spoonity {
 	{
 		Input::clearWindow();
 
+		delete _PhysicsEngine;
 		delete _Renderer;
 		delete _Window;
 		delete _Player;
