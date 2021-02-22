@@ -11,8 +11,6 @@ class Game : public Spoonity::Engine
 public:
 	std::vector<Spoonity::Scene*> _Scenes;
 
-	Spoonity::Shader _DefaultShader;
-
 	//Functions
 public:
 

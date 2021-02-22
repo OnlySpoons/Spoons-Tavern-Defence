@@ -33,15 +33,30 @@ Shader names = shader_name.vs/fs/gs
 */
 
 #include <iostream>
+#include <functional>
 
 #include "Engine.h"
 #include "Game.h"
+
+#include <functional>
+#include "Dispatcher.h"
+#include "Observer.h"
 
 using namespace Spoonity;
 
 int main()
 {
 	Engine* engine = new Game();
+
+	Dispatcher<EventType> dispatcher;
+
+	TestObserver observer;
+
+	dispatcher.subscribe(EventType::InvalidEvent, observer);
+
+	TestEvent e;
+
+	dispatcher.post(e);
 
 	try {
 

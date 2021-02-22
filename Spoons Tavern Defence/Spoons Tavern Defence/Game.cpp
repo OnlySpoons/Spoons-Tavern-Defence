@@ -7,8 +7,6 @@
 //Constructor
 Game::Game() : Engine(new Player(Spoonity::ObjectData()))
 {
-	_DefaultShader = Spoonity::Shader("Data/Shaders/PostProcessing/Default/default_shader.vs", "Data/Shaders/PostProcessing/Default/default_shader.fs");
-
 	_Scenes.emplace_back(loadOverworld());
 
 	//Determine default scene, and pass it to the renderer.

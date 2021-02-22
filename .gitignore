@@ -8,7 +8,7 @@
 *.tlog
 *.idb
 *.ilk
-*.pbd
+*.pdb
 *.ipch
 *.db
 *.suo

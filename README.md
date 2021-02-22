@@ -1,12 +1,28 @@
 Spoons: Tavern Defence
 
+Change Log 22/02/2021 - Martin & Thomas
+
+- Added Event class for all events to inherit from
+- Added EventType enumerator to track events
+- Added Dispatcher class to track subscribers and post events
+- Added abstract Observer class for observers to inherit from
+
+
+Change Log 11/02/2021 - Martin & Thomas
+
+- Implemented Shadows
+- Implemented post-processing
+
+
 Change Log 12/01/2021 - Martin & Thomas
 
 - Changed how rendering works to abstract the shader from objects into the renderer
 
+
 Change Log 08/01/2021 - Martin & Thomas
 
 - Fixed Memory leaks
+
 
 Change Log 08/01/2021 - Martin
 
@@ -14,9 +30,11 @@ Change Log 08/01/2021 - Martin
 - Changed Player to control reactions to input
 - **Warning** This build may have memory leaks
 
+
 Change Log 05/01/2021 - Martin
 
 - Change ObjectData to take an angle and direction to simplify the rendering of objects.
+
 
 Change Log 16/12/2020 - Martin & Thomas
 
