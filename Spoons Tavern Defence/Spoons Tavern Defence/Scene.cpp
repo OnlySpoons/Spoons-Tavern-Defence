@@ -4,26 +4,26 @@ namespace Spoonity {
 
 	//Constructor
 	Scene::Scene(Level id, std::vector<GameObject*>* objs)
-		: _ID(id), _SceneObjects(objs)
+		: _id(id), _sceneObjects(objs)
 	{
 	}
 
 	Scene::~Scene()
 	{
-		for (auto it = _SceneObjects->begin(); it < _SceneObjects->end(); ++it)
+		for (auto it = _sceneObjects->begin(); it < _sceneObjects->end(); ++it)
 		{
 			delete* it;
 		}
 
-		_SceneObjects->clear();
+		_sceneObjects->clear();
 
-		delete _SceneObjects;
+		delete _sceneObjects;
 	}
 
 	//Draw the objects in the scene
 	void Scene::draw(const Shader& shader, glm::mat4 projection, glm::mat4 view, glm::mat4 model) const
 	{
-		for (GameObject* obj : *_SceneObjects)
+		for (GameObject* obj : *_sceneObjects)
 		{
 			obj->draw(shader, projection, view, model);
 		}
@@ -32,7 +32,7 @@ namespace Spoonity {
 	//Update the objects in the scene
 	void Scene::update(float& deltaTime) const
 	{
-		for (GameObject* obj : *_SceneObjects)
+		for (GameObject* obj : *_sceneObjects)
 		{
 			obj->update(deltaTime);
 		}
@@ -42,20 +42,20 @@ namespace Spoonity {
 	void Scene::addObject(GameObject* obj)
 	{
 		//Add the object to the list of objects in the scene
-		_SceneObjects->emplace_back(std::move(obj));
+		_sceneObjects->emplace_back(std::move(obj));
 	}
 
 	//Remove object to the scene
 	bool Scene::removeObject(GameObject* obj)
 	{
 		//Find position of the object
-		auto it = std::find(_SceneObjects->begin(), _SceneObjects->end(), obj);
+		auto it = std::find(_sceneObjects->begin(), _sceneObjects->end(), obj);
 
 		//Check if the object was found
-		if (it != _SceneObjects->end())
+		if (it != _sceneObjects->end())
 		{
 			//Erase the object
-			_SceneObjects->erase(it);
+			_sceneObjects->erase(it);
 			return true;
 		}
 
@@ -64,9 +64,9 @@ namespace Spoonity {
 	}
 	void Scene::enableObject(GameObject* obj)
 	{
-		auto it = std::find(_SceneObjects->begin(), _SceneObjects->end(), obj);
+		auto it = std::find(_sceneObjects->begin(), _sceneObjects->end(), obj);
 
-		if (it != _SceneObjects->end())
+		if (it != _sceneObjects->end())
 		{
 			obj->enable();
 		}
@@ -74,9 +74,9 @@ namespace Spoonity {
 
 	void Scene::disableObject(GameObject* obj)
 	{
-		auto it = std::find(_SceneObjects->begin(), _SceneObjects->end(), obj);
+		auto it = std::find(_sceneObjects->begin(), _sceneObjects->end(), obj);
 
-		if (it != _SceneObjects->end())
+		if (it != _sceneObjects->end())
 		{
 			obj->disable();
 		}

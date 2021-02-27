@@ -25,12 +25,12 @@ namespace Spoonity {
 		//Variables
 	private:
 		//Model Data
-		std::vector<Texture> _TexturesLoaded;	//Stores loaded textures
-		std::vector<Mesh> _Meshes;				//Stores loaded meshes
-		std::vector<glm::mat4> _Transforms;		//Stores node transformations
+		std::vector<Texture> _texturesLoaded;	//Stores loaded textures
+		std::vector<Mesh> _meshes;				//Stores loaded meshes
+		std::vector<glm::mat4> _transforms;		//Stores node transformations
 
-		std::string _Directory;
-		bool _GammaCorrection;
+		std::string _directory;
+		bool _gammaCorrection;
 
 		//Functions
 	public:

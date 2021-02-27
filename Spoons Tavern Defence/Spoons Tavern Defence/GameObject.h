@@ -34,20 +34,20 @@ namespace Spoonity {
 	{
 		//Variables
 	public:
-		ObjectData _Data;
+		ObjectData _data;
 
 	protected:
-		bool _IsEnabled;
+		bool _isEnabled;
 
 		//Functions
 	public:
 
 		//Constructors
-		GameObject() :_Data(ObjectData()) {}
+		GameObject() :_data(ObjectData()), _isEnabled(false) {}
 
 		GameObject(const ObjectData& data,
 			const bool& enabled = false)
-			: _Data(data), _IsEnabled(enabled)
+			: _data(data), _isEnabled(enabled)
 		{
 		}
 
@@ -63,13 +63,13 @@ namespace Spoonity {
 		//Enable object to be rendered and process physics
 		void enable()
 		{
-			_IsEnabled = true;
+			_isEnabled = true;
 		}
 
 		//Disable object from being rendered and processing physics
 		void disable()
 		{
-			_IsEnabled = false;
+			_isEnabled = false;
 		}
 	};
 }

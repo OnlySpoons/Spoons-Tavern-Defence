@@ -16,7 +16,7 @@ namespace Spoonity {
 
 		//Member Variables
 	public:
-		unsigned int _ID;
+		unsigned int _id;
 
 		//Functions
 	public:

@@ -23,12 +23,10 @@ namespace Spoonity {
 
 		//Member variables
 	public:
-		Camera* _Camera;
-
-		bool _IsSpeccyBastard;
+		Camera* _camera;
 
 	protected:
-		Model _Model;
+		Model _model;
 
 		//Fuctions
 	public:

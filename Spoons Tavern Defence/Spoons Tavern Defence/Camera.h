@@ -15,17 +15,17 @@ namespace Spoonity {
 
 		//Member variables
 	public:
-		constexpr static glm::vec3 _WorldUp = glm::vec3(0.0f, 1.0f, 0.0f);
+		constexpr static glm::vec3 WorldUp = glm::vec3(0.0f, 1.0f, 0.0f);
 
-		glm::vec3 _Position;
-		glm::vec3 _Front;
-		glm::vec3 _Up;
-		glm::vec3 _Right;
+		glm::vec3 _position;
+		glm::vec3 _front;
+		glm::vec3 _up;
+		glm::vec3 _right;
 
-		float _Yaw;
-		float _Pitch;
+		float _yaw;
+		float _pitch;
 
-		float _FOV;
+		float _fov;
 
 		//Functions
 	public:

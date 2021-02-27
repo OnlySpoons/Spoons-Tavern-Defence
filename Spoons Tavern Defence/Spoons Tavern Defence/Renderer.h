@@ -6,10 +6,10 @@
 
 #include "stb_image.h"
 
-#include "Window.h"
-#include "Camera.h"
 #include "Shader.h"
+
 #include "Scene.h"
+#include "Camera.h"
 
 #include "GameObject.h"
 #include "Skybox.h"
@@ -21,31 +21,30 @@ namespace Spoonity {
 
 		//Variables
 	public:
-		Shader _PostProcessShader;
+		Shader _postProcessShader;
 
-		Scene* _CurrentScene;
-		Skybox* _Skybox;
+		Skybox* _skybox;
 
 	private:
-		const Window* _Window;
-		const Camera* _Camera;
 
-		Shader _DepthShader, _GeometryShader, _LightingShader, debugDepthShader;
+		Shader _depthShader, _geometryShader, _lightingShader, _debugDepthShader;
 
 		const unsigned int SHADOW_WIDTH = 8192, SHADOW_HEIGHT = 8192;
 
-		unsigned int _DepthMapFBO, _DepthMap;
+		unsigned int _windowWidth, _windowHeight;
+
+		unsigned int _depthMapFBO, _depthMap;
 
 		unsigned int _gBuffer, _gPosition, _gNormal, _gAlbedoSpec;
 
-		unsigned int _ScreenBuffer, _ScreenTexture, _StencilMask;
+		unsigned int _screenBuffer, _screenTexture, _stencilMask;
 
-		const char* _StencilPath;
+		const char* _stencilPath;
 
-		unsigned int quadVAO, quadVBO;
+		unsigned int _quadVAO, _quadVBO;
 
 		//TODO: lighting class/rename
-		glm::vec3 _LightPosition, _LightDirection, _LightColor; // Note light position isn't used for directional lights and light direction isn't used for point lights
+		glm::vec3 _lightPosition, _lightDirection, _lightColor; // Note light position isn't used for directional lights and light direction isn't used for point lights
 
 	//Functions
 	public:
@@ -53,7 +52,7 @@ namespace Spoonity {
 		//Constructors
 		Renderer();
 
-		Renderer(const Window* window, const Camera* camera);
+		Renderer(int width, int height);
 
 		//Destructor
 		~Renderer();
@@ -62,6 +61,6 @@ namespace Spoonity {
 		void genBuffers();
 
 		//Render the scene
-		void renderScene();
+		void renderScene(const Scene& scene, const Camera& camera);
 	};
 }

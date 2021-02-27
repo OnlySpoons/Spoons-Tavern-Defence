@@ -14,9 +14,9 @@ namespace Spoonity {
 	{
 		//Variables
 	public:
-		Level _ID;
+		Level _id;
 
-		std::vector<GameObject*>* _SceneObjects;
+		std::vector<GameObject*>* _sceneObjects;
 
 		//Functions
 	public:

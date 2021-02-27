@@ -4,7 +4,7 @@ namespace Spoonity {
 
 	//Constructor
 	Window::Window(WindowProps properties)
-		: _Properties(properties)
+		: _properties(properties)
 	{
 		//GLFW: initialise and configure
 		glfwInit();
@@ -12,20 +12,20 @@ namespace Spoonity {
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-		_Instance = glfwCreateWindow(_Properties.Width, _Properties.Height, _Properties.Title.c_str(), NULL, NULL);
+		_instance = glfwCreateWindow(_properties.width, _properties.height, _properties.title.c_str(), NULL, NULL);
 
-		if (_Instance == NULL)
+		if (_instance == NULL)
 		{
 			glfwTerminate();
 			throw "Failed to create GLFW window";
 		}
 
-		glfwMakeContextCurrent(_Instance);
-		glfwSetFramebufferSizeCallback(_Instance, Input::framebufferSizeCallback);
-		glfwSetScrollCallback(_Instance, Input::scrollCallback);
+		glfwMakeContextCurrent(_instance);
+		glfwSetFramebufferSizeCallback(_instance, Input::framebufferSizeCallback);
+		glfwSetScrollCallback(_instance, Input::scrollCallback);
 
 		//Tell GLFW to capture mouse
-		glfwSetInputMode(_Instance, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		glfwSetInputMode(_instance, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 		//Glad: load all OpenGL function pointers
 		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -42,22 +42,22 @@ namespace Spoonity {
 	//Function to get instance
 	GLFWwindow* Window::getInstance() const
 	{
-		return _Instance;
+		return _instance;
 	}
 
 	//Function to get width
 	unsigned int Window::getWidth() const
 	{
-		return _Properties.Width;
+		return _properties.width;
 	}
 
 	//Function to get height
 	unsigned int Window::getHeight() const
 	{
-		return _Properties.Height;
+		return _properties.height;
 	}
 	void Window::close() const
 	{
-		glfwSetWindowShouldClose(_Instance, true);
+		glfwSetWindowShouldClose(_instance, true);
 	}
 }

@@ -8,8 +8,8 @@ class Player : public Spoonity::Actor
 	//Variables
 private:
 	//Used for mouse movement
-	glm::vec2 _LastPos;
-	bool _FirstMouse;
+	glm::vec2 _lastPos;
+	bool _firstMouse;
 
 	//Functions
 public:

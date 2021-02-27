@@ -10,8 +10,7 @@
 namespace Spoonity {
 	
 	template<typename T>
-	using SlotType = std::function< void( const Event<T>& ) >;
-	//TODO:: make dispatcher static
+	using EventFunc = std::function< void( const Event<T>& ) >;
 
 	template<typename T>
 	class Dispatcher
@@ -19,23 +18,23 @@ namespace Spoonity {
 	public:
 
 	private:
-		std::map< T, std::vector<SlotType<T>> > _Observers;
+		std::map< T, std::vector<EventFunc<T>> > _observers;
 
 		//TODO:: add event queue which is handled at the start/end of each frame
 
 	public:
 
-		void subscribe(const T& type, SlotType<T>& func)
+		void subscribe(const T& type, EventFunc<T>& func)
 		{
-			_Observers[type].push_back(func);
+			_observers[type].push_back(func);
 		}
 
 		template<typename ObserverType>
 		void subscribe(const T& type, ObserverType& observer)
 		{
-			SlotType<T> func = std::bind(&ObserverType::handle, observer, std::placeholders::_1);
+			EventFunc<T> func = std::bind(&ObserverType::handle, observer, std::placeholders::_1);
 
-			_Observers[type].push_back(func);
+			_observers[type].push_back(func);
 		}
 
 		void post(const Event<T>& event) const
@@ -43,10 +42,10 @@ namespace Spoonity {
 			auto type = event.type();
 
 			//Ignore events for which we do not have any observers.
-			if (_Observers.find(type) == _Observers.end())
+			if (_observers.find(type) == _observers.end())
 				return;
 
-			for (auto&& observer : _Observers.at(type))
+			for (auto&& observer : _observers.at(type))
 				if (!event.isHandled()) observer(event);
 		}
 

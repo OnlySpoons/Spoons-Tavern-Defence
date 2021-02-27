@@ -7,14 +7,14 @@
 //Constructor
 Game::Game() : Engine(new Player(Spoonity::ObjectData()))
 {
-	_Scenes.emplace_back(loadOverworld());
+	_scenes.emplace_back(loadOverworld());
 
 	//Determine default scene, and pass it to the renderer.
-	for (auto it = _Scenes.begin(); it != _Scenes.end(); it++)
+	for (auto it = _scenes.begin(); it != _scenes.end(); it++)
 	{
-		if ((*it)->_ID == Level::Overworld)
+		if ((*it)->_id == Level::Overworld)
 		{
-			_Renderer->_CurrentScene = *it;
+			_currentScene = *it;
 		}
 	}
 }
@@ -22,23 +22,17 @@ Game::Game() : Engine(new Player(Spoonity::ObjectData()))
 //Destructor
 Game::~Game()
 {
-	for (auto it = _Scenes.begin(); it != _Scenes.end(); ++it)
-	{
-		delete* it;
-	}
-
-	_Scenes.clear();
 }
 
 //Overriding gameloop
 void Game::gameLoop(float& deltaTime)
 {
 	//Update the player
-	_Player->update(deltaTime);
+	_player->update(deltaTime);
 
-	for (auto it = _Scenes.begin(); it != _Scenes.end(); it++)
+	for (auto it = _scenes.begin(); it != _scenes.end(); it++)
 	{
-		if ((*it)->_ID == Level::Overworld)
+		if ((*it)->_id == Level::Overworld)
 		{
 			(*it)->update(deltaTime);
 		}
@@ -66,7 +60,7 @@ Spoonity::Scene* Game::loadOverworld()
 		Spoonity::Shader("Data/Shaders/Skybox/skybox_shader.vs", "Data/Shaders/Skybox/skybox_shader.fs")
 	);
 
-	_Renderer->_Skybox = sky;
+	_renderer->_skybox = sky;
 
 	//Add the objects to the scene
 	objs->emplace_back(sky);

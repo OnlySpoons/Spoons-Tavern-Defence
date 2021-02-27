@@ -19,9 +19,9 @@ namespace Spoonity {
 		//Member variables
 	private:
 		//Reference to the window
-		static Window* _Window;
+		static Window* _window;
 
-		static glm::vec2 _ScrollOffset;
+		static glm::vec2 _scrollOffset;
 
 		//Functions
 	public:
@@ -58,7 +58,7 @@ namespace Spoonity {
 		//Window resizing callback
 		static void framebufferSizeCallback(GLFWwindow* window, int width, int height);
 
-		//Used to set the _ScrollOffset vector
+		//Used to set the _scrollOffset vector
 		static void scrollCallback(GLFWwindow* window, double xOffset, double yOffset);
 	};
 }

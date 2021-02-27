@@ -17,15 +17,15 @@ namespace Spoonity {
     struct Vertex
     {
         //Position
-        glm::vec3 Position;
+        glm::vec3 position;
         //Normal
-        glm::vec3 Normal;
+        glm::vec3 normal;
         //TexCoords
-        glm::vec2 TexCoords;
+        glm::vec2 texCoords;
         //Tangent
-        glm::vec3 Tangent;
+        glm::vec3 tangent;
         //Bitangent
-        glm::vec3 Bitangent;
+        glm::vec3 bitangent;
     };
 
     //Texture data
@@ -41,9 +41,9 @@ namespace Spoonity {
         //Variables
     private:
         //Mesh Data
-        std::vector<Vertex> _Vertices;
-        std::vector<unsigned int> _Indices;
-        std::vector<Texture> _Textures;
+        std::vector<Vertex> _vertices;
+        std::vector<unsigned int> _indices;
+        std::vector<Texture> _textures;
         unsigned int _VAO, _VBO, _EBO;
 
         //Functions

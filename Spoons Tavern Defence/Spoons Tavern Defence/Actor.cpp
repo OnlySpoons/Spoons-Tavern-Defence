@@ -7,14 +7,14 @@ namespace Spoonity {
 		Camera* camera,
 		const std::string& modelPath)
 		: GameObject(data, true),
-		_Model(modelPath == "" ? Model() : Model(modelPath)),
-		_Camera(camera)
+		_model(modelPath == "" ? Model() : Model(modelPath)),
+		_camera(camera)
 	{
 	}
 
 	//Destructor
 	Actor::~Actor()
 	{
-		delete _Camera;
+		delete _camera;
 	}
 }

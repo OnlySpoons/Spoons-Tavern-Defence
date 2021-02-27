@@ -4,11 +4,11 @@ namespace Spoonity
 {
 	//Constructors
 	Model::Model()
-		: _GammaCorrection(false)
+		: _gammaCorrection(false)
 	{
 	}
 
-	Model::Model(std::string const& path, bool gamma) : _GammaCorrection(gamma)
+	Model::Model(std::string const& path, bool gamma) : _gammaCorrection(gamma)
 	{
 		loadModel(path);
 	}
@@ -16,13 +16,13 @@ namespace Spoonity
 	//Render the model
 	void Model::draw(const Shader shader, const glm::mat4& model) const
 	{
-		if (!_Meshes.empty())
+		if (!_meshes.empty())
 		{
-			for (unsigned int i = 0; i < _Meshes.size(); i++)
+			for (unsigned int i = 0; i < _meshes.size(); i++)
 			{
 				//Modifies the model matrix for the mesh's relative position
-				shader.setMat4("model", model * _Transforms[i]);
-				_Meshes[i].Draw(shader);
+				shader.setMat4("model", model * _transforms[i]);
+				_meshes[i].Draw(shader);
 			}
 		}
 	}
@@ -63,7 +63,7 @@ namespace Spoonity
 		}
 
 		//Retrieve the directory path of the filepath
-		_Directory = path.substr(0, path.find_last_of('/'));
+		_directory = path.substr(0, path.find_last_of('/'));
 
 		//Process ASSIMP's root node recursively
 		processNode(scene->mRootNode, scene);
@@ -82,12 +82,12 @@ namespace Spoonity
 				transform = navNode->mTransformation * transform;
 				navNode = navNode->mParent;
 			}
-			_Transforms.push_back(aiMatrix4x4ToGlm(transform));
+			_transforms.push_back(aiMatrix4x4ToGlm(transform));
 
 			//The node object only contains indices to index the actual objects in the scene.
 			//The scene contains all the data, node is just to keep stuff organized (like relations between nodes)
 			aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-			_Meshes.push_back(processMesh(mesh, scene));
+			_meshes.push_back(processMesh(mesh, scene));
 		}
 		//After all meshes are processed, process each child node
 		for (unsigned int i = 0; i < node->mNumChildren; i++)
@@ -110,12 +110,12 @@ namespace Spoonity
 			Vertex vertex;
 
 			//Positions
-			vertex.Position = aiVector3DToGlm(mesh->mVertices[i]);
+			vertex.position = aiVector3DToGlm(mesh->mVertices[i]);
 
 			//Normals
 			if (mesh->HasNormals())
 			{
-				vertex.Normal = aiVector3DToGlm(mesh->mNormals[i]);
+				vertex.normal = aiVector3DToGlm(mesh->mNormals[i]);
 			}
 
 			//Texture coordinates
@@ -126,20 +126,20 @@ namespace Spoonity
 				//use models where a vertex can have multiple texture coordinates so we always take the first set (0)
 				vec.x = mesh->mTextureCoords[0][i].x;
 				vec.y = mesh->mTextureCoords[0][i].y;
-				vertex.TexCoords = vec;
+				vertex.texCoords = vec;
 			}
 			else
 			{
-				vertex.TexCoords = glm::vec2(0.0f);
+				vertex.texCoords = glm::vec2(0.0f);
 			}
 
 			//Tangents and Bitangents
 			if (mesh->HasTangentsAndBitangents())
 			{
 				//Tangent
-				vertex.Tangent = aiVector3DToGlm(mesh->mTangents[i]);
+				vertex.tangent = aiVector3DToGlm(mesh->mTangents[i]);
 				//Bitangent=
-				vertex.Bitangent = aiVector3DToGlm(mesh->mBitangents[i]);
+				vertex.bitangent = aiVector3DToGlm(mesh->mBitangents[i]);
 			}
 
 			vertices.push_back(vertex);
@@ -203,12 +203,12 @@ namespace Spoonity
 			mat->GetTexture(type, i, &str);
 
 			bool skip = false;
-			for (unsigned int j = 0; j < _TexturesLoaded.size(); j++)
+			for (unsigned int j = 0; j < _texturesLoaded.size(); j++)
 			{
 				//Check if texture was loaded before
-				if (std::strcmp(_TexturesLoaded[j].path.data(), str.C_Str()) == 0)
+				if (std::strcmp(_texturesLoaded[j].path.data(), str.C_Str()) == 0)
 				{
-					textures.push_back(_TexturesLoaded[j]);
+					textures.push_back(_texturesLoaded[j]);
 					skip = true;
 					break;
 				}
@@ -223,7 +223,7 @@ namespace Spoonity
 				texture.path = str.C_Str();
 				textures.push_back(texture);
 				//Store it as texture loaded to avoid duplicates
-				_TexturesLoaded.push_back(texture);
+				_texturesLoaded.push_back(texture);
 			}
 		}
 		return textures;
@@ -233,7 +233,7 @@ namespace Spoonity
 	unsigned int Model::TextureFromFile(const char* path, bool gamma)
 	{
 		std::string filename = std::string(path);
-		filename = _Directory + '/' + filename;
+		filename = _directory + '/' + filename;
 
 		//Generate texture ID
 		unsigned int textureID;

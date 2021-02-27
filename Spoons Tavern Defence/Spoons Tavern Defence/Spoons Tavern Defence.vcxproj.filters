@@ -52,9 +52,6 @@
     <Filter Include="Source Files\STD\GameObjects">
       <UniqueIdentifier>{7f23d1c9-7776-4740-86c9-b1e3967907e9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Spoonity\Event System">
-      <UniqueIdentifier>{ffa3b3b4-3b88-4a31-8b1e-d62af222fd7f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Spoonity\Event System">
       <UniqueIdentifier>{f707b4fc-2b29-458e-8641-95fd99f06ea5}</UniqueIdentifier>
     </Filter>
@@ -175,9 +172,6 @@
     </ClCompile>
     <ClCompile Include="Player.cpp">
       <Filter>Source Files\STD\GameObjects</Filter>
-    </ClCompile>
-    <ClCompile Include="Observer.cpp">
-      <Filter>Source Files\Spoonity\Event System</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

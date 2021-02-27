@@ -10,12 +10,12 @@ namespace Spoonity {
 
 	struct WindowProps
 	{
-		std::string Title;
-		unsigned int Width;
-		unsigned int Height;
+		std::string title;
+		unsigned int width;
+		unsigned int height;
 
 		WindowProps(const std::string& title = "Window", unsigned int width = 1280, unsigned int height = 720)
-			: Title(title), Width(width), Height(height)
+			: title(title), width(width), height(height)
 		{
 		}
 	};
@@ -26,9 +26,9 @@ namespace Spoonity {
 
 		//Member variables
 	private:
-		GLFWwindow* _Instance; //The GLFWwindow instance
+		GLFWwindow* _instance; //The GLFWwindow instance
 
-		WindowProps _Properties; //Window Properties
+		WindowProps _properties; //Window Properties
 
 	//Functions
 	public:

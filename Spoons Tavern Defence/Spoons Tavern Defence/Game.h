@@ -9,7 +9,6 @@ class Game : public Spoonity::Engine
 {
 	//Variables
 public:
-	std::vector<Spoonity::Scene*> _Scenes;
 
 	//Functions
 public:

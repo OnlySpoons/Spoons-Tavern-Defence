@@ -1,8 +1,11 @@
 #pragma once
 
+#include <vector>
+
 #include "Window.h"
 #include "Renderer.h"
 #include "Player.h"
+#include "Scene.h"
 
 namespace Spoonity {
 
@@ -11,22 +14,26 @@ namespace Spoonity {
 
 		//Memeber variables
 	protected:
-		Window* _Window;
+		Window* _window;
 
-		Renderer* _Renderer;
+		Renderer* _renderer;
 
-		Actor* _Player;
+		Actor* _player;
 
-		float _LastFrame;
+		std::vector<Spoonity::Scene*> _scenes;
+
+		Scene* _currentScene;
+
+		float _lastFrame;
 
 	public:
-		float _DeltaTime;
+		float _deltaTime;
 
 		//Functions
 	public:
 
 		//Constructor
-		Engine(Actor* player);
+		Engine(Actor* player, Scene* scene = nullptr);
 
 		//Destructor
 		virtual ~Engine();

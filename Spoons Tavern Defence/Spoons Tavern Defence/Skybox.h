@@ -14,8 +14,8 @@ namespace Spoonity {
 		//Variables
 	private:
 		//Inherited Variables
-		//_Data - position, direction, and rotation data
-		//_GeometryShader - shader used to render the object
+		//_data - position, direction, and rotation data
+		//_geometryShader - shader used to render the object
 
 		Shader _Shader;
 

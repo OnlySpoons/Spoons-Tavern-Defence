@@ -3,7 +3,7 @@
 namespace Spoonity {
 
     //Constructor
-    Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures) : _Vertices(vertices), _Indices(indices), _Textures(textures)
+    Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures) : _vertices(vertices), _indices(indices), _textures(textures)
     {
         //Set the vertex buffers and its attribute pointers.
         setupMesh();
@@ -18,13 +18,13 @@ namespace Spoonity {
         unsigned int normalNr = 1;
         unsigned int heightNr = 1;
 
-        for (unsigned int i = 0; i < _Textures.size(); i++)
+        for (unsigned int i = 0; i < _textures.size(); i++)
         {
             //Active proper texture unit before binding
             glActiveTexture(GL_TEXTURE0 + i);
             //Retrieve texture number (the N in diffuse_textureN)
             std::string number;
-            std::string name = _Textures[i].type;
+            std::string name = _textures[i].type;
             if (name == "texture_diffuse")
                 number = std::to_string(diffuseNr++);
             else if (name == "texture_specular")
@@ -37,12 +37,12 @@ namespace Spoonity {
             //Now set the sampler to the correct texture unit
             shader.setInt(("material." + (name + number)).c_str(), i);
             //Bind the texture
-            glBindTexture(GL_TEXTURE_2D, _Textures[i].id);
+            glBindTexture(GL_TEXTURE_2D, _textures[i].id);
         }
 
         //Draw mesh
         glBindVertexArray(_VAO);
-        glDrawElements(GL_TRIANGLES, (GLsizei)_Indices.size(), GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, (GLsizei)_indices.size(), GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
 
         //Set everything back to defaults
@@ -61,10 +61,10 @@ namespace Spoonity {
 
         //Load data into vertex buffers
         glBindBuffer(GL_ARRAY_BUFFER, _VBO);
-        glBufferData(GL_ARRAY_BUFFER, _Vertices.size() * sizeof(Vertex), &_Vertices[0], GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, _vertices.size() * sizeof(Vertex), &_vertices[0], GL_STATIC_DRAW);
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _EBO);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, _Indices.size() * sizeof(unsigned int), &_Indices[0], GL_STATIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, _indices.size() * sizeof(unsigned int), &_indices[0], GL_STATIC_DRAW);
 
         //Set the vertex attribute pointers
         //Vertex Positions
@@ -72,16 +72,16 @@ namespace Spoonity {
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
         //Vertex normals
         glEnableVertexAttribArray(1);
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Normal));
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normal));
         //Vertex texture coords
         glEnableVertexAttribArray(2);
-        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
+        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, texCoords));
         //Vertex tangent
         glEnableVertexAttribArray(3);
-        glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Tangent));
+        glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, tangent));
         //Vertex bitangent
         glEnableVertexAttribArray(4);
-        glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Bitangent));
+        glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, bitangent));
 
         glBindVertexArray(0);
     }

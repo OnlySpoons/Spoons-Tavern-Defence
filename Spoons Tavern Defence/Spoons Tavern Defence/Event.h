@@ -9,20 +9,20 @@ namespace Spoonity {
 	class Event
 	{
 	protected:
-		T _Type;
-		std::string _Name;
-		bool _Handled = false;
+		T _type;
+		std::string _name;
+		bool _handled = false;
 
 	public:
 		Event() {}
 
-		Event(T type, const std::string& name = "") : _Type(type), _Name(name) {}
+		Event(T type, const std::string& name = "") : _type(type), _name(name) {}
 
 		virtual ~Event() {}
 
-		inline const T type() const { return _Type; };
-		inline const std::string& getName() const { return _Name; };
-		virtual bool isHandled() const { return _Handled; };
+		inline const T type() const { return _type; };
+		inline const std::string& getName() const { return _name; };
+		virtual bool isHandled() const { return _handled; };
 	};
 
 	class TestEvent : public Event<EventType>

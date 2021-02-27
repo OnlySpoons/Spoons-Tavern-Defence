@@ -5,18 +5,18 @@
 namespace Spoonity {
 
 	//Initial variable declaration
-	Window* Input::_Window = nullptr;
-	glm::vec2 Input::_ScrollOffset = glm::vec2(0.0f);
+	Window* Input::_window = nullptr;
+	glm::vec2 Input::_scrollOffset = glm::vec2(0.0f);
 
 	void Input::setWindow(Window* window)
 	{
-		_Window = window;
+		_window = window;
 	}
 
 	//Function to check if Input has been initialised
 	void Input::checkWindow()
 	{
-		if (!_Window)
+		if (!_window)
 		{
 			throw "Input has no assigned Window";
 		}
@@ -27,19 +27,19 @@ namespace Spoonity {
 	{
 		checkWindow();
 
-		return glfwGetKey(_Window->getInstance(), (int)key) == GLFW_PRESS;
+		return glfwGetKey(_window->getInstance(), (int)key) == GLFW_PRESS;
 	}
 
 	bool Input::isKeyHeld(KeyCode key)
 	{
-		return glfwGetKey(_Window->getInstance(), (int)key) == GLFW_REPEAT;
+		return glfwGetKey(_window->getInstance(), (int)key) == GLFW_REPEAT;
 	}
 
 	bool Input::isKeyReleased(KeyCode key)
 	{
 		checkWindow();
 
-		return glfwGetKey(_Window->getInstance(), (int)key) == GLFW_RELEASE;
+		return glfwGetKey(_window->getInstance(), (int)key) == GLFW_RELEASE;
 	}
 
 	//Functions to get mouse button input
@@ -47,21 +47,21 @@ namespace Spoonity {
 	{
 		checkWindow();
 
-		return glfwGetMouseButton(_Window->getInstance(), (int)button) == GLFW_PRESS;
+		return glfwGetMouseButton(_window->getInstance(), (int)button) == GLFW_PRESS;
 	}
 
 	bool Input::isButtonHeld(MouseCode button)
 	{
 		checkWindow();
 
-		return glfwGetMouseButton(_Window->getInstance(), (int)button) == GLFW_REPEAT;
+		return glfwGetMouseButton(_window->getInstance(), (int)button) == GLFW_REPEAT;
 	}
 
 	bool Input::isButtonReleased(MouseCode button)
 	{
 		checkWindow();
 
-		return glfwGetMouseButton(_Window->getInstance(), (int)button) == GLFW_RELEASE;
+		return glfwGetMouseButton(_window->getInstance(), (int)button) == GLFW_RELEASE;
 	}
 
 	//Function to get cursor positon
@@ -71,7 +71,7 @@ namespace Spoonity {
 
 		double xPos, yPos;
 
-		glfwGetCursorPos(_Window->getInstance(), &xPos, &yPos);
+		glfwGetCursorPos(_window->getInstance(), &xPos, &yPos);
 
 		return glm::vec2((float)xPos, (float)yPos);
 	}
@@ -79,20 +79,20 @@ namespace Spoonity {
 	//Function to get scroll offset
 	glm::vec2 Input::getScrollOffset()
 	{
-		return _ScrollOffset;
+		return _scrollOffset;
 	}
 
 	//TODO: remove this function
 	//Function to close the window
 	void Input::closeWindow()
 	{
-		_Window->close();
+		_window->close();
 	}
 
 	//Function to clear the window pointer
 	void Input::clearWindow()
 	{
-		_Window = nullptr;
+		_window = nullptr;
 	}
 
 	//Window resizing callback
@@ -106,7 +106,7 @@ namespace Spoonity {
 	//Callback function to handle scroll wheel usage
 	void Input::scrollCallback(GLFWwindow* window, double xOffset, double yOffset)
 	{
-		_ScrollOffset.x = (float)xOffset;
-		_ScrollOffset.y = (float)yOffset;
+		_scrollOffset.x = (float)xOffset;
+		_scrollOffset.y = (float)yOffset;
 	}
 }

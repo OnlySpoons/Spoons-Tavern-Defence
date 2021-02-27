@@ -5,41 +5,41 @@ Player::Player(const Spoonity::ObjectData& data,
 	const std::string& modelPath)
 	: Actor(data, new Spoonity::Camera(data.position, data.front), modelPath)
 {
-	_Data.position = glm::vec3(0.0f, 0.5f, 0.0f);
-	_Camera->_Position = _Data.position + glm::vec3(0.0f, 0.2f, 0.0f);
+	_data.position = glm::vec3(0.0f, 0.5f, 0.0f);
+	_camera->_position = _data.position + glm::vec3(0.0f, 0.2f, 0.0f);
 
-	_Data.angle = glm::vec2(-90.0f, 0.0f);
-	_Camera->_Yaw = _Data.angle.x;
-	_Camera->_Pitch = _Data.angle.y;
+	_data.angle = glm::vec2(-90.0f, 0.0f);
+	_camera->_yaw = _data.angle.x;
+	_camera->_pitch = _data.angle.y;
 
-	_Data.front = _Camera->_Front;
-	_Data.front = _Camera->_Up;
-	_Data.updateVectors();
+	_data.front = _camera->_front;
+	_data.front = _camera->_up;
+	_data.updateVectors();
 
-	_Data.scale = glm::vec3(1.0f);
-	_Data.speed = 2.0f;
+	_data.scale = glm::vec3(1.0f);
+	_data.speed = 2.0f;
 
-	_Camera->updateCameraVectors();
+	_camera->updateCameraVectors();
 
-	_FirstMouse = true;
-	_LastPos = glm::vec2(0.0f);
+	_firstMouse = true;
+	_lastPos = glm::vec2(0.0f);
 }
 
 //Render the player Model
 void Player::draw(const Spoonity::Shader& shader, glm::mat4 projection, glm::mat4 view, glm::mat4 model)
 {
-	if (_IsEnabled)
+	if (_isEnabled)
 	{
 		shader.use();
 		shader.setMat4("projection", projection);
 		shader.setMat4("view", view);
 
 		model = glm::mat4(1.0f);
-		model = glm::translate(model, _Data.position);
-		model = glm::rotate(model, glm::radians(_Data.angle.x), _Data.up);
-		model = glm::scale(model, _Data.scale);
+		model = glm::translate(model, _data.position);
+		model = glm::rotate(model, glm::radians(_data.angle.x), _data.up);
+		model = glm::scale(model, _data.scale);
 
-		_Model.draw(shader, model);
+		_model.draw(shader, model);
 	}
 }
 
@@ -59,9 +59,9 @@ void Player::processInput(float& deltaTime)
 		Input::closeWindow();
 
 	//Temporary variables
-	float velocity = _Data.speed * deltaTime;
-	glm::vec3 front = glm::normalize(glm::vec3(_Data.front.x, 0.0f, _Data.front.z));
-	glm::vec3& right = _Camera->_Right;
+	float velocity = _data.speed * deltaTime;
+	glm::vec3 front = glm::normalize(glm::vec3(_data.front.x, 0.0f, _data.front.z));
+	glm::vec3& right = _camera->_right;
 
 	//Left shift is sprint key
 	if (Input::isKeyPressed(KeyCode::LeftShift))
@@ -69,62 +69,62 @@ void Player::processInput(float& deltaTime)
 
 	//Set the new position of the camera based on the keys W, A, S, & D
 	if (Input::isKeyPressed(KeyCode::W))
-		_Camera->_Position += front * velocity;
+		_camera->_position += front * velocity;
 	if (Input::isKeyPressed(KeyCode::S))
-		_Camera->_Position -= front * velocity;
+		_camera->_position -= front * velocity;
 	if (Input::isKeyPressed(KeyCode::D))
-		_Camera->_Position += right * velocity;
+		_camera->_position += right * velocity;
 	if (Input::isKeyPressed(KeyCode::A))
-		_Camera->_Position -= right * velocity;
+		_camera->_position -= right * velocity;
 
 	/*
 	//Flight controls
 	if (Input::isKeyPressed(KeyCode::Space))
-		_Camera->_Position += _Camera->_WorldUp * velocity;
+		_camera->_position += _camera->WorldUp * velocity;
 	if (Input::isKeyPressed(KeyCode::LeftControl))
-		_Camera->_Position -= _Camera->_WorldUp * velocity;
+		_camera->_position -= _camera->WorldUp * velocity;
 
 	//Clamp Height
-	if (_Camera->_Position.y < 0.7f)
-		_Camera->_Position.y = 0.7f;
+	if (_camera->_position.y < 0.7f)
+		_camera->_position.y = 0.7f;
 	*/
 
 	//Update the player position based on camera position
-	_Data.position = _Camera->_Position - glm::vec3(0.0f, 0.2f, 0.0f);
+	_data.position = _camera->_position - glm::vec3(0.0f, 0.2f, 0.0f);
 
 	//Print player position when mouse button is pressed
 	if (Input::isButtonPressed(MouseCode::LeftButton))
-		std::cout << "(" << _Data.position.x << ", " << _Data.position.y << ", " << _Data.position.z << ")" << std::endl;
+		std::cout << "(" << _data.position.x << ", " << _data.position.y << ", " << _data.position.z << ")" << std::endl;
 
 	glm::vec2 mousePosition = Input::getCursorPos();
 
-	if (_FirstMouse)
+	if (_firstMouse)
 	{
-		_LastPos = mousePosition;
-		_FirstMouse = false;
+		_lastPos = mousePosition;
+		_firstMouse = false;
 	}
 
-	float xOffset = mousePosition.x - _LastPos.x;
-	float yOffset = _LastPos.y - mousePosition.y; //Reversed since y-coordinates go from bottom to top
+	float xOffset = mousePosition.x - _lastPos.x;
+	float yOffset = _lastPos.y - mousePosition.y; //Reversed since y-coordinates go from bottom to top
 
-	_LastPos = mousePosition;
+	_lastPos = mousePosition;
 
 	xOffset *= 0.1f;
 	yOffset *= 0.1f;
 
-	_Camera->_Yaw += xOffset;
-	_Camera->_Pitch += yOffset;
+	_camera->_yaw += xOffset;
+	_camera->_pitch += yOffset;
 
-	if (_Camera->_Pitch > 89.0f)
-		_Camera->_Pitch = 89.0f;
-	if (_Camera->_Pitch < -89.0f)
-		_Camera->_Pitch = -89.0f;
+	if (_camera->_pitch > 89.0f)
+		_camera->_pitch = 89.0f;
+	if (_camera->_pitch < -89.0f)
+		_camera->_pitch = -89.0f;
 
-	_Camera->updateCameraVectors();
+	_camera->updateCameraVectors();
 
-	_Data.front = _Camera->_Front;
-	_Data.updateVectors();
+	_data.front = _camera->_front;
+	_data.updateVectors();
 
-	_Data.angle.x = _Camera->_Yaw;
-	_Data.angle.y = _Camera->_Pitch;
+	_data.angle.x = _camera->_yaw;
+	_data.angle.y = _camera->_pitch;
 }

@@ -10,7 +10,7 @@ namespace Spoonity {
 		//Variables
 	private:
 		//Entities control their own model
-		Model _Model;
+		Model _model;
 
 		//Functions
 	public:
