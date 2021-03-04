@@ -3,26 +3,21 @@
 
 #include "GameObject.h"
 
-enum class Level {
-	None = -1,
-	Overworld = 0,
-};
-
 namespace Spoonity {
 
 	class Scene
 	{
 		//Variables
 	public:
-		Level _id;
+		int _id;
 
-		std::vector<GameObject*>* _sceneObjects;
+		std::vector<GameObject*> _sceneObjects;
 
 		//Functions
 	public:
 
 		//Constructor
-		Scene(Level id, std::vector<GameObject*>* objs);
+		Scene(int id);
 
 		~Scene();
 

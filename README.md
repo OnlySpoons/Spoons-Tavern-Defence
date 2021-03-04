@@ -1,5 +1,17 @@
 Spoons: Tavern Defence
 
+Change Log 04/03/2021 - Martin
+
+- Refactored Scene to promote usage of it's functions
+- Regactored loadOverworld function to utilise scene functions
+- Tweaked dispatcher to exit if the event is handled
+
+Change Log 27/02/2021 - Martin
+
+- Refactored Renderer to take a Scene and Camera when rendering instead of when instantiated
+- Renamed variables to begin with an underscore and a lowercase letter as opposed to an underscore and an uppercase letter
+
+
 Change Log 22/02/2021 - Martin & Thomas
 
 - Added Event class for all events to inherit from

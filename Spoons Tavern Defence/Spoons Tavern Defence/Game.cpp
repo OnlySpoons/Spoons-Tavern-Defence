@@ -7,7 +7,7 @@
 //Constructor
 Game::Game() : Engine(new Player(Spoonity::ObjectData()))
 {
-	_scenes.emplace_back(loadOverworld());
+	loadOverworld();
 
 	//Determine default scene, and pass it to the renderer.
 	for (auto it = _scenes.begin(); it != _scenes.end(); it++)
@@ -40,10 +40,10 @@ void Game::gameLoop(float& deltaTime)
 }
 
 //Load default scene
-Spoonity::Scene* Game::loadOverworld()
+void Game::loadOverworld()
 {
-	//Create the objects vector to be passed to the scene
-	std::vector<Spoonity::GameObject*>* objs = new std::vector<Spoonity::GameObject*>();
+	//Create the scene
+	Spoonity::Scene* scene = new Spoonity::Scene(Level::Overworld);
 
 	Spoonity::Skybox* sky = new Spoonity::Skybox(
 		Spoonity::ObjectData(),
@@ -60,10 +60,11 @@ Spoonity::Scene* Game::loadOverworld()
 		Spoonity::Shader("Data/Shaders/Skybox/skybox_shader.vs", "Data/Shaders/Skybox/skybox_shader.fs")
 	);
 
+
+	//TODO: remove this when objects are aware of render pass
 	_renderer->_skybox = sky;
 
-	//Add the objects to the scene
-	objs->emplace_back(sky);
+	scene->addObject(sky);
 
 	Spoonity::Entity* demo = new Spoonity::Entity(
 		Spoonity::ObjectData(
@@ -78,10 +79,9 @@ Spoonity::Scene* Game::loadOverworld()
 
 	demo->enable(); //enable the object to be drawn
 
-	objs->emplace_back(demo);
+	scene->addObject(demo);
 
 	//TODO: add other objects as required.
 
-	//Return a scene with the added objects
-	return new Spoonity::Scene(Level::Overworld, objs);
+	_scenes.emplace_back(scene);
 }

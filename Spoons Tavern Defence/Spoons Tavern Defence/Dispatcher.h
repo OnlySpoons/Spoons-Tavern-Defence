@@ -39,6 +39,8 @@ namespace Spoonity {
 
 		void post(const Event<T>& event) const
 		{
+			if (event.isHandled()) return;
+
 			auto type = event.type();
 
 			//Ignore events for which we do not have any observers.
@@ -46,7 +48,10 @@ namespace Spoonity {
 				return;
 
 			for (auto&& observer : _observers.at(type))
-				if (!event.isHandled()) observer(event);
+			{
+				observer(event);
+				if (event.isHandled()) return;
+			}
 		}
 
 	};
