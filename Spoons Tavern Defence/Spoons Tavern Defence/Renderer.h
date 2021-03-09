@@ -16,6 +16,18 @@
 
 namespace Spoonity {
 
+	struct RenderData {
+		glm::vec3 cameraPos;
+
+		glm::mat4 projection;
+		glm::mat4 view;
+		glm::mat4 model;
+
+		glm::mat4 lightProjection;
+		glm::mat4 lightView;
+		glm::mat4 lightSpaceMatrix;
+	};
+
 	class Renderer
 	{
 
@@ -62,5 +74,14 @@ namespace Spoonity {
 
 		//Render the scene
 		void renderScene(const Scene& scene, const Camera& camera);
+
+	private:
+		void shadowPass(const Scene& scene, RenderData data);
+
+		void geometryPass(const Scene& scene, RenderData data);
+		
+		void lightingPass(const Scene& scene, RenderData data);
+
+		void postProcessing(const Scene& scene, RenderData data);
 	};
 }

@@ -1,5 +1,9 @@
 Spoons: Tavern Defence
 
+Change Log 09/03/2021 - Martin & Thomas
+- Refactored Renderer into functions for each pass
+- Changed loadOverworld to change the current scene instead of setting it after it's loaded
+
 Change Log 04/03/2021 - Martin
 
 - Refactored Scene to promote usage of it's functions

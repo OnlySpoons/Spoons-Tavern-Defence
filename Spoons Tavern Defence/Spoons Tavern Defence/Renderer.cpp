@@ -4,6 +4,7 @@ namespace Spoonity {
 
     Renderer::Renderer()
         : _skybox(nullptr),
+        _windowWidth(1280), _windowHeight(720),
         _lightColor(glm::vec3(0.0f)), _lightDirection(glm::vec3(0.0f)), _lightPosition(glm::vec3(0.0f)),
         _depthMapFBO(0), _depthMap(0),
         _gBuffer(0), _gPosition(0), _gNormal(0), _gAlbedoSpec(0),
@@ -211,30 +212,56 @@ namespace Spoonity {
     {
         //Render
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         glDepthFunc(GL_LESS);
 
         //For debugging rendering
         //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-        glm::vec3 cameraPos = camera._position;
+        float near_plane = 1.0f, far_plane = 20.0f;
 
-        glm::mat4 projection = glm::perspective(glm::radians(camera._fov), (float)_windowWidth / (float)_windowHeight, 0.011f, 500.0f);
-        glm::mat4 view = camera.GetViewMatrix();
-        glm::mat4 model = glm::mat4(1.0f);
+        RenderData data{};
+        data.cameraPos = camera._position;
+        _lightPosition = data.cameraPos + glm::vec3(-7.0f, 7.0f, -7.0f);
+
+        data.projection = glm::perspective(glm::radians(camera._fov), (float)_windowWidth / (float)_windowHeight, 0.011f, 500.0f);
+        data.view = camera.GetViewMatrix();
+        data.model = glm::mat4(1.0f);
+
+        data.lightProjection = glm::ortho(-20.0f, 20.0f, -20.0f, 20.0f, near_plane, far_plane);
+        data.lightView = glm::lookAt(_lightPosition, _lightPosition + _lightDirection, camera.WorldUp);
+        data.lightSpaceMatrix = data.lightProjection * data.lightView;
 
         // 0. depth pass: render scene from the lights perspective to get shadows
-        float near_plane = 1.0f, far_plane = 20.0f;
-        _lightPosition = cameraPos + glm::vec3(-7.0f, 7.0f, -7.0f);
-        glm::mat4 lightProjection = glm::ortho(-20.0f, 20.0f, -20.0f, 20.0f, near_plane, far_plane);
-        glm::mat4 lightView = glm::lookAt(_lightPosition, _lightPosition + _lightDirection, camera.WorldUp);
-        glm::mat4 lightSpaceMatrix = lightProjection * lightView;
+        shadowPass(scene, data);
+        
+        // 1. geometry pass: render scene's geometry/color data into gbuffer
+        geometryPass(scene, data);
 
+
+        // 2. lighting pass: calculate lighting by iterating over a screen filled quad pixel-by-pixel using the gbuffer's content.
+        lightingPass(scene, data);
+
+        // 3. Post processing
+        postProcessing(scene, data);
+        
+        //Blit Buffer
+        glBindFramebuffer(GL_READ_FRAMEBUFFER, _screenBuffer);
+        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0); // write to default framebuffer
+        // blit to default framebuffer. Note that this may or may not work as the internal formats of both the FBO and default framebuffer have to match.
+        // the internal formats are implementation defined. This works on all of my systems, but if it doesn't on yours you'll likely have to write to the 		
+        // depth buffer in another shader stage (or somehow see to match the default framebuffer's internal format with the FBO's internal format).
+        glBlitFramebuffer(0, 0, _windowWidth, _windowHeight, 0, 0, _windowWidth, _windowHeight, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    }
+
+    void Renderer::shadowPass(const Scene& scene, RenderData data)
+    {
         glFrontFace(GL_CW);
         _depthShader.use();
-        _depthShader.setMat4("lightSpaceMatrix", lightSpaceMatrix);
-        _depthShader.setMat4("model", model);
+        _depthShader.setMat4("lightSpaceMatrix", data.lightSpaceMatrix);
+        _depthShader.setMat4("model", data.model);
 
         glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
         glBindFramebuffer(GL_FRAMEBUFFER, _depthMapFBO);
@@ -242,7 +269,7 @@ namespace Spoonity {
 
         _skybox->disable();
 
-        scene.draw(_depthShader, lightProjection, lightView, model);
+        scene.draw(_depthShader, data.lightProjection, data.lightView, data.model);
 
         _skybox->enable();
 
@@ -251,20 +278,24 @@ namespace Spoonity {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         glFrontFace(GL_CCW);
-        // 1. geometry pass: render scene's geometry/color data into gbuffer
+    }
+
+    void Renderer::geometryPass(const Scene& scene, RenderData data)
+    {
         glBindFramebuffer(GL_FRAMEBUFFER, _gBuffer);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        _geometryShader.setVec3("viewPos", cameraPos);
+        _geometryShader.setVec3("viewPos", data.cameraPos);
 
-        scene.draw(_geometryShader, projection, view, model);
+        scene.draw(_geometryShader, data.projection, data.view, data.model);
 
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-
-        // 2. lighting pass: calculate lighting by iterating over a screen filled quad pixel-by-pixel using the gbuffer's content.
+    }
+    
+    void Renderer::lightingPass(const Scene& scene, RenderData data)
+    {
         glBindFramebuffer(GL_FRAMEBUFFER, _screenBuffer);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         _lightingShader.use();
         glActiveTexture(GL_TEXTURE0);
@@ -294,15 +325,16 @@ namespace Spoonity {
         _lightingShader.setFloat("light.Radius", radius);
         */
 
-        _lightingShader.setVec3("viewPos", cameraPos);
-        _lightingShader.setMat4("lightSpaceMatrix", lightSpaceMatrix);
+        _lightingShader.setVec3("viewPos", data.cameraPos);
+        _lightingShader.setMat4("lightSpaceMatrix", data.lightSpaceMatrix);
 
         glBindVertexArray(_quadVAO);
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
         glBindVertexArray(0);
-
-        // TODO: 3. Post processing
-        //------------------------
+    }
+    
+    void Renderer::postProcessing(const Scene& scene, RenderData data)
+    {
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
         _postProcessShader.use();
@@ -328,13 +360,5 @@ namespace Spoonity {
         glBindVertexArray(_quadVAO);
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
         glBindVertexArray(0);
-
-        glBindFramebuffer(GL_READ_FRAMEBUFFER, _screenBuffer);
-        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0); // write to default framebuffer
-        // blit to default framebuffer. Note that this may or may not work as the internal formats of both the FBO and default framebuffer have to match.
-        // the internal formats are implementation defined. This works on all of my systems, but if it doesn't on yours you'll likely have to write to the 		
-        // depth buffer in another shader stage (or somehow see to match the default framebuffer's internal format with the FBO's internal format).
-        glBlitFramebuffer(0, 0, _windowWidth, _windowHeight, 0, 0, _windowWidth, _windowHeight, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
 }

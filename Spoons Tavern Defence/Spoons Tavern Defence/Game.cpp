@@ -7,16 +7,11 @@
 //Constructor
 Game::Game() : Engine(new Player(Spoonity::ObjectData()))
 {
+	//Load the current Scene
 	loadOverworld();
 
-	//Determine default scene, and pass it to the renderer.
-	for (auto it = _scenes.begin(); it != _scenes.end(); it++)
-	{
-		if ((*it)->_id == Level::Overworld)
-		{
-			_currentScene = *it;
-		}
-	}
+	//TODO: this shit
+	//_scenes.emplace_back(new Overworld());
 }
 
 //Destructor
@@ -43,7 +38,7 @@ void Game::gameLoop(float& deltaTime)
 void Game::loadOverworld()
 {
 	//Create the scene
-	Spoonity::Scene* scene = new Spoonity::Scene(Level::Overworld);
+	_currentScene = new Spoonity::Scene(Level::Overworld);
 
 	Spoonity::Skybox* sky = new Spoonity::Skybox(
 		Spoonity::ObjectData(),
@@ -64,7 +59,7 @@ void Game::loadOverworld()
 	//TODO: remove this when objects are aware of render pass
 	_renderer->_skybox = sky;
 
-	scene->addObject(sky);
+	_currentScene->addObject(sky);
 
 	Spoonity::Entity* demo = new Spoonity::Entity(
 		Spoonity::ObjectData(
@@ -79,9 +74,9 @@ void Game::loadOverworld()
 
 	demo->enable(); //enable the object to be drawn
 
-	scene->addObject(demo);
+	_currentScene->addObject(demo);
 
 	//TODO: add other objects as required.
 
-	_scenes.emplace_back(scene);
+	_scenes.emplace_back(_currentScene);
 }
