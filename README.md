@@ -7,7 +7,7 @@ Change Log 09/03/2021 - Martin & Thomas
 Change Log 04/03/2021 - Martin
 
 - Refactored Scene to promote usage of it's functions
-- Regactored loadOverworld function to utilise scene functions
+- Refactored loadOverworld function to utilise scene functions
 - Tweaked dispatcher to exit if the event is handled
 
 Change Log 27/02/2021 - Martin
