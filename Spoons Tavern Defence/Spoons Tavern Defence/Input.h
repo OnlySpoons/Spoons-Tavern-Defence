@@ -22,6 +22,8 @@ namespace Spoonity {
 		static Window* _window;
 
 		static glm::vec2 _scrollOffset;
+		static glm::vec2 _lastPos;
+		static bool firstMouse;
 
 		//Functions
 	public:
@@ -45,6 +47,9 @@ namespace Spoonity {
 		//Function to get cursor positon
 		static glm::vec2 getCursorPos();
 
+		//Function to get cursor offset
+		static glm::vec2 getCursorOffset();
+
 		//Function to get scroll offset
 		static glm::vec2 getScrollOffset();
 
@@ -58,7 +63,10 @@ namespace Spoonity {
 		//Window resizing callback
 		static void framebufferSizeCallback(GLFWwindow* window, int width, int height);
 
-		//Used to set the _scrollOffset vector
+		//Callback function to handle scroll wheel usage
 		static void scrollCallback(GLFWwindow* window, double xOffset, double yOffset);
+
+		//Callback function to handle mouse
+		static void mouseCallback(GLFWwindow* window, double xpos, double ypos);
 	};
 }

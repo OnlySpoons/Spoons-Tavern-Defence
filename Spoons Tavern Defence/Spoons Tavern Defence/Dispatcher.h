@@ -16,13 +16,13 @@ namespace Spoonity {
 		using EventFunc = std::function< void( Event<T>& ) >;
 
 	private:
-		std::map< T, std::vector<EventFunc<T>> > _observers;
+		std::map< T, std::vector<EventFunc> > _observers;
 
 		//TODO:: add event queue which is handled at the start/end of each frame
 
 	public:
 
-		void subscribe(const T& type, EventFunc<T>& func)
+		void subscribe(const T& type, EventFunc& func)
 		{
 			_observers[type].push_back(func);
 		}
@@ -30,7 +30,7 @@ namespace Spoonity {
 		template<typename ObserverType>
 		void subscribe(const T& type, ObserverType& observer)
 		{
-			EventFunc<T> func = std::bind(&ObserverType::handle, observer, std::placeholders::_1);
+			EventFunc func = std::bind(&ObserverType::handle, observer, std::placeholders::_1);
 
 			_observers[type].push_back(func);
 		}

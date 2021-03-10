@@ -11,11 +11,8 @@ namespace Spoonity {
 
 	class Skybox : public GameObject
 	{
-		//Variables
+	//Variables
 	private:
-		//Inherited Variables
-		//_data - position, direction, and rotation data
-		//_geometryShader - shader used to render the object
 
 		Shader _Shader;
 
@@ -24,11 +21,11 @@ namespace Spoonity {
 		unsigned int _VAO, _VBO, _CubeTexture;
 
 
-		//Functions
+	//Functions
 	public:
 
 		//Constructor
-		Skybox(const ObjectData& data,
+		Skybox(const Transform& data,
 			const std::vector<std::string>& faces,
 			const Shader& shader);
 

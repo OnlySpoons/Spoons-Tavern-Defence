@@ -3,7 +3,7 @@
 
 namespace Spoonity {
 
-	Entity::Entity(const ObjectData& data,
+	Entity::Entity(const Transform& data,
 		const std::string& modelPath)
 		: GameObject(data), _model(Model(modelPath))
 	{
@@ -18,13 +18,7 @@ namespace Spoonity {
 			shader.setMat4("projection", projection);
 			shader.setMat4("view", view);
 
-			glm::vec3 lookPos = _data.position + _data.front;
-
-			model = glm::mat4(1.0f);
-			model = glm::translate(model, _data.position);
-			model = glm::rotate(model, glm::radians(_data.angle.x), _data.front);
-			model = glm::rotate(model, glm::radians(_data.angle.y), _data.up);
-			model = glm::scale(model, _data.scale);
+			model = _transform.getMatrix();
 
 			_model.draw(shader, model);
 		}

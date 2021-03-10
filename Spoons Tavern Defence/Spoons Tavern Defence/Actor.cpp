@@ -3,7 +3,7 @@
 namespace Spoonity {
 
 	//Constructor
-	Actor::Actor(const ObjectData& data,
+	Actor::Actor(const Transform& data,
 		Camera* camera,
 		const std::string& modelPath)
 		: GameObject(data, true),

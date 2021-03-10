@@ -58,6 +58,15 @@
     <Filter Include="Header Files\Spoonity\GameObjects\Enums">
       <UniqueIdentifier>{46aea58e-5aac-42a1-805d-3121eb2f24a9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Spoonity\Physics">
+      <UniqueIdentifier>{d56ded26-3594-4e02-b1ac-f0368244993f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Spoonity\Physics">
+      <UniqueIdentifier>{14eb860b-6bf6-4032-8fad-3f21f6a4bc47}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Spoonity\Utility">
+      <UniqueIdentifier>{0a8a8ed5-dd4d-4a4f-bb28-171865fe2c22}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -126,6 +135,12 @@
     <ClInclude Include="PassType.h">
       <Filter>Header Files\Spoonity\GameObjects\Enums</Filter>
     </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>Header Files\Spoonity\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldDirections.h">
+      <Filter>Header Files\Spoonity\Utility</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -178,6 +193,9 @@
     </ClCompile>
     <ClCompile Include="Player.cpp">
       <Filter>Source Files\STD\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>Source Files\Spoonity\Physics</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -1,6 +1,5 @@
 #pragma once
 #include "GameObject.h"
-#include "Shader.h"
 #include "Camera.h"
 #include "Model.h"
 
@@ -32,7 +31,7 @@ namespace Spoonity {
 	public:
 
 		//Constructor
-		Actor(const ObjectData& data,
+		Actor(const Transform& data,
 			Camera* camera,
 			const std::string& modelPath = ""
 		);

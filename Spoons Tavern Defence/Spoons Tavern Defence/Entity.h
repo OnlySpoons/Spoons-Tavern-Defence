@@ -18,7 +18,7 @@ namespace Spoonity {
 		//Constructors
 		Entity() {}
 
-		Entity(const ObjectData& data,
+		Entity(const Transform& data,
 			const std::string& modelPath
 		);
 

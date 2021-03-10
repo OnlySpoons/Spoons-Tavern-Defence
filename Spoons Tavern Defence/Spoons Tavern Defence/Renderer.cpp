@@ -3,8 +3,7 @@
 namespace Spoonity {
 
     Renderer::Renderer()
-        : _skybox(nullptr),
-        _windowWidth(1280), _windowHeight(720),
+        : _windowWidth(1280), _windowHeight(720),
         _lightColor(glm::vec3(0.0f)), _lightDirection(glm::vec3(0.0f)), _lightPosition(glm::vec3(0.0f)),
         _depthMapFBO(0), _depthMap(0),
         _gBuffer(0), _gPosition(0), _gNormal(0), _gAlbedoSpec(0),
@@ -54,7 +53,6 @@ namespace Spoonity {
     //Destructor
     Renderer::~Renderer()
     {
-        _skybox = nullptr;
     }
 
     //Function for configuring buffers
@@ -220,16 +218,16 @@ namespace Spoonity {
         float near_plane = 1.0f, far_plane = 20.0f;
 
         RenderData data{};
-        data.cameraPos = camera._position;
+        data.cameraPos = camera.getPosition();
 
-        data.projection = glm::perspective(glm::radians(camera._fov), (float)_windowWidth / (float)_windowHeight, 0.011f, 500.0f);
+        data.projection = glm::perspective(glm::radians(camera.getFOV()), (float)_windowWidth / (float)_windowHeight, 0.011f, 500.0f);
         data.view = camera.GetViewMatrix();
         data.model = glm::mat4(1.0f);
 
         _lightPosition = data.cameraPos + glm::vec3(-7.0f, 7.0f, -7.0f);
 
         data.lightProjection = glm::ortho(-20.0f, 20.0f, -20.0f, 20.0f, near_plane, far_plane);
-        data.lightView = glm::lookAt(_lightPosition, _lightPosition + _lightDirection, camera.WorldUp);
+        data.lightView = glm::lookAt(_lightPosition, _lightPosition + _lightDirection, WorldDir::UP);
         data.lightSpaceMatrix = data.lightProjection * data.lightView;
 
         shadowPass(scene, data);

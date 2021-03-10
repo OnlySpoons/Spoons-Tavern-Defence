@@ -3,7 +3,7 @@
 namespace Spoonity {
 
     //Constructor
-    Skybox::Skybox(const ObjectData& data,
+    Skybox::Skybox(const Transform& data,
         const std::vector<std::string>& faces,
         const Shader& shader)
         : GameObject(data, true), _TextureFaces(faces), _Shader(shader)

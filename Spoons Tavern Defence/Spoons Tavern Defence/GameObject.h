@@ -1,55 +1,28 @@
 #pragma once
 #include "Shader.h"
-#include "Camera.h"
-
+#include "Transform.h"
 #include "PassType.h"
 
 namespace Spoonity {
 
-	struct ObjectData {
-		float speed;
-		glm::vec2 angle;
-		glm::vec3 position;
-		glm::vec3 front;
-		glm::vec3 up;
-		glm::vec3 right;
-		glm::vec3 scale;
-
-		ObjectData(const glm::vec3& position = glm::vec3(0.0f),
-			const glm::vec2& angle = glm::vec2(0.0f),
-			const glm::vec3& front = glm::vec3(1.0f, 0.0f, 0.0f),
-			const glm::vec3& up = glm::vec3(0.0f, 1.0f, 0.0f),
-			const glm::vec3& scale = glm::vec3(1.0f),
-			const float speed = 0.0f)
-			: position(position), angle(angle), front(front), up(up), right(glm::cross(front, up)), scale(scale), speed(speed)
-		{
-		}
-
-		void updateVectors()
-		{
-			right = glm::cross(front, up);
-			up = glm::cross(right, front);
-		}
-	};
-
 	class GameObject
 	{
-		//Variables
+	//Variables
 	public:
-		ObjectData _data;
+		Transform _transform;
 
 	protected:
 		bool _isEnabled;
 
-		//Functions
+	//Functions
 	public:
 
 		//Constructors
-		GameObject() :_data(ObjectData()), _isEnabled(false) {}
+		GameObject() :_transform(Transform()), _isEnabled(false) {}
 
-		GameObject(const ObjectData& data,
+		GameObject(const Transform& data,
 			const bool& enabled = false)
-			: _data(data), _isEnabled(enabled)
+			: _transform(data), _isEnabled(enabled)
 		{
 		}
 

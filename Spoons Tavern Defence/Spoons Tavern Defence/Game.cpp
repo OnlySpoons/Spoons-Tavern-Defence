@@ -5,7 +5,7 @@
 #include "Entity.h"
 
 //Constructor
-Game::Game() : Engine(new Player(Spoonity::ObjectData()))
+Game::Game() : Engine(new Player(Spoonity::Transform()))
 {
 	//Load the current Scene
 	loadOverworld();
@@ -41,7 +41,7 @@ void Game::loadOverworld()
 	_currentScene = new Spoonity::Scene(Level::Overworld);
 
 	Spoonity::Skybox* sky = new Spoonity::Skybox(
-		Spoonity::ObjectData(),
+		Spoonity::Transform(),
 		std::vector<std::string>(
 			{
 				"Data/Textures/skybox/right.jpg",
@@ -55,19 +55,13 @@ void Game::loadOverworld()
 		Spoonity::Shader("Data/Shaders/Skybox/skybox_shader.vs", "Data/Shaders/Skybox/skybox_shader.fs")
 	);
 
-
-	//TODO: remove this when objects are aware of render pass
-	_renderer->_skybox = sky;
-
 	_currentScene->addObject(sky);
 
 	Spoonity::Entity* demo = new Spoonity::Entity(
-		Spoonity::ObjectData(
-			glm::vec3(0.0f),
-			glm::vec2(0.0f, 0.0f),
-			glm::vec3(1.0f, 0.0f, 0.0f),
-			glm::vec3(0.0f, 1.0f, 0.0f),
-			glm::vec3(0.005f)
+		Spoonity::Transform(
+			glm::vec3(0.0f), //position
+			glm::vec3(0.0f), //rotation
+			glm::vec3(0.005f) //scale
 		),
 		"Data/Models/SyntyStudios/PolygonHeist/bank.fbx"
 	);

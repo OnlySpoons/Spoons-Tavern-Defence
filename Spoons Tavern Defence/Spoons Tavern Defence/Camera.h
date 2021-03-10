@@ -3,40 +3,52 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+#include "Transform.h"
+
 namespace Spoonity {
 
 	//Default values for major variables
 	constexpr float YAW = -90.0f;
 	constexpr float PITCH = 0.0f;
-	constexpr float FOV = 45.0f;
 
 	class Camera
 	{
-
-		//Member variables
-	public:
-		constexpr static glm::vec3 WorldUp = glm::vec3(0.0f, 1.0f, 0.0f);
+	//Variables
+	private:
+		static constexpr float FOV = 90.0f;
 
 		glm::vec3 _position;
 		glm::vec3 _front;
 		glm::vec3 _up;
-		glm::vec3 _right;
-
-		float _yaw;
-		float _pitch;
-
 		float _fov;
 
-		//Functions
+	//Functions
 	public:
 
 		//Constructor
-		Camera(glm::vec3 position, glm::vec3 front, float yaw = YAW, float pitch = PITCH, float fov = FOV);
+		Camera(glm::vec3 position = glm::vec3(0.0f),
+			   glm::vec3 front = WorldDir::FRONT,
+			   glm::vec3 up = WorldDir::UP,
+			   float fov = FOV
+		);
+		
+		//Update all variables
+		void update(const Transform& transform, const glm::vec3& cameraOffset = glm::vec3(0.0f));
+
+		//Setters
+		void setPosition(const glm::vec3& position);
+		void setFront(const glm::vec3& front);
+		void setUp(const glm::vec3& up);
+		void setFOV(const float& fov);
+
+		//Getters
+		glm::vec3 getPosition() const;
+		glm::vec3 getFront() const;
+		glm::vec3 getUp() const;
+		float getFOV() const;
+
 
 		//Returns the direction the player is looking to translate objects into view space
 		glm::mat4 GetViewMatrix() const;
-
-		//Reacalculates the cameras direction vectors
-		void updateCameraVectors();
 	};
 }

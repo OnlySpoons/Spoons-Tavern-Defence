@@ -3,33 +3,44 @@
 namespace Spoonity {
 
 	//Constructor
-	Camera::Camera(glm::vec3 position, glm::vec3 front, float yaw, float pitch, float fov)
+	Camera::Camera(glm::vec3 position, glm::vec3 front, glm::vec3 up, float fov)
 		: _position(position),
 		_front(front),
-		_yaw(yaw), _pitch(pitch)
+		_up(up),
+		_fov(fov)
 	{
-		updateCameraVectors();
 	}
+
+	//Update all variables
+	void Camera::update(const Transform& transform, const glm::vec3& cameraOffset)
+	{
+		setPosition(transform.getPosition() + cameraOffset);
+		setFront(transform.getFront());
+		setUp(transform.getUp());
+	}
+
+	//Setters
+	void Camera::setPosition(const glm::vec3& position) { _position = position; }
+
+	void Camera::setFront(const glm::vec3& front) { _front = front; }
+
+	void Camera::setUp(const glm::vec3& up) { _up = up; }
+
+	void Camera::setFOV(const float& fov) { _fov = fov; }
+
+	//Getters
+	glm::vec3 Camera::getPosition() const { return _position; }
+
+	glm::vec3 Camera::getFront() const { return _front; }
+
+	glm::vec3 Camera::getUp() const { return _up; }
+
+	float Camera::getFOV() const { return _fov; }
+
 
 	//Returns the direction the player is looking to translate objects into view space
 	glm::mat4 Camera::GetViewMatrix() const
 	{
 		return glm::lookAt(_position, _position + _front, _up);
-	}
-
-	//Reacalculates the cameras direction vectors
-	void Camera::updateCameraVectors()
-	{
-		float pitch = glm::radians(_pitch);
-		float yaw = glm::radians(_yaw);
-
-		glm::vec3 front(0.0f);
-		front.x = cos(yaw) * cos(pitch);
-		front.y = sin(pitch);
-		front.z = sin(yaw) * cos(pitch);
-		_front = normalize(front);
-
-		_right = glm::normalize(glm::cross(_front, WorldUp));
-		_up = glm::normalize(glm::cross(_right, _front));
 	}
 }

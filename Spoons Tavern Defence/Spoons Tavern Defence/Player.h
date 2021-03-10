@@ -7,15 +7,15 @@ class Player : public Spoonity::Actor
 {
 	//Variables
 private:
-	//Used for mouse movement
-	glm::vec2 _lastPos;
-	bool _firstMouse;
+	float _speed;
+
+	glm::vec3 _cameraOffset;
 
 	//Functions
 public:
 
 	//Constructor
-	Player(const Spoonity::ObjectData& data,
+	Player(const Spoonity::Transform& data,
 		const std::string& modelPath = ""
 	);
 

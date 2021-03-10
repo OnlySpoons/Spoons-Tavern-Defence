@@ -7,6 +7,8 @@ namespace Spoonity {
 	//Initial variable declaration
 	Window* Input::_window = nullptr;
 	glm::vec2 Input::_scrollOffset = glm::vec2(0.0f);
+	glm::vec2 Input::_lastPos = glm::vec2(0.0f);
+	bool Input::firstMouse = true;
 
 	void Input::setWindow(Window* window)
 	{
@@ -74,6 +76,28 @@ namespace Spoonity {
 		glfwGetCursorPos(_window->getInstance(), &xPos, &yPos);
 
 		return glm::vec2((float)xPos, (float)yPos);
+	}
+
+	//Function to get cursor offset
+	glm::vec2 Input::getCursorOffset()
+	{
+		glm::vec2 mousePos = getCursorPos();
+
+		if (firstMouse)
+		{
+			_lastPos = mousePos;
+			firstMouse = false;
+		}
+
+		float xOffset = mousePos.x - _lastPos.x;
+		float yOffset = _lastPos.y - mousePos.y; //Reversed since y-coordinates go from bottom to top
+
+		_lastPos = mousePos;
+
+		xOffset *= 0.1f;
+		yOffset *= 0.1f;
+
+		return glm::vec2(xOffset, yOffset);
 	}
 
 	//Function to get scroll offset
