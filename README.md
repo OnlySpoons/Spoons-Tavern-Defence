@@ -1,14 +1,22 @@
 Spoons: Tavern Defence
 
+Change Log 10/03/2021 - Martin & Thomas
+- Refactored Objects to be aware of which render pass it is
+- Added Transform Class to replace ObjectData struct
+- Refactored codebase to utilise the Transform class more effectively
+
+
 Change Log 09/03/2021 - Martin & Thomas
 - Refactored Renderer into functions for each pass
 - Changed loadOverworld to change the current scene instead of setting it after it's loaded
+
 
 Change Log 04/03/2021 - Martin
 
 - Refactored Scene to promote usage of it's functions
 - Refactored loadOverworld function to utilise scene functions
 - Tweaked dispatcher to exit if the event is handled
+
 
 Change Log 27/02/2021 - Martin
 
