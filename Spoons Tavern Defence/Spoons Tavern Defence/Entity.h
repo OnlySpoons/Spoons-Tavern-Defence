@@ -2,12 +2,17 @@
 #include "GameObject.h"
 #include "Camera.h"
 #include "Model.h"
+#include "Collider.h"
+#include "RigidBody.h"
 
 namespace Spoonity {
 
 	class Entity : public GameObject
 	{
 		//Variables
+	public:
+		std::vector<Collider*> _colliders;
+		std::vector < RigidBody*> _rigidBodies;
 	private:
 		//Entities control their own model
 		Model _Model;

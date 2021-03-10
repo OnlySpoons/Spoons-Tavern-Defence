@@ -117,6 +117,15 @@
     <ClInclude Include="Physics.h">
       <Filter>Header Files\Spoonity\Physics</Filter>
     </ClInclude>
+    <ClInclude Include="RigidBody.h">
+      <Filter>Header Files\Spoonity\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsConstants.h">
+      <Filter>Header Files\Spoonity\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Collider.h">
+      <Filter>Header Files\Spoonity\Physics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -171,6 +180,12 @@
       <Filter>Source Files\Spoonity\Input</Filter>
     </ClCompile>
     <ClCompile Include="Physics.cpp">
+      <Filter>Source Files\Spoonity\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="RigidBody.cpp">
+      <Filter>Source Files\Spoonity\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Collider.cpp">
       <Filter>Source Files\Spoonity\Physics</Filter>
     </ClCompile>
   </ItemGroup>
