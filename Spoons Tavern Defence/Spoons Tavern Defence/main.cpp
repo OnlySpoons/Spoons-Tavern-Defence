@@ -48,7 +48,7 @@ int main()
 {
 	Engine* engine = new Game();
 
-	Dispatcher<EventType> dispatcher;
+	/*Dispatcher<EventType> dispatcher;
 
 	TestObserver observer;
 
@@ -56,7 +56,7 @@ int main()
 
 	TestEvent e;
 
-	dispatcher.post(e);
+	dispatcher.post(e);*/
 
 	try {
 

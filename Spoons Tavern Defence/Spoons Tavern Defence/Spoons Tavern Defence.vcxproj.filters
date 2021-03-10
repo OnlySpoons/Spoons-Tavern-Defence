@@ -55,6 +55,9 @@
     <Filter Include="Header Files\Spoonity\Event System">
       <UniqueIdentifier>{f707b4fc-2b29-458e-8641-95fd99f06ea5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Spoonity\GameObjects\Enums">
+      <UniqueIdentifier>{46aea58e-5aac-42a1-805d-3121eb2f24a9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -119,6 +122,9 @@
     </ClInclude>
     <ClInclude Include="Observer.h">
       <Filter>Header Files\Spoonity\Event System</Filter>
+    </ClInclude>
+    <ClInclude Include="PassType.h">
+      <Filter>Header Files\Spoonity\GameObjects\Enums</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

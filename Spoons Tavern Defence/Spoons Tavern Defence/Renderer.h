@@ -11,9 +11,8 @@
 #include "Scene.h"
 #include "Camera.h"
 
-#include "GameObject.h"
-#include "Skybox.h"
-
+#include "PassType.h"
+	
 namespace Spoonity {
 
 	struct RenderData {
@@ -34,8 +33,6 @@ namespace Spoonity {
 		//Variables
 	public:
 		Shader _postProcessShader;
-
-		Skybox* _skybox;
 
 	private:
 
@@ -76,12 +73,19 @@ namespace Spoonity {
 		void renderScene(const Scene& scene, const Camera& camera);
 
 	private:
-		void shadowPass(const Scene& scene, RenderData data);
 
-		void geometryPass(const Scene& scene, RenderData data);
-		
-		void lightingPass(const Scene& scene, RenderData data);
+		//Render scene from the light's perspective to get shadows
+		void shadowPass(const Scene& scene, RenderData& data);
 
-		void postProcessing(const Scene& scene, RenderData data);
+		//Render scene's geometry/colour data to gbuffer
+		void geometryPass(const Scene& scene, RenderData& data);
+
+		//Calculate lighting by iterating over a screen filled quad pixel by pixel using the gbuffer's content
+		void lightingPass(const Scene& scene, RenderData& data);
+
+		//Apply post processing by iterating over a screen filled quad pixel by pixel using a Screen texture
+		void postProcessing(const Scene& scene, RenderData& data);
+
+		void blitFramebuffer();
 	};
 }

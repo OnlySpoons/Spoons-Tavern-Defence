@@ -20,7 +20,7 @@ public:
 	);
 
 	//Render the player Model
-	void draw(const Spoonity::Shader& shader, glm::mat4 projection, glm::mat4 view, glm::mat4 model) override;
+	void draw(const Spoonity::Shader& shader, glm::mat4 projection, glm::mat4 view, glm::mat4 model, Spoonity::PassType pass) override;
 
 	//Update the player
 	void update(float& deltaTime) override;

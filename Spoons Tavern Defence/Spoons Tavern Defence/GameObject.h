@@ -2,6 +2,8 @@
 #include "Shader.h"
 #include "Camera.h"
 
+#include "PassType.h"
+
 namespace Spoonity {
 
 	struct ObjectData {
@@ -55,7 +57,7 @@ namespace Spoonity {
 		virtual ~GameObject() {}
 
 		//Render the object
-		virtual void draw(const Shader& shader, glm::mat4 projection, glm::mat4 view, glm::mat4 model) = 0;
+		virtual void draw(const Shader& shader, glm::mat4 projection, glm::mat4 view, glm::mat4 model, PassType pass) = 0;
 
 		//Update the object
 		virtual void update(float& deltaTime) = 0;

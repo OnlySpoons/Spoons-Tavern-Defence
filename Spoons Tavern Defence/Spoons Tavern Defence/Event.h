@@ -20,9 +20,10 @@ namespace Spoonity {
 
 		virtual ~Event() {}
 
-		inline const T type() const { return _type; };
-		inline const std::string& getName() const { return _name; };
-		virtual bool isHandled() const { return _handled; };
+		inline const T type() const { return _type; }
+		inline const std::string& getName() const { return _name; }
+		virtual bool isHandled() const { return _handled; }
+		virtual bool handle() { _handled = true; }
 	};
 
 	class TestEvent : public Event<EventType>
@@ -31,7 +32,7 @@ namespace Spoonity {
 
 		static constexpr EventType Type = EventType::InvalidEvent;
 
-		TestEvent() :Event<EventType>(EventType::InvalidEvent, "TestEvent") {};
+		TestEvent() :Event<EventType>(EventType::InvalidEvent, "TestEvent") {}
 		
 		virtual ~TestEvent() {}
 	};

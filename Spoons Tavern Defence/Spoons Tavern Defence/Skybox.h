@@ -36,7 +36,7 @@ namespace Spoonity {
 		~Skybox();
 
 		//Render the object
-		void draw(const Shader& shader, glm::mat4 projection, glm::mat4 view, glm::mat4 model) override;
+		void draw(const Shader& shader, glm::mat4 projection, glm::mat4 view, glm::mat4 model, PassType pass) override;
 
 		//Unused by skybox
 		void update(float& deltaTime) override {}

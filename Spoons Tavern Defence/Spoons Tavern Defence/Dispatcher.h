@@ -10,12 +10,10 @@
 namespace Spoonity {
 	
 	template<typename T>
-	using EventFunc = std::function< void( const Event<T>& ) >;
-
-	template<typename T>
 	class Dispatcher
 	{
 	public:
+		using EventFunc = std::function< void( Event<T>& ) >;
 
 	private:
 		std::map< T, std::vector<EventFunc<T>> > _observers;
@@ -37,7 +35,7 @@ namespace Spoonity {
 			_observers[type].push_back(func);
 		}
 
-		void post(const Event<T>& event) const
+		void post(Event<T>& event) const
 		{
 			if (event.isHandled()) return;
 

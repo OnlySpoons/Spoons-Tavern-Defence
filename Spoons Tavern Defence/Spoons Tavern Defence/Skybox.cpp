@@ -27,9 +27,9 @@ namespace Spoonity {
     }
 
     //Render the object
-    void Skybox::draw(const Shader& shader, glm::mat4 projection, glm::mat4 view, glm::mat4 model)
+    void Skybox::draw(const Shader& shader, glm::mat4 projection, glm::mat4 view, glm::mat4 model, PassType pass)
     {
-        if (_isEnabled)
+        if (_isEnabled && pass == PassType::Geometry)
         {
             //Remove translation from the view matrix
             view = glm::mat4(glm::mat3(view));

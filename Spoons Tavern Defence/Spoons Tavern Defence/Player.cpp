@@ -26,7 +26,7 @@ Player::Player(const Spoonity::ObjectData& data,
 }
 
 //Render the player Model
-void Player::draw(const Spoonity::Shader& shader, glm::mat4 projection, glm::mat4 view, glm::mat4 model)
+void Player::draw(const Spoonity::Shader& shader, glm::mat4 projection, glm::mat4 view, glm::mat4 model, Spoonity::PassType pass)
 {
 	if (_isEnabled)
 	{
