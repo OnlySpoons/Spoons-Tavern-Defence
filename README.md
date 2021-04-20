@@ -1,5 +1,13 @@
 Spoons: Tavern Defence
 
+Change Log 20/04/2021 - Martin & Thomas
+- Fully implemented Bullet physics simulation and added gravity to all objects
+- Box, Sphere, and Capsule colliders implemented as basic shape colliders
+- Mesh collider implemented based on mesh data
+- Compound collider implemented for objects with multiple meshes
+- Player now uses a Capsule collider
+- Added Bullet debug mode to Renderer which allows visualisation of the simulation in wireframe mode
+
 Change Log 26/03/2021 - Thomas
 - Added .h and .cpp files from Physics branch
 
