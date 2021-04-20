@@ -1,7 +1,7 @@
 #pragma once
 #include <GLFW/glfw3.h>
 
-namespace Spoonity {
+namespace spty {
 
 	//Enumeration class that creates aliases for GLFW key codes
 	enum class KeyCode {

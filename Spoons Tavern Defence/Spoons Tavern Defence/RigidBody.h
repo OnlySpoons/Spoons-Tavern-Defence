@@ -9,7 +9,7 @@
 
 #include "Physics.h"
 
-namespace Spoonity {
+namespace spty {
 
 	class RigidBody
 	{
@@ -17,32 +17,31 @@ namespace Spoonity {
 	public:
 		//Default constructor
 		RigidBody() {}
-		RigidBody(GameObject* obj, BoxCollider* col)
-			: collider(col) 
-		{
-			localData = obj->_Data;
-		}
-		~RigidBody() {}
+		
+		RigidBody(const Transform& transform, Collider* col);
 
-		void init();
+		~RigidBody();
 
 		void setMass(float m);
 		void setForce(glm::vec3 f);
 		void setKinematic(bool val);
 
+		void move(glm::vec3 direction);
+
 		btTransform getWorldTransform(); //Needs testing
 		glm::vec3 getBulletPosition();
 		glm::vec3 getBulletRotation();
+		glm::vec3 getBulletInertia();
+
+		void calculateLocalInertia();
 
 	private:
-		glm::vec3 inertia = PhysicsConstants.INERTIA;
-		bool kinematic = PhysicsConstants.KINEMATIC;
-		float mass = PhysicsConstants.MASS;
+		glm::vec3 _inertia = PhysicsConstants::INERTIA;
+		bool _kinematic = PhysicsConstants::KINEMATIC;
+		float _mass = 10.0f;
 
 		//Bullet implementation
-		btRigidBody* body = nullptr;
-		GameObject::_Data localData; //TODO: need way of storing copy of constructor's obj._Data for updating pos/rot
-		BoxCollider* collider = nullptr;
+		btRigidBody* _body = nullptr;
+		Collider* _collider = nullptr;
 	};
-
 }

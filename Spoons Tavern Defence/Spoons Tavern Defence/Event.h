@@ -3,7 +3,7 @@
 
 #include "EventType.h"
 
-namespace Spoonity {
+namespace spty {
 
 	template<typename T>
 	class Event
@@ -32,7 +32,7 @@ namespace Spoonity {
 
 		static constexpr EventType Type = EventType::InvalidEvent;
 
-		TestEvent() :Event<EventType>(EventType::InvalidEvent, "TestEvent") {}
+		TestEvent() :Event<EventType>(Type, "TestEvent") {}
 		
 		virtual ~TestEvent() {}
 	};

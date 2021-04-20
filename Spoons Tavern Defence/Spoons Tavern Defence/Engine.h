@@ -7,7 +7,7 @@
 #include "Player.h"
 #include "Scene.h"
 
-namespace Spoonity {
+namespace spty {
 
 	class Engine
 	{
@@ -20,7 +20,7 @@ namespace Spoonity {
 
 		Actor* _player;
 
-		std::vector<Spoonity::Scene*> _scenes;
+		std::vector<spty::Scene*> _scenes;
 
 		Scene* _currentScene;
 
@@ -33,7 +33,7 @@ namespace Spoonity {
 	public:
 
 		//Constructor
-		Engine(Actor* player, Scene* scene = nullptr);
+		Engine(Scene* scene = nullptr);
 
 		//Destructor
 		virtual ~Engine();

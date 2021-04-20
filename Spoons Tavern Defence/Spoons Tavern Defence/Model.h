@@ -6,6 +6,7 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
+
 #include "stb_image.h"
 
 #include "Shader.h"
@@ -18,7 +19,7 @@
 #include <map>
 #include <vector>
 
-namespace Spoonity {
+namespace spty {
 
 	class Model
 	{
@@ -42,6 +43,9 @@ namespace Spoonity {
 
 		//Render the model
 		void draw(const Shader shader, const glm::mat4& model) const;
+
+		//Return a trimesh for collision detection
+		CompoundCollider* getCompoundShape() const;
 
 	private:
 

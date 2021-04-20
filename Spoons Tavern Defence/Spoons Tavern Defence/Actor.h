@@ -2,12 +2,13 @@
 #include "GameObject.h"
 #include "Camera.h"
 #include "Model.h"
+#include "RigidBody.h"
 
 #include "Input.h"
 #include "KeyCode.h"
 #include "MouseCode.h"
 
-namespace Spoonity {
+namespace spty {
 
 	//Abstraction for possible directions of movement
 	enum class Movement {
@@ -26,6 +27,7 @@ namespace Spoonity {
 
 	protected:
 		Model _model;
+		RigidBody _rigidBody;
 
 		//Fuctions
 	public:
@@ -44,5 +46,7 @@ namespace Spoonity {
 
 		//Update the object
 		virtual void update(float& deltaTime) = 0;
+
+		virtual void physicsUpdate() = 0;
 	};
 }

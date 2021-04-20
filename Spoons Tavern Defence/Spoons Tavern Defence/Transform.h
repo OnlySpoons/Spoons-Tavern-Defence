@@ -6,7 +6,7 @@
 
 #include "WorldDirections.h"
 
-namespace Spoonity {
+namespace spty {
 
 	enum class Axis
 	{
@@ -67,6 +67,10 @@ namespace Spoonity {
 		float getPitch() const;
 		float getYaw() const;
 		float getRoll() const;
+
+		void setPitch(float pitch);
+		void setYaw(float yaw);
+		void setRoll(float roll);
 
 	private:
 		//Keep pitch from inverting

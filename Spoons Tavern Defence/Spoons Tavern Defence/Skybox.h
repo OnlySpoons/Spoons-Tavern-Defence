@@ -7,7 +7,7 @@
 #include "GameObject.h"
 #include "Shader.h"
 
-namespace Spoonity {
+namespace spty {
 
 	class Skybox : public GameObject
 	{
@@ -37,6 +37,7 @@ namespace Spoonity {
 
 		//Unused by skybox
 		void update(float& deltaTime) override {}
+		void physicsUpdate() override {}
 
 	private:
 

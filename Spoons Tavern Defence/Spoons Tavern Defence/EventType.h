@@ -1,10 +1,11 @@
 #pragma once
 
-namespace Spoonity {
+namespace spty {
 
 	enum class EventType
 	{
 		InvalidEvent = 0,
+		AddPhysicsObject = 1,
 
 	};
 }

@@ -1,54 +1,121 @@
 #include "Collider.h"
 
-namespace Spoonity {
+namespace spty {
 
-	PhysicsMaterial::PhysicsMaterial(float f, float b) 
-	{ 
-		friction = f; 
-		bounciness = b; 
+	//Physics Material Constructors
+	PhysicsMaterial::PhysicsMaterial(float f, float b)
+	{
+		_friction = f;
+		_bounciness = b;
 	}
 	PhysicsMaterial::PhysicsMaterial() 
-	{ 
-		friction = PhysicsConstants.FRICTION; 
-		bounciness = PhysicsConstants.BOUNCE; 
+	{
+		_friction = PhysicsConstants::FRICTION;
+		_bounciness = 0.0f;
 	}
 
-	//--------------------------DELETED FUNCTION ERROR--------------------------
+	//Box Collider Constructors
 	BoxCollider::BoxCollider()
 	{ 
-		size = PhysicsConstants.CUBE_SIZE; 
-		centre = PhysicsConstants.CENTRE; 
-		generateShape(); 
+		_size = glm::vec3(1.0f, 1.0f, 1.0f);
+		generateShape();
 	}
-	BoxCollider::BoxCollider(glm::vec3 s, glm::vec3 c)
+	BoxCollider::BoxCollider(glm::vec3 s)
 	{ 
-		size = s; 
-		centre = c; 
-		generateShape(); 
+		_size = s;
+		generateShape();
 	}
 
+	//Sphere Collider Constructors
 	SphereCollider::SphereCollider() 
 	{ 
-		radius = PhysicsConstants.RADIUS; 
-		centre = PhysicsConstants.CENTRE; 
-		generateShape(); 
+		_radius = 10;
+		generateShape();
 	}
-	SphereCollider::SphereCollider(float r, glm::vec3 c) 
+	SphereCollider::SphereCollider(float r)
 	{ 
-		radius = r; 
-		centre = c; 
-		generateShape(); 
+		_radius = r;
+		generateShape();
 	}
-	//--------------------------DELETED FUNCTION ERROR--------------------------
 
-	void BoxCollider::generateShape() { shape = new btBoxShape(Physics::convertVector(size)); }
-	void SphereCollider::generateShape() { shape = new btSphereShape(radius); }
+	//Mesh Collider Constuctors
+	MeshCollider::MeshCollider()
+	{
+		_mesh = new btTriangleMesh();
+		generateShape();
+	}
+	MeshCollider::MeshCollider(const btTriangleMesh& m)
+	{
+		_mesh = m;
+		generateShape();
+	}
 
-	glm::vec3 Collider::getCentre() { return centre; }
-	glm::vec3 BoxCollider::getSize() { return size; }
-	void SphereCollider::setRadius(float r) { radius = r; }
-	float SphereCollider::getRadius() { return radius; }
+	//Compound Collider Constructors
+	CompoundCollider::CompoundCollider()
+	{
+		_colliders = {};
+		_transforms = {};
+		generateShape();
+	}
+	CompoundCollider::CompoundCollider(const std::vector<Collider*>& colliders, const std::vector<glm::mat4>& transforms)
+	{
+		_colliders = colliders;
+		_transforms = transforms;
+		generateShape();
+	}
 
-	void BoxCollider::setSize(glm::vec3 s) { size = s; generateShape(); }
-	void Collider::setCentre(glm::vec3 c) { centre = c; } //Not working
+	//Generate shape functions
+	void BoxCollider::generateShape() { _shape = new btBoxShape(Physics::glmVec3TobtVector3(_size)); }
+	void SphereCollider::generateShape() { _shape = new btSphereShape(_radius); }
+
+	void MeshCollider::generateShape()
+	{
+		/*btTriangleMesh trimesh = btTriangleMesh();
+		trimesh.addTriangle(btVector3(1, 0, 0), btVector3(0, 1, 0), btVector3(0, 0, 0));
+		trimesh.addTriangle(btVector3(1, 0, 0), btVector3(0, 1, 0), btVector3(0.5, 0.5, 0.5));
+		trimesh.addTriangle(btVector3(0, 0, 0), btVector3(0, 1, 0), btVector3(0.5, 0.5, 0.5));
+		trimesh.addTriangle(btVector3(1, 0, 0), btVector3(0, 0, 0), btVector3(0.5, 0.5, 0.5));*/
+
+		btConvexTriangleMeshShape convexShape = btConvexTriangleMeshShape(&_mesh);
+		btShapeHull* hull = new btShapeHull(&convexShape);
+		int margin = convexShape.getMargin();
+		hull->buildHull(margin);
+		/*convexShape->setUserPointer(hull);*/
+
+		btConvexHullShape* convexHull = new btConvexHullShape();
+		for (int i = 0; i < hull->numVertices(); i++)
+		{
+			btVector3 point = hull->getVertexPointer()[i];
+			convexHull->addPoint(point);
+			std::cout << "(" << point.x() << ", " << point.y() << ", " << point.z() << ")" << std::endl;
+		}
+
+		_shape = convexHull;
+	}
+
+	void CompoundCollider::generateShape()
+	{
+		btCompoundShape* tmpShape = new btCompoundShape();
+		for (int i = 0; i < _colliders.size(); i++)
+		{
+			btTransform trans;
+			trans.setFromOpenGLMatrix(glm::value_ptr(_transforms[i]));
+			tmpShape->addChildShape(trans, _colliders[i]->getShape());
+		}
+
+		_shape = tmpShape;
+	}
+
+	//Getters, Setters and Adders
+	void BoxCollider::setSize(glm::vec3 s) { _size = s; generateShape();  }
+	glm::vec3 BoxCollider::getSize() { return _size; }
+
+	void SphereCollider::setRadius(float r) { _radius = r; generateShape(); }
+	float SphereCollider::getRadius() { return _radius; }
+
+	void CompoundCollider::addCollider(Collider* collider, glm::mat4 transform)
+	{
+		_colliders.emplace_back(collider);
+		_transforms.push_back(transform);
+	}
 }

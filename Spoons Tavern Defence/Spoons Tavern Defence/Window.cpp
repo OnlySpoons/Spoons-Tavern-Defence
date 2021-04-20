@@ -1,6 +1,6 @@
 #include "Window.h"
 
-namespace Spoonity {
+namespace spty {
 
 	//Constructor
 	Window::Window(WindowProps properties)

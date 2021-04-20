@@ -1,6 +1,6 @@
 #include "Transform.h"
 
-namespace Spoonity {
+namespace spty {
 
 	//Constructor
 	Transform::Transform(const glm::vec3& pos,
@@ -105,6 +105,12 @@ namespace Spoonity {
 	float Transform::getYaw() const { return _rot.x; }
 
 	float Transform::getRoll() const { return _rot.z; }
+
+	void Transform::setPitch(float pitch) { _rot.y = pitch; }
+
+	void Transform::setYaw(float yaw) { _rot.x = yaw; }
+
+	void Transform::setRoll(float roll) { _rot.z = roll; }
 
 /*--------------- 
 Private Functions

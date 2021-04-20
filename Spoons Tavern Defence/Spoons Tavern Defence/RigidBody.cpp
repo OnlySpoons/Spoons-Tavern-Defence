@@ -1,58 +1,95 @@
 #include "RigidBody.h"
 
-namespace Spoonity {
+namespace spty {
 
-	void Spoonity::RigidBody::init()
+	RigidBody::RigidBody(const Transform& transform, Collider* col)
+		: _collider(col)
 	{
-		//Aborts if object doesn't have a bullet collider
-		if (collider == nullptr)
-			return; //TODO: add log message
+		btDefaultMotionState* motion = new btDefaultMotionState(
+			btTransform(
+				btQuaternion(
+					transform.getPitch(),
+					transform.getYaw(),
+					transform.getRoll()
+				),
+				Physics::glmVec3TobtVector3(transform.getPosition())
+			)
+		);
 
-		btDefaultMotionState* motion = new btDefaultMotionState(btTransform(btQuaternion(/*xyz rotation*/), /*position*/)); //TODO: fill in with Transform data when done
-		btVector3 initInertia = Physics::convertVector(inertia);
-		collider->shape->calculateLocalInertia(mass, initInertia);
+		//calculateLocalInertia();
 
 		//Construct
-		btRigidBody::btRigidBodyConstructionInfo construction(mass, motion, collider->shape, Physics::convertVector(inertia));
-		body = new btRigidBody(construction);
+		btRigidBody::btRigidBodyConstructionInfo construction(_mass, motion, _collider->_shape, Physics::glmVec3TobtVector3(_inertia));
+		_body = new btRigidBody(construction);
 
+		_body->setActivationState(4);
+
+		//TODO: Make this an event
 		//Add to the bullet world
-		Physics::addBulletBody(body);
+		Physics::addBulletBody(_body);
 	}
 
-	void Spoonity::RigidBody::setMass(float m)
+	RigidBody::~RigidBody()
 	{
-		mass = m;
+		delete _collider;
+		delete _body;
 	}
 
-	void Spoonity::RigidBody::setForce(glm::vec3 f)
+	void spty::RigidBody::setMass(float m)
 	{
-		inertia = f;
+		_mass = m;
+		_body->setMassProps(_mass, Physics::glmVec3TobtVector3(_inertia));
 	}
 
-	void Spoonity::RigidBody::setKinematic(bool val)
+	void spty::RigidBody::setForce(glm::vec3 f)
 	{
-		kinematic = val; 
-		if (kinematic == true)
+		_inertia = f;
+		_body->setMassProps(_mass, Physics::glmVec3TobtVector3(_inertia));
+	}
+
+	void spty::RigidBody::setKinematic(bool val)
+	{
+		_kinematic = val; 
+		if (_kinematic)
 			setMass(0);
+		else
+			setMass(1);
 	}
 
-	btTransform Spoonity::RigidBody::getWorldTransform()
+	void RigidBody::move(glm::vec3 direction)
+	{
+		direction.y += _body->getLinearVelocity().y();
+		_body->setLinearVelocity(Physics::glmVec3TobtVector3(direction));
+	}
+
+	btTransform spty::RigidBody::getWorldTransform()
 	{
 		btTransform result;
-		body->getMotionState()->getWorldTransform(result);
+		_body->getMotionState()->getWorldTransform(result);
 		return result;
 	}
 
-	glm::vec3 Spoonity::RigidBody::getBulletPosition()
+	glm::vec3 spty::RigidBody::getBulletPosition()
 	{
-		return Physics::convertVectorBack(getWorldTransform().getOrigin());
+		return Physics::btVector3ToglmVec3(getWorldTransform().getOrigin());
 	}
 
-	//TODO
-	glm::vec3 Spoonity::RigidBody::getBulletRotation()
+	glm::vec3 spty::RigidBody::getBulletRotation()
 	{
-		return glm::vec3(0); //TEMP
+		float x, y, z;
+		getWorldTransform().getRotation().getEulerZYX(z, y, x);
+		return glm::vec3(x, y, z);
 	}
 
+	glm::vec3 RigidBody::getBulletInertia()
+	{
+		return _inertia;
+	}
+
+	void RigidBody::calculateLocalInertia()
+	{
+		btVector3 localInertia;
+		_collider->_shape->calculateLocalInertia(_mass, localInertia);
+		_inertia = Physics::btVector3ToglmVec3(localInertia);
+	}
 }

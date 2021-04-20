@@ -3,7 +3,7 @@
 #include "Transform.h"
 #include "PassType.h"
 
-namespace Spoonity {
+namespace spty {
 
 	class GameObject
 	{
@@ -34,6 +34,8 @@ namespace Spoonity {
 
 		//Update the object
 		virtual void update(float& deltaTime) = 0;
+
+		virtual void physicsUpdate() = 0;
 
 		//Enable object to be rendered and process physics
 		void enable()

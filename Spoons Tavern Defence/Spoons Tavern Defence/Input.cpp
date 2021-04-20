@@ -2,7 +2,7 @@
 #include "Window.h"
 #include "Actor.h"
 
-namespace Spoonity {
+namespace spty {
 
 	//Initial variable declaration
 	Window* Input::_window = nullptr;

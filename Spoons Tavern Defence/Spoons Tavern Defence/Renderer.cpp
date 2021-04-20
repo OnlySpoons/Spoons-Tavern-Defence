@@ -1,6 +1,6 @@
 #include "Renderer.h"
 
-namespace Spoonity {
+namespace spty {
 
     Renderer::Renderer()
         : _windowWidth(1280), _windowHeight(720),

@@ -1,6 +1,6 @@
 #include "Actor.h"
 
-namespace Spoonity {
+namespace spty {
 
 	//Constructor
 	Actor::Actor(const Transform& data,
@@ -8,7 +8,8 @@ namespace Spoonity {
 		const std::string& modelPath)
 		: GameObject(data, true),
 		_model(modelPath == "" ? Model() : Model(modelPath)),
-		_camera(camera)
+		_camera(camera),
+		_rigidBody(_transform, new BoxCollider(_transform.getScale()))
 	{
 	}
 

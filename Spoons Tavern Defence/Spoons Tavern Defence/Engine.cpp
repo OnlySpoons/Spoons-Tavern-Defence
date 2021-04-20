@@ -1,17 +1,19 @@
 #include "Engine.h"
 
-namespace Spoonity {
+namespace spty {
 
-	Engine::Engine(Actor* player, Scene* scene) 
+	Engine::Engine(Scene* scene) 
 		: _lastFrame(0.0f), _deltaTime(0.0f),
-		_player(player),
 		_currentScene(scene)
 	{
-		_window = new Window(WindowProps("Advanced Graphics Project", 1920, 1080));
+		_window = new Window(WindowProps("Spoonity", 1920, 1080));
 
 		_renderer = new Renderer(_window->getWidth(), _window->getHeight());
 
-		//Initialize input
+		//Initialise physics
+		Physics::init();
+
+		//Initialise input
 		Input::setWindow(_window);
 	}
 
@@ -43,6 +45,9 @@ namespace Spoonity {
 
 		//Input
 		glfwPollEvents();
+
+		//Physics update
+		Physics::Update(_deltaTime, *_currentScene);
 
 		//Run gameloop
 		gameLoop(_deltaTime);

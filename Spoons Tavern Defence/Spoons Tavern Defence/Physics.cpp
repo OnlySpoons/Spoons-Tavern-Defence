@@ -1,13 +1,19 @@
 #include "Physics.h"
-#include "RigidBody.h"
 
-namespace Spoonity {
+namespace spty {
 
-	Physics::Physics(float G) { Init(PhysicsConstants.GRAVITY); }
+	btBroadphaseInterface* Physics::m_pBroadphase = nullptr;
+	btCollisionConfiguration* Physics::m_pCollisionConfiguration = nullptr;
+	btCollisionDispatcher* Physics::m_pDispatcher = nullptr;
+	btConstraintSolver* Physics::m_pSolver = nullptr;
+	btDynamicsWorld* Physics::m_pWorld = nullptr;
 
-	void Physics::Init(float g)
+	float Physics::_gravity = PhysicsConstants::GRAVITY;
+
+	void Physics::init(float G)
 	{
-		gravity = PhysicsConstants.GRAVITY;
+		_gravity = PhysicsConstants::GRAVITY;
+
 
 		// create the collision configuration
 		m_pCollisionConfiguration = new btDefaultCollisionConfiguration();
@@ -19,22 +25,16 @@ namespace Spoonity {
 		m_pSolver = new btSequentialImpulseConstraintSolver();
 		// create the world
 		m_pWorld = new btDiscreteDynamicsWorld(m_pDispatcher, m_pBroadphase, m_pSolver, m_pCollisionConfiguration);
-		setGravity(g);
+		setGravity(_gravity);
 	}
 
-	Physics::~Physics()
+	void Physics::cleanup()
 	{
 		delete m_pWorld;
 		delete m_pSolver;
 		delete m_pBroadphase;
 		delete m_pDispatcher;
 		delete m_pCollisionConfiguration;
-	}
-
-	void Physics::AddObject(Entity& obj)
-	{
-		//TODO: add check to make sure object has rigid body before adding to vector
-		physicsObjects.push_back(&obj);
 	}
 
 	void Physics::addBulletBody(btRigidBody* r)
@@ -44,33 +44,26 @@ namespace Spoonity {
 
 	void Physics::setGravity(float g)
 	{
-		gravity = g;
+		_gravity = g;
 
-		m_pWorld->setGravity(btVector3(0, -gravity, 0));
+		m_pWorld->setGravity(btVector3(0, -_gravity, 0));
 	}
 
 	float Physics::getGravity()
 	{
-		return gravity;
+		return _gravity;
 	}
 
-	void Physics::Update(float& deltaTime)
+	glm::vec3 Physics::getGravityVector()
+	{
+		return glm::vec3(0.0f, -_gravity, 0.0f);
+	}
+
+	void Physics::Update(float& deltaTime, const Scene& scene)
 	{
 		m_pWorld->stepSimulation(deltaTime);
 
-		//Update all game objects transforms to match physics transforms
-		for (int i = 0; i < physicsObjects.size(); i++)
-		{
-			//TODO: need to update every single rigidBody in vector list by offset based on rb's offset from entity coords in local space
-			for (int j = 0; j < physicsObjects[j]->_rigidBodies.size(); j++)
-			{
-				//TEMP: replace with transform
-				physicsObjects[i]->_Data.position = physicsObjects[i]->_rigidBodies[j]->getBulletPosition();
-
-				physicsObjects[i]->_Data.angle.x = physicsObjects[i]->_rigidBodies[j]->getBulletRotation().x;
-				physicsObjects[i]->_Data.angle.y = physicsObjects[i]->_rigidBodies[j]->getBulletRotation().y;
-			}
-		}
+		scene.physics();
 	}
 
 }

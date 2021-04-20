@@ -7,7 +7,7 @@
 #include "EventType.h"
 #include "Observer.h"
 
-namespace Spoonity {
+namespace spty {
 	
 	template<typename T>
 	class Dispatcher
@@ -16,26 +16,24 @@ namespace Spoonity {
 		using EventFunc = std::function< void( Event<T>& ) >;
 
 	private:
-		std::map< T, std::vector<EventFunc> > _observers;
-
-		//TODO:: add event queue which is handled at the start/end of each frame
+		static std::map< T, std::vector<EventFunc> > _observers;
 
 	public:
 
-		void subscribe(const T& type, EventFunc& func)
+		static void subscribe(const T& type, EventFunc func)
 		{
-			_observers[type].push_back(func);
+			_observers[type].emplace_back(func);
 		}
 
 		template<typename ObserverType>
-		void subscribe(const T& type, ObserverType& observer)
+		static void subscribe(const T& type, ObserverType& observer)
 		{
 			EventFunc func = std::bind(&ObserverType::handle, observer, std::placeholders::_1);
 
-			_observers[type].push_back(func);
+			_observers[type].emplace_back(func);
 		}
 
-		void post(Event<T>& event) const
+		static void post(Event<T>& event)
 		{
 			if (event.isHandled()) return;
 

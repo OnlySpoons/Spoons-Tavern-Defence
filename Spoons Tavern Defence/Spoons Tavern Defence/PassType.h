@@ -1,6 +1,6 @@
 #pragma once
 
-namespace Spoonity {
+namespace spty {
 
 	enum class PassType {
 		Shadow = 0,

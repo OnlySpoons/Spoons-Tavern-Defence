@@ -4,7 +4,7 @@
 #include "Event.h"
 #include "EventType.h"
 
-namespace Spoonity {
+namespace spty {
 	
 	template<typename T>
 	class Observer

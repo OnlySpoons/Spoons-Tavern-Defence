@@ -1,6 +1,6 @@
 #include "Shader.h"
 
-namespace Spoonity {
+namespace spty {
 
 	//Constructors
 	Shader::Shader()

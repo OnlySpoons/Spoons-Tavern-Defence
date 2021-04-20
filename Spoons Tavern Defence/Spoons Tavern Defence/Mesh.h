@@ -2,8 +2,11 @@
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <bullet/btBulletDynamicsCommon.h>
 
 #include "Shader.h"
+#include "Physics.h"
+#include "Collider.h"
 
 #include <string>
 #include <fstream>
@@ -11,7 +14,7 @@
 #include <iostream>
 #include <vector>
 
-namespace Spoonity {
+namespace spty {
 
     //Vertex data
     struct Vertex
@@ -54,6 +57,8 @@ namespace Spoonity {
 
         //Render the mesh
         void Draw(Shader shader) const;
+
+        MeshCollider* getMeshCollider() const;
 
     private:
 

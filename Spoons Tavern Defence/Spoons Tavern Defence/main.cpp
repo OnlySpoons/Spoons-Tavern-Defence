@@ -42,7 +42,7 @@ Shader names = shader_name.vs/fs/gs
 #include "Dispatcher.h"
 #include "Observer.h"
 
-using namespace Spoonity;
+using namespace spty;
 
 int main()
 {

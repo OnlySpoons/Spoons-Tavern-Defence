@@ -5,10 +5,20 @@
 #include "Entity.h"
 
 //Constructor
-Game::Game() : Engine(new Player(Spoonity::Transform()))
+Game::Game() : Engine()
 {
+	_player = new Player(
+		spty::Transform(
+			glm::vec3(0.0f, 1.0f, 0.0f), //position
+			glm::vec3(0.0f), //rotation
+			glm::vec3(1.0f) //scale
+		)
+	);
+
 	//Load the current Scene
 	loadOverworld();
+
+	_currentScene->addObject(_player);
 
 	//TODO: this shit
 	//_scenes.emplace_back(new Overworld());
@@ -17,14 +27,12 @@ Game::Game() : Engine(new Player(Spoonity::Transform()))
 //Destructor
 Game::~Game()
 {
+	_currentScene->removeObject(_player);
 }
 
 //Overriding gameloop
 void Game::gameLoop(float& deltaTime)
 {
-	//Update the player
-	_player->update(deltaTime);
-
 	for (auto it = _scenes.begin(); it != _scenes.end(); it++)
 	{
 		if ((*it)->_id == Level::Overworld)
@@ -38,10 +46,10 @@ void Game::gameLoop(float& deltaTime)
 void Game::loadOverworld()
 {
 	//Create the scene
-	_currentScene = new Spoonity::Scene(Level::Overworld);
+	_currentScene = new spty::Scene(Level::Overworld);
 
-	Spoonity::Skybox* sky = new Spoonity::Skybox(
-		Spoonity::Transform(),
+	spty::Skybox* sky = new spty::Skybox(
+		spty::Transform(),
 		std::vector<std::string>(
 			{
 				"Data/Textures/skybox/right.jpg",
@@ -52,13 +60,13 @@ void Game::loadOverworld()
 				"Data/Textures/skybox/back.jpg"
 			}
 			),
-		Spoonity::Shader("Data/Shaders/Skybox/skybox_shader.vs", "Data/Shaders/Skybox/skybox_shader.fs")
+		spty::Shader("Data/Shaders/Skybox/skybox_shader.vs", "Data/Shaders/Skybox/skybox_shader.fs")
 	);
 
 	_currentScene->addObject(sky);
 
-	Spoonity::Entity* demo = new Spoonity::Entity(
-		Spoonity::Transform(
+	spty::Entity* demo = new spty::Entity(
+		spty::Transform(
 			glm::vec3(0.0f), //position
 			glm::vec3(0.0f), //rotation
 			glm::vec3(0.005f) //scale
@@ -68,7 +76,21 @@ void Game::loadOverworld()
 
 	demo->enable(); //enable the object to be drawn
 
+	demo->setKinematic(true);
+
 	_currentScene->addObject(demo);
+
+	//demo = new spty::Entity(
+	//	spty::Transform(
+	//		glm::vec3(0.0f, -1.5f, 0.0f), //position
+	//		glm::vec3(0.0f), //rotation
+	//		glm::vec3(20.0f, 1.0f, 20.0f) //scale
+	//	)
+	//);
+
+	//demo->setKinematic(true);
+
+	//_currentScene->addObject(demo);
 
 	//TODO: add other objects as required.
 

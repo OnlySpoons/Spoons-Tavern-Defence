@@ -1,6 +1,6 @@
 #include "Mesh.h"
 
-namespace Spoonity {
+namespace spty {
 
     //Constructor
     Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures) : _vertices(vertices), _indices(indices), _textures(textures)
@@ -47,6 +47,28 @@ namespace Spoonity {
 
         //Set everything back to defaults
         glActiveTexture(GL_TEXTURE0);
+    }
+
+    MeshCollider* Mesh::getMeshCollider() const
+    {
+        btTriangleMesh trimesh = btTriangleMesh();
+
+        for (int i = 0; i * 3 < _indices.size() - 1; i++)
+        {
+            int index0 = _indices[i * 3 + 0];
+            int index1 = _indices[i * 3 + 1];
+            int index2 = _indices[i * 3 + 2];
+
+            btVector3 vertex0( Physics::glmVec3TobtVector3( _vertices[index0].position) );
+            btVector3 vertex1( Physics::glmVec3TobtVector3( _vertices[index1].position) );
+            btVector3 vertex2( Physics::glmVec3TobtVector3( _vertices[index2].position) );
+
+            trimesh.addTriangle(vertex0, vertex1, vertex2);
+        }
+
+        MeshCollider* mesh = new MeshCollider(trimesh);
+
+        return mesh;
     }
 
     //Initializes all the buffer objects/arrays

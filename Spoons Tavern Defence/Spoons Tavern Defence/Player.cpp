@@ -1,23 +1,25 @@
 #include "Player.h"
 
 //Constructor
-Player::Player(const Spoonity::Transform& transform,
+Player::Player(const spty::Transform& transform,
 	const std::string& modelPath)
-	: Actor(transform, new Spoonity::Camera(), modelPath),
+	: Actor(transform, new spty::Camera(), modelPath),
 	_cameraOffset(glm::vec3(0.0f, 0.2f, 0.0f)),
-	_speed(2.0f)
+	_speed(70.0f)
 {
-	_transform.setPosition(glm::vec3(0.0f, 0.5f, 0.0f));
+	_transform.setPosition(glm::vec3(10.0f, 0.5f, 10.0f));
 
 	_transform.setRotation(glm::vec3(0.0f, 0.0f, 0.0f));
 
 	_transform.setScale(glm::vec3(1.0f));
 
 	_camera->update(_transform, _cameraOffset);
+
+	_rigidBody.setMass(150.0f);
 }
 
 //Render the player Model
-void Player::draw(const Spoonity::Shader& shader, glm::mat4 projection, glm::mat4 view, glm::mat4 model, Spoonity::PassType pass)
+void Player::draw(const spty::Shader& shader, glm::mat4 projection, glm::mat4 view, glm::mat4 model, spty::PassType pass)
 {
 	if (_isEnabled)
 	{
@@ -29,6 +31,8 @@ void Player::draw(const Spoonity::Shader& shader, glm::mat4 projection, glm::mat
 
 		_model.draw(shader, model);
 	}
+
+	
 }
 
 //Update the player
@@ -37,17 +41,23 @@ void Player::update(float& deltaTime)
 	processInput(deltaTime);
 }
 
+void Player::physicsUpdate()
+{
+	_transform.setPosition( _rigidBody.getBulletPosition() );
+	//_transform.setRotation( _rigidBody.getBulletRotation() );
+}
+
 //Process the input for player controls
 void Player::processInput(float& deltaTime)
 {
-	using namespace Spoonity;
+	using namespace spty;
 
 	//Escape closes the window
 	if (Input::isKeyPressed(KeyCode::Escape))
 		Input::closeWindow();
 
 	//Temporary variables
-	float velocity = _speed * deltaTime;
+	glm::vec3 direction = _rigidBody.getBulletInertia();
 
 	glm::vec3 front = _transform.getFront();
 	front = glm::normalize(glm::vec3(front.x, 0.0f, front.z));
@@ -55,26 +65,31 @@ void Player::processInput(float& deltaTime)
 	glm::vec3 right = _transform.getRight();
 	right = glm::normalize(glm::vec3(right.x, 0.0f, right.z));
 
+	float velocity = _speed * deltaTime;
+
 	//Left shift is sprint key
 	if (Input::isKeyPressed(KeyCode::LeftShift))
 		velocity *= 1.6f;
 
-	//Set the new position of the camera based on the keys W, A, S, & D
+	//Move based on the keys W, A, S, & D
 	if (Input::isKeyPressed(KeyCode::W))
-		_transform.move(front * velocity);
+		direction += front;
 	if (Input::isKeyPressed(KeyCode::S))
-		_transform.move(-front * velocity);
+		direction -= front;
 	if (Input::isKeyPressed(KeyCode::D))
-		_transform.move(right * velocity);
+		direction += right;
 	if (Input::isKeyPressed(KeyCode::A))
-		_transform.move(-right * velocity);
+		direction -= right;
 
+	//direction = glm::vec3(direction.x, 0.0f, direction.z);
+
+	_rigidBody.move(direction * velocity);
 	
 	////Flight controls
 	//if (Input::isKeyPressed(KeyCode::Space))
-	//	_transform.move(WorldDir::UP * velocity);
+	//	_rigidBody.move(WorldDir::UP * velocity);
 	//if (Input::isKeyPressed(KeyCode::LeftControl))
-	//	_transform.move(WorldDir::DOWN * velocity);
+	//	_rigidBody.move(WorldDir::DOWN * velocity);
 
 	//Print player position when mouse button is pressed
 	if (Input::isButtonPressed(MouseCode::LeftButton))

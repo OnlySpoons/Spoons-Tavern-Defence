@@ -1,6 +1,6 @@
 #include "Scene.h"
 
-namespace Spoonity {
+namespace spty {
 
 	//Constructor
 	Scene::Scene(int id)
@@ -33,6 +33,15 @@ namespace Spoonity {
 		for (GameObject* obj : _sceneObjects)
 		{
 			obj->update(deltaTime);
+		}
+	}
+
+	//Update the physics of objects in the scene
+	void Scene::physics() const
+	{
+		for (GameObject* obj : _sceneObjects)
+		{
+			obj->physicsUpdate();
 		}
 	}
 

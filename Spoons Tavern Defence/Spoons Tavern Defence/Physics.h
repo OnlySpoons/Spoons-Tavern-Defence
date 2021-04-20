@@ -2,48 +2,47 @@
 #include "bullet/btBulletDynamicsCommon.h"
 
 #include "PhysicsConstants.h"
-#include "Entity.h"
+#include "Scene.h"
 
 #include <vector>
 
-namespace Spoonity
+namespace spty
 {
 	class Physics 
 	{
-		friend class GameObject;
-		friend class RigidBody;
-		friend class BoxCollider;
-		friend class Collider;
-
 	public:
-		Physics(float g = PhysicsConstants.GRAVITY);
-		~Physics();
+		static void init(float g = PhysicsConstants::GRAVITY);
 
-		void setGravity(float g);
-		float getGravity();
+		static void cleanup();
 
-		void Update(float& deltaTime);
+		static void setGravity(float g);
+		static float getGravity();
+		static glm::vec3 getGravityVector();
 
-
-	protected:
-		//Core Bullet components
-		btBroadphaseInterface* m_pBroadphase;
-		btCollisionConfiguration* m_pCollisionConfiguration;
-		btCollisionDispatcher* m_pDispatcher;
-		btConstraintSolver* m_pSolver;
-		static btDynamicsWorld* m_pWorld;
+		static void Update(float& deltaTime, const Scene& scene);
 
 		//Helper functions
-		static inline btVector3 convertVector(glm::vec3 foo) { return btVector3(foo.x, foo.y, foo.z); }
-		static inline glm::vec3 convertVectorBack(const btVector3& foo) { return glm::vec3(foo.getX(), foo.getY(), foo.getZ()); }
+		static inline btVector3 glmVec3TobtVector3(const glm::vec3& vec) { return btVector3(vec.x, vec.y, vec.z); }
+		static inline glm::vec3 btVector3ToglmVec3(const btVector3& vec) { return glm::vec3(vec.getX(), vec.getY(), vec.getZ()); }
+		static inline btQuaternion asQuaternion(glm::vec3 rot) { return btQuaternion(rot.x, rot.y, rot.z); }
 
-		void AddObject(Entity& obj);
 		static void addBulletBody(btRigidBody* r);
-	
-	private:
-		void Init(float g);
 
-		std::vector<Entity*> physicsObjects;
-		float gravity;
+		/*static inline btTransform TransformTobtTransform(Transform transform)
+		{
+			btTransform result;
+			result.setRotation(asQuaternion(transform.getRotation()));
+			result.setOrigin(glmVec3TobtVector3(transform.getPosition()));
+		}*/
+
+	private:
+		//Core Bullet components
+		static btBroadphaseInterface* m_pBroadphase;
+		static btCollisionConfiguration* m_pCollisionConfiguration;
+		static btCollisionDispatcher* m_pDispatcher;
+		static btConstraintSolver* m_pSolver;
+		static btDynamicsWorld* m_pWorld;
+		
+		static float _gravity;
 	};
 }

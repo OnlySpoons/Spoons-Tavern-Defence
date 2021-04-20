@@ -5,7 +5,7 @@
 
 #include "Transform.h"
 
-namespace Spoonity {
+namespace spty {
 
 	//Default values for major variables
 	constexpr float YAW = -90.0f;

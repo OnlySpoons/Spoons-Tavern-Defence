@@ -67,6 +67,9 @@
     <Filter Include="Header Files\Spoonity\Utility">
       <UniqueIdentifier>{0a8a8ed5-dd4d-4a4f-bb28-171865fe2c22}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Spoonity\Event System\Events">
+      <UniqueIdentifier>{1f0f0b9b-c62c-4121-a794-3e0528892bbb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">

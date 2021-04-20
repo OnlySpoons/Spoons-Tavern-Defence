@@ -1,6 +1,6 @@
 #include "Model.h"
 
-namespace Spoonity
+namespace spty
 {
 	//Constructors
 	Model::Model()
@@ -275,5 +275,18 @@ namespace Spoonity
 		}
 
 		return textureID;
+	}
+
+	CompoundCollider* Model::getCompoundShape() const
+	{
+		//TODO: add trianlge mesh generation
+		std::vector<Collider*> colliders;
+
+		for (int i = 0; i < _meshes.size(); i++)
+		{
+			colliders.emplace_back(_meshes[i].getMeshCollider());
+		}
+
+		return new CompoundCollider(colliders, _transforms);
 	}
 }

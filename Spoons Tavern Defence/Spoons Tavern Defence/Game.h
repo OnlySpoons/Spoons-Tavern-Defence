@@ -10,7 +10,7 @@ enum Level {
 	Overworld = 0,
 };
 
-class Game : public Spoonity::Engine
+class Game : public spty::Engine
 {
 	//Variables
 public:

@@ -3,7 +3,7 @@
 
 #include "GameObject.h"
 
-namespace Spoonity {
+namespace spty {
 
 	class Scene
 	{
@@ -26,6 +26,8 @@ namespace Spoonity {
 
 		//Update the objects in the scene
 		void update(float& deltaTime) const;
+
+		void physics() const;
 
 		//Add object to the scene
 		void addObject(GameObject* obj);

@@ -2,18 +2,21 @@
 
 #include <glm/glm.hpp>
 #include <bullet/btBulletCollisionCommon.h>
+#include <bullet/BulletCollision/CollisionShapes/btShapeHull.h>
 
 #include "Physics.h"
 
-namespace Spoonity {
+namespace spty {
 
 	class PhysicsMaterial
 	{
-		float friction;
-		float bounciness;
+	public:
+		float _friction;
+		float _bounciness;
 
+	public:
 		PhysicsMaterial();
-		PhysicsMaterial(float f, float b = PhysicsConstants.BOUNCE);
+		PhysicsMaterial(float f, float b);
 	};
 
 	class Collider
@@ -22,15 +25,18 @@ namespace Spoonity {
 		friend class Physics;
 
 	public:
-		~Collider() {}
+		Collider() {}
 
-		void setCentre(glm::vec3 c);
-		glm::vec3 getCentre();
+		virtual ~Collider() { delete _shape; }
+
+		btCollisionShape* getShape() { return _shape; }
 
 	protected:
-		btCollisionShape* shape;
-		PhysicsMaterial material;
-		glm::vec3 centre;
+		btCollisionShape* _shape;
+		PhysicsMaterial _material;
+
+	private:
+		virtual void generateShape() = 0;
 
 		//May need to add: int tag;
 
@@ -40,34 +46,62 @@ namespace Spoonity {
 	{
 	public:
 		BoxCollider();
-		BoxCollider(glm::vec3 s, glm::vec3 c);
+		BoxCollider(glm::vec3 s);
 
 		void setSize(glm::vec3 s);
 
 		glm::vec3 getSize();
 
 	private:
-		glm::vec3 size;
+		glm::vec3 _size;
 
 		//Recreates the bullet collision shape
-		void generateShape();
+		void generateShape() override;
 	};
 
 	class SphereCollider : public Collider
 	{
 	public:
 		SphereCollider();
-		SphereCollider(float r, glm::vec3 c);
+		SphereCollider(float r);
 
 		void setRadius(float r);
 
 		float getRadius();
 
 	private:
-		float radius;
+		float _radius;
 
 		//Recreates the bullet collision shape
-		void generateShape();
+		void generateShape() override;
+	};
+
+	class MeshCollider : public Collider
+	{
+	public:
+		MeshCollider();
+		MeshCollider(const btTriangleMesh& m);
+
+	private:
+		btTriangleMesh _mesh;
+
+		//Recreates the bullet collision shape
+		void generateShape() override;
+	};
+
+	class CompoundCollider : public Collider
+	{
+	public:
+		CompoundCollider();
+		CompoundCollider(const std::vector<Collider*>& colliders, const std::vector<glm::mat4>& transforms);
+
+		void addCollider(Collider* collider, glm::mat4 transform);
+
+	private:
+		std::vector<Collider*> _colliders;
+		std::vector<glm::mat4> _transforms;
+
+		void generateShape() override;
 	};
 
 }

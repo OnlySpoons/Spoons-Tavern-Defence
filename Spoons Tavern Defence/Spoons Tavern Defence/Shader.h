@@ -9,7 +9,7 @@
 #include <sstream>
 #include <iostream>
 
-namespace Spoonity {
+namespace spty {
 
 	class Shader
 	{

@@ -1,6 +1,6 @@
 #include "Camera.h"
 
-namespace Spoonity {
+namespace spty {
 
 	//Constructor
 	Camera::Camera(glm::vec3 position, glm::vec3 front, glm::vec3 up, float fov)

@@ -13,7 +13,7 @@
 
 #include "PassType.h"
 	
-namespace Spoonity {
+namespace spty {
 
 	struct RenderData {
 		glm::vec3 cameraPos;

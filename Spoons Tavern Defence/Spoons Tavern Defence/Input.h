@@ -6,7 +6,7 @@
 #include "KeyCode.h"
 #include "MouseCode.h"
 
-namespace Spoonity {
+namespace spty {
 
 	//A promise that the Window class will exist (avoids include loop)
 	class Window;

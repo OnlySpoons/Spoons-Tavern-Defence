@@ -6,7 +6,7 @@
 
 #include "Input.h"
 
-namespace Spoonity {
+namespace spty {
 
 	struct WindowProps
 	{

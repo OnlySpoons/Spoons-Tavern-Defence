@@ -1,6 +1,6 @@
 #include "Skybox.h"
 
-namespace Spoonity {
+namespace spty {
 
     //Constructor
     Skybox::Skybox(const Transform& data,
