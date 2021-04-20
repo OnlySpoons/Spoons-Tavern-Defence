@@ -29,12 +29,25 @@ namespace spty {
 	//Sphere Collider Constructors
 	SphereCollider::SphereCollider() 
 	{ 
-		_radius = 10;
+		_radius = 1.0f;
 		generateShape();
 	}
 	SphereCollider::SphereCollider(float r)
 	{ 
 		_radius = r;
+		generateShape();
+	}
+
+	CapsuleCollider::CapsuleCollider()
+	{
+		_radius = 0.5f;
+		_height = 1.0f;
+		generateShape();
+	}
+	CapsuleCollider::CapsuleCollider(float r, float h)
+	{
+		_radius = r;
+		_height = h;
 		generateShape();
 	}
 
@@ -67,6 +80,7 @@ namespace spty {
 	//Generate shape functions
 	void BoxCollider::generateShape() { _shape = new btBoxShape(Physics::glmVec3TobtVector3(_size)); }
 	void SphereCollider::generateShape() { _shape = new btSphereShape(_radius); }
+	void CapsuleCollider::generateShape() { _shape = new btCapsuleShape(_radius, _height); }
 
 	void MeshCollider::generateShape()
 	{
@@ -87,7 +101,6 @@ namespace spty {
 		{
 			btVector3 point = hull->getVertexPointer()[i];
 			convexHull->addPoint(point);
-			std::cout << "(" << point.x() << ", " << point.y() << ", " << point.z() << ")" << std::endl;
 		}
 
 		_shape = convexHull;
@@ -118,4 +131,5 @@ namespace spty {
 		_colliders.emplace_back(collider);
 		_transforms.push_back(transform);
 	}
+	
 }

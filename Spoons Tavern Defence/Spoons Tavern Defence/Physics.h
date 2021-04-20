@@ -3,6 +3,7 @@
 
 #include "PhysicsConstants.h"
 #include "Scene.h"
+#include "BulletDebugDrawer.h"
 
 #include <vector>
 
@@ -27,6 +28,9 @@ namespace spty
 		static inline btQuaternion asQuaternion(glm::vec3 rot) { return btQuaternion(rot.x, rot.y, rot.z); }
 
 		static void addBulletBody(btRigidBody* r);
+
+		static void setDebugDrawer(BulletDebugDrawer* debugDrawer);
+		static void debugDraw();
 
 		/*static inline btTransform TransformTobtTransform(Transform transform)
 		{

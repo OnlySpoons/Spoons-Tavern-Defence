@@ -42,6 +42,17 @@ namespace spty {
 		m_pWorld->addRigidBody(r);
 	}
 
+	void Physics::setDebugDrawer(BulletDebugDrawer* debugDrawer)
+	{
+		m_pWorld->setDebugDrawer(debugDrawer);
+	}
+
+	void Physics::debugDraw()
+	{
+
+		m_pWorld->debugDrawWorld();
+	}
+
 	void Physics::setGravity(float g)
 	{
 		_gravity = g;

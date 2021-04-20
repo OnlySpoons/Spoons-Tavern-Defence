@@ -76,6 +76,19 @@ namespace spty {
 		void generateShape() override;
 	};
 
+	class CapsuleCollider : public Collider
+	{
+	public:
+		CapsuleCollider();
+		CapsuleCollider(float r, float h);
+
+	private:
+		float _radius;
+		float _height;
+
+		void generateShape() override;
+	};
+
 	class MeshCollider : public Collider
 	{
 	public:

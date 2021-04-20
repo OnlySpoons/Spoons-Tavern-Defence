@@ -9,7 +9,7 @@ namespace spty {
 		: GameObject(data, true),
 		_model(modelPath == "" ? Model() : Model(modelPath)),
 		_camera(camera),
-		_rigidBody(_transform, new BoxCollider(_transform.getScale()))
+		_rigidBody(_transform, new CapsuleCollider(_transform.getScale().x, _transform.getScale().y))
 	{
 	}
 

@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor.h" />
+    <ClInclude Include="BulletDebugDrawer.h" />
     <ClInclude Include="Collider.h" />
     <ClInclude Include="Dispatcher.h" />
     <ClInclude Include="Event.h" />

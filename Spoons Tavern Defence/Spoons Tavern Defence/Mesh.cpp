@@ -59,9 +59,17 @@ namespace spty {
             int index1 = _indices[i * 3 + 1];
             int index2 = _indices[i * 3 + 2];
 
-            btVector3 vertex0( Physics::glmVec3TobtVector3( _vertices[index0].position) );
-            btVector3 vertex1( Physics::glmVec3TobtVector3( _vertices[index1].position) );
-            btVector3 vertex2( Physics::glmVec3TobtVector3( _vertices[index2].position) );
+
+            glm::vec3 pos;
+
+            pos = glm::vec4(_vertices[index0].position , 1.0f);
+            btVector3 vertex0( Physics::glmVec3TobtVector3( pos ));
+
+            pos = glm::vec4(_vertices[index1].position , 1.0f);
+            btVector3 vertex1( Physics::glmVec3TobtVector3( pos ));
+
+            pos = glm::vec4(_vertices[index2].position , 1.0f);
+            btVector3 vertex2( Physics::glmVec3TobtVector3( pos ));
 
             trimesh.addTriangle(vertex0, vertex1, vertex2);
         }

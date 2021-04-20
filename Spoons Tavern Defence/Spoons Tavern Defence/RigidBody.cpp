@@ -16,7 +16,7 @@ namespace spty {
 			)
 		);
 
-		//calculateLocalInertia();
+		_collider->getShape()->setLocalScaling( Physics::glmVec3TobtVector3( transform.getScale() ) );
 
 		//Construct
 		btRigidBody::btRigidBodyConstructionInfo construction(_mass, motion, _collider->_shape, Physics::glmVec3TobtVector3(_inertia));

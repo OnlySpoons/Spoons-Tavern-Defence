@@ -27,6 +27,7 @@ namespace spty {
         //Tell stb_image.h to flip loaded texture's on the y-axis (before loading model)
         //stbi_set_flip_vertically_on_load(true);
 
+        Physics::setDebugDrawer(&_debugDrawer);
 
         //Configure global opengl state
         glEnable(GL_DEPTH_TEST);
@@ -320,6 +321,11 @@ namespace spty {
     //Apply post processing by iterating over a screen filled quad pixel by pixel using a Screen texture
     void Renderer::postProcessing(const Scene& scene, RenderData& data)
     {
+        /*_debugDrawer.debugShader.use();
+        _debugDrawer.setDebugMode(btIDebugDraw::DBG_DrawWireframe);
+        _debugDrawer.SetMatrices(data.view, data.projection);
+        Physics::debugDraw();*/
+
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
         _postProcessShader.use();
@@ -331,7 +337,6 @@ namespace spty {
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, _stencilMask);
 
-
         /*
         _debugDepthShader.use();
         _debugDepthShader.setFloat("near_plane", near_plane);
@@ -339,8 +344,6 @@ namespace spty {
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, _depthMap);
         */
-
-        //------------------------
 
         glBindVertexArray(_quadVAO);
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);

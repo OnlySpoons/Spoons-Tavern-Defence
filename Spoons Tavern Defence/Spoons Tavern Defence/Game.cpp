@@ -9,9 +9,9 @@ Game::Game() : Engine()
 {
 	_player = new Player(
 		spty::Transform(
-			glm::vec3(0.0f, 1.0f, 0.0f), //position
+			glm::vec3(0.0f, 0.5f, 0.0f), //position
 			glm::vec3(0.0f), //rotation
-			glm::vec3(1.0f) //scale
+			glm::vec3(0.5f, 0.7f, 0.5f) //scale
 		)
 	);
 
@@ -71,6 +71,7 @@ void Game::loadOverworld()
 			glm::vec3(0.0f), //rotation
 			glm::vec3(0.005f) //scale
 		),
+		//"Data/Models/gun/SK_Web_RifleSwat_01.fbx"
 		"Data/Models/SyntyStudios/PolygonHeist/bank.fbx"
 	);
 

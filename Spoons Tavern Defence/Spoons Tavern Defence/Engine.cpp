@@ -4,14 +4,14 @@ namespace spty {
 
 	Engine::Engine(Scene* scene) 
 		: _lastFrame(0.0f), _deltaTime(0.0f),
-		_currentScene(scene)
+		_currentScene(scene), _player(nullptr)
 	{
 		_window = new Window(WindowProps("Spoonity", 1920, 1080));
 
-		_renderer = new Renderer(_window->getWidth(), _window->getHeight());
-
 		//Initialise physics
 		Physics::init();
+
+		_renderer = new Renderer(_window->getWidth(), _window->getHeight());
 
 		//Initialise input
 		Input::setWindow(_window);

@@ -7,10 +7,12 @@
 #include "stb_image.h"
 
 #include "Shader.h"
+#include "BulletDebugDrawer.h"
 
 #include "Scene.h"
 #include "Camera.h"
 
+#include "Physics.h"
 #include "PassType.h"
 	
 namespace spty {
@@ -37,6 +39,8 @@ namespace spty {
 	private:
 
 		Shader _depthShader, _geometryShader, _lightingShader, _debugDepthShader;
+
+		BulletDebugDrawer _debugDrawer;
 
 		const unsigned int SHADOW_WIDTH = 8192, SHADOW_HEIGHT = 8192;
 
