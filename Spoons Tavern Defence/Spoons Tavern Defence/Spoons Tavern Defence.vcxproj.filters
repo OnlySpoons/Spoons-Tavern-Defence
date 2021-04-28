@@ -25,12 +25,6 @@
     <Filter Include="Header Files\STD">
       <UniqueIdentifier>{374e7746-111e-4f1f-95c5-3ef4ab26a0d5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Spoonity\GameObjects">
-      <UniqueIdentifier>{c4e7dca2-8495-422c-98e9-e8107a2365ae}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Spoonity\GameObjects">
-      <UniqueIdentifier>{08b0e92d-0f68-47b7-99c0-04b138889969}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Spoonity\Graphics">
       <UniqueIdentifier>{b53020c9-c24b-414c-8034-802eff9eaf6f}</UniqueIdentifier>
     </Filter>
@@ -46,17 +40,8 @@
     <Filter Include="Source Files\Spoonity\Model Loading">
       <UniqueIdentifier>{74851299-29b2-42dc-aca7-5c8e4d849c13}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\STD\GameObjects">
-      <UniqueIdentifier>{657edff8-8224-4d00-94a1-d046a6994429}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\STD\GameObjects">
-      <UniqueIdentifier>{7f23d1c9-7776-4740-86c9-b1e3967907e9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Spoonity\Event System">
       <UniqueIdentifier>{f707b4fc-2b29-458e-8641-95fd99f06ea5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Spoonity\GameObjects\Enums">
-      <UniqueIdentifier>{46aea58e-5aac-42a1-805d-3121eb2f24a9}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\Spoonity\Physics">
       <UniqueIdentifier>{d56ded26-3594-4e02-b1ac-f0368244993f}</UniqueIdentifier>
@@ -70,6 +55,33 @@
     <Filter Include="Header Files\Spoonity\Event System\Events">
       <UniqueIdentifier>{1f0f0b9b-c62c-4121-a794-3e0528892bbb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\STD\Events">
+      <UniqueIdentifier>{74af004f-d32c-4152-bd62-9c08e4275d11}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Spoonity\Event System">
+      <UniqueIdentifier>{46fa5bcb-9aed-4022-bad1-b57216c4496e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\STD\Game Objects">
+      <UniqueIdentifier>{657edff8-8224-4d00-94a1-d046a6994429}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Spoonity\Game Objects">
+      <UniqueIdentifier>{08b0e92d-0f68-47b7-99c0-04b138889969}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Spoonity\Game Objects\Enums">
+      <UniqueIdentifier>{46aea58e-5aac-42a1-805d-3121eb2f24a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Spoonity\Game Objects">
+      <UniqueIdentifier>{c4e7dca2-8495-422c-98e9-e8107a2365ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\STD\Game Objects">
+      <UniqueIdentifier>{7f23d1c9-7776-4740-86c9-b1e3967907e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\STD\Game Objects\Weapons">
+      <UniqueIdentifier>{387b61ed-ebe5-424a-9bd9-cbe310e1a1da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\STD\Game Objects\Weapons">
+      <UniqueIdentifier>{6734316d-bb1e-4659-85f1-c462498a502f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -79,16 +91,16 @@
       <Filter>Header Files\STD</Filter>
     </ClInclude>
     <ClInclude Include="Actor.h">
-      <Filter>Header Files\Spoonity\GameObjects</Filter>
+      <Filter>Header Files\Spoonity\Game Objects</Filter>
     </ClInclude>
     <ClInclude Include="Entity.h">
-      <Filter>Header Files\Spoonity\GameObjects</Filter>
+      <Filter>Header Files\Spoonity\Game Objects</Filter>
     </ClInclude>
     <ClInclude Include="GameObject.h">
-      <Filter>Header Files\Spoonity\GameObjects</Filter>
+      <Filter>Header Files\Spoonity\Game Objects</Filter>
     </ClInclude>
     <ClInclude Include="Skybox.h">
-      <Filter>Header Files\Spoonity\GameObjects</Filter>
+      <Filter>Header Files\Spoonity\Game Objects</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>Header Files\Spoonity\Graphics</Filter>
@@ -121,7 +133,7 @@
       <Filter>Header Files\Spoonity\Model Loading</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
-      <Filter>Header Files\STD\GameObjects</Filter>
+      <Filter>Header Files\STD\Game Objects</Filter>
     </ClInclude>
     <ClInclude Include="Dispatcher.h">
       <Filter>Header Files\Spoonity\Event System</Filter>
@@ -136,7 +148,7 @@
       <Filter>Header Files\Spoonity\Event System</Filter>
     </ClInclude>
     <ClInclude Include="PassType.h">
-      <Filter>Header Files\Spoonity\GameObjects\Enums</Filter>
+      <Filter>Header Files\Spoonity\Game Objects\Enums</Filter>
     </ClInclude>
     <ClInclude Include="Transform.h">
       <Filter>Header Files\Spoonity\Physics</Filter>
@@ -159,6 +171,21 @@
     <ClInclude Include="BulletDebugDrawer.h">
       <Filter>Header Files\Spoonity\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="DamageEvent.h">
+      <Filter>Header Files\STD\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEventType.h">
+      <Filter>Header Files\STD\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="Weapon.h">
+      <Filter>Header Files\STD\Game Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="AssaultRifle.h">
+      <Filter>Header Files\STD\Game Objects\Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsEntity.h">
+      <Filter>Header Files\Spoonity\Game Objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -174,13 +201,13 @@
       <Filter>Source Files\STD</Filter>
     </ClCompile>
     <ClCompile Include="Actor.cpp">
-      <Filter>Source Files\Spoonity\GameObjects</Filter>
+      <Filter>Source Files\Spoonity\Game Objects</Filter>
     </ClCompile>
     <ClCompile Include="Entity.cpp">
-      <Filter>Source Files\Spoonity\GameObjects</Filter>
+      <Filter>Source Files\Spoonity\Game Objects</Filter>
     </ClCompile>
     <ClCompile Include="Skybox.cpp">
-      <Filter>Source Files\Spoonity\GameObjects</Filter>
+      <Filter>Source Files\Spoonity\Game Objects</Filter>
     </ClCompile>
     <ClCompile Include="KeyCode.h">
       <Filter>Header Files\Spoonity\Input</Filter>
@@ -210,7 +237,7 @@
       <Filter>Source Files\Spoonity\Model Loading</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">
-      <Filter>Source Files\STD\GameObjects</Filter>
+      <Filter>Source Files\STD\Game Objects</Filter>
     </ClCompile>
     <ClCompile Include="Transform.cpp">
       <Filter>Source Files\Spoonity\Physics</Filter>
@@ -223,6 +250,15 @@
     </ClCompile>
     <ClCompile Include="RigidBody.cpp">
       <Filter>Source Files\Spoonity\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Dispatcher.cpp">
+      <Filter>Source Files\Spoonity\Event System</Filter>
+    </ClCompile>
+    <ClCompile Include="AssaultRifle.cpp">
+      <Filter>Source Files\STD\Game Objects\Weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysicsEntity.cpp">
+      <Filter>Source Files\Spoonity\Game Objects</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

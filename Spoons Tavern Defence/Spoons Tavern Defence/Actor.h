@@ -42,11 +42,13 @@ namespace spty {
 		virtual ~Actor();
 
 		//Render the object
-		virtual void draw(const Shader& shader, glm::mat4 projection, glm::mat4 view, glm::mat4 model, PassType pass) = 0;
+		void draw(const Shader& shader, glm::mat4 projection, glm::mat4 view, glm::mat4 model, PassType pass);
 
 		//Update the object
 		virtual void update(float& deltaTime) = 0;
 
 		virtual void physicsUpdate() = 0;
+
+		bool onGround();
 	};
 }

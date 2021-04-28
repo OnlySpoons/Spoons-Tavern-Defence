@@ -5,8 +5,7 @@ namespace spty {
 	Entity::Entity(const Transform& data,
 		const std::string& modelPath)
 		: GameObject(data),
-		_model(modelPath == "" ? Model() : Model(modelPath)),
-		_rigidBody(_transform, _model.getCompoundShape())
+		_model(modelPath == "" ? Model() : Model(modelPath))
 	{
 	}
 
@@ -26,11 +25,5 @@ namespace spty {
 
 	void Entity::update(float& deltaTime)
 	{
-	}
-
-	void Entity::physicsUpdate()
-	{
-		_transform.setPosition( _rigidBody.getBulletPosition() );
-		//_transform.setRotation( _rigidBody.getBulletRotation() );
 	}
 }

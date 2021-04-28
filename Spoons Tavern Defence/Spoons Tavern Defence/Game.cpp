@@ -2,23 +2,50 @@
 
 #include "GameObject.h"
 #include "Skybox.h"
-#include "Entity.h"
+#include "PhysicsEntity.h"
+
+#include "AssaultRifle.h"
 
 //Constructor
 Game::Game() : Engine()
 {
-	_player = new Player(
-		spty::Transform(
-			glm::vec3(0.0f, 0.5f, 0.0f), //position
-			glm::vec3(0.0f), //rotation
-			glm::vec3(0.5f, 0.7f, 0.5f) //scale
-		)
-	);
-
 	//Load the current Scene
 	loadOverworld();
 
+	Weapon* startingWeapon = new AssaultRifle(
+		spty::Transform(
+			glm::vec3(0.1f, 0.0f, 0.2f), //position
+			glm::vec3(0.0f), //rotation
+			glm::vec3(0.0005f) //scale
+		),
+		"Data/Models/gun/SK_Web_RifleSwat_01.fbx"
+	);
+
+	_currentScene->addObject(startingWeapon);
+
+	_player = new Player(
+		startingWeapon,
+		spty::Transform(
+			glm::vec3(0.0f, 0.5f, 10.0f), //position
+			glm::vec3(0.0f), //rotation
+			glm::vec3(0.3f, 0.7f, 0.3f) //scale
+		)
+	);
+
 	_currentScene->addObject(_player);
+
+	using namespace spty;
+
+	Dispatcher<GameEventType>::subscribe(DamageEvent::Type,
+		[&](Event<GameEventType>& e)
+		{
+			DamageEvent Damage = EventCast<DamageEvent>(e);
+
+			std::cout << Damage.amount << std::endl;
+
+			e.handle();
+		}
+	);
 
 	//TODO: this shit
 	//_scenes.emplace_back(new Overworld());
@@ -40,6 +67,8 @@ void Game::gameLoop(float& deltaTime)
 			(*it)->update(deltaTime);
 		}
 	}
+
+
 }
 
 //Load default scene
@@ -65,14 +94,14 @@ void Game::loadOverworld()
 
 	_currentScene->addObject(sky);
 
-	spty::Entity* demo = new spty::Entity(
+	spty::PhysicsEntity* demo = new spty::PhysicsEntity(
 		spty::Transform(
 			glm::vec3(0.0f), //position
 			glm::vec3(0.0f), //rotation
 			glm::vec3(0.005f) //scale
 		),
 		//"Data/Models/gun/SK_Web_RifleSwat_01.fbx"
-		"Data/Models/SyntyStudios/PolygonHeist/bank.fbx"
+		"Data/Models/SyntyStudios/PolygonHeist/Main_Scene_V0.8_Test.fbx"
 	);
 
 	demo->enable(); //enable the object to be drawn
@@ -80,18 +109,6 @@ void Game::loadOverworld()
 	demo->setKinematic(true);
 
 	_currentScene->addObject(demo);
-
-	//demo = new spty::Entity(
-	//	spty::Transform(
-	//		glm::vec3(0.0f, -1.5f, 0.0f), //position
-	//		glm::vec3(0.0f), //rotation
-	//		glm::vec3(20.0f, 1.0f, 20.0f) //scale
-	//	)
-	//);
-
-	//demo->setKinematic(true);
-
-	//_currentScene->addObject(demo);
 
 	//TODO: add other objects as required.
 

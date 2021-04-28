@@ -1,5 +1,17 @@
 Spoons: Tavern Defence
 
+Change Log 28/04/2021 - Martin & Thomas
+- Created a PhysicsEntity class to inherit from Entity to allow distiction between entities without physics
+- Added Weapon class for weapons to inherit from
+- Added AssaultRifle class to be the starting weapon
+- Added raycasting to Physics
+- Added jumping and firing to player
+- Added DamageEvent for when a weapon is fired
+- Tweaked transform class to fix issues with matrix calculations
+- Tweaked gravity to address floatiness problem
+- Fixed issue with renderScene where the passed camera was dereferenced incorrectly
+
+
 Change Log 20/04/2021 - Martin & Thomas
 - Fully implemented Bullet physics simulation and added gravity to all objects
 - Box, Sphere, and Capsule colliders implemented as basic shape colliders
@@ -7,6 +19,7 @@ Change Log 20/04/2021 - Martin & Thomas
 - Compound collider implemented for objects with multiple meshes
 - Player now uses a Capsule collider
 - Added Bullet debug mode to Renderer which allows visualisation of the simulation in wireframe mode
+
 
 Change Log 26/03/2021 - Thomas
 - Added .h and .cpp files from Physics branch

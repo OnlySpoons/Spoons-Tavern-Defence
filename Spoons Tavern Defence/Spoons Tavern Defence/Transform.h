@@ -8,7 +8,7 @@
 
 namespace spty {
 
-	enum class Axis
+	enum Axis
 	{
 		X = 0,
 		Y,
@@ -23,6 +23,15 @@ namespace spty {
 		glm::vec3 _pos;
 		glm::vec3 _rot;
 		glm::vec3 _scale;
+
+	public:
+
+		glm::mat3 _referenceSpace = glm::mat3
+		(
+			WorldDir::DOWN, 
+			WorldDir::LEFT, 
+			WorldDir::BACK
+		);
 
 	//Functions
 	public:

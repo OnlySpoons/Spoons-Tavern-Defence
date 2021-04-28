@@ -35,14 +35,13 @@ namespace spty {
 		right.x = sin(glm::radians(_rot.x + 90.0f)) * cos(glm::radians(_rot.y));
 		right.y = sin(glm::radians(_rot.y));
 		right.z = -cos(glm::radians(_rot.x + 90.0f)) * cos(glm::radians(_rot.y));
-
 		return glm::normalize(right);
 	}
 
 	glm::vec3 Transform::getUp() const
 	{
 		glm::vec3 up;
-		up.x = sin(glm::radians(_rot.x)) * cos(glm::radians(_rot.y +90.0f));
+		up.x = sin(glm::radians(_rot.x)) * cos(glm::radians(_rot.y + 90.0f));
 		up.y = sin(glm::radians(_rot.y + 90.0f));
 		up.z = -cos(glm::radians(_rot.x)) * cos(glm::radians(_rot.y + 90.0f));
 		return glm::normalize(up);
@@ -54,23 +53,22 @@ namespace spty {
 		front.x = sin(glm::radians(_rot.x)) * cos(glm::radians(_rot.y));
 		front.y = sin(glm::radians(_rot.y));
 		front.z = -cos(glm::radians(_rot.x)) * cos(glm::radians(_rot.y));
-
 		return glm::normalize(front);
 	}
 
 	//Getter for the transform matrix
 	glm::mat4 Transform::getMatrix() const
 	{
-		glm::mat4 posMatrix = glm::translate(_pos);
+		glm::mat4 matrix = glm::mat4(1.0f);
+		
+		matrix = glm::translate(matrix, _pos);
+		matrix = glm::scale(matrix, _scale);
 
-		glm::mat4 rotXMatrix = glm::rotate(glm::radians(_rot.x), WorldDir::DOWN);
-		glm::mat4 rotYMatrix = glm::rotate(glm::radians(_rot.y), WorldDir::LEFT);
-		glm::mat4 rotZMatrix = glm::rotate(glm::radians(_rot.z), WorldDir::BACK);
-		glm::mat4 rotMatrix = rotZMatrix * rotYMatrix * rotXMatrix;
+		matrix = glm::rotate(matrix, glm::radians(_rot.x), _referenceSpace[Axis::X]);
+		matrix = glm::rotate(matrix, glm::radians(_rot.y), _referenceSpace[Axis::Y]);
+		matrix = glm::rotate(matrix, glm::radians(_rot.z), _referenceSpace[Axis::Z]);
 
-		glm::mat4 scaleMatrix = glm::scale(_scale);
-
-		return posMatrix * rotMatrix * scaleMatrix;
+		return matrix;
 	}
 
 	//Utility functions

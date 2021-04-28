@@ -1,5 +1,4 @@
 #pragma once
-
 #include <glm/glm.hpp>
 #include <bullet/btBulletCollisionCommon.h>
 #include <bullet/BulletCollision/CollisionShapes/btShapeHull.h>
@@ -25,7 +24,7 @@ namespace spty {
 		friend class Physics;
 
 	public:
-		Collider() {}
+		Collider() : _shape(nullptr) {}
 
 		virtual ~Collider() { delete _shape; }
 

@@ -20,6 +20,7 @@ namespace spty {
 	Engine::~Engine()
 	{
 		Input::clearWindow();
+		Physics::cleanup();
 
 		for (auto it = _scenes.begin(); it != _scenes.end(); ++it)
 		{
@@ -53,7 +54,7 @@ namespace spty {
 		gameLoop(_deltaTime);
 
 		//Render
-		_renderer->renderScene(*_currentScene, *_player->_camera);
+		_renderer->renderScene( *_currentScene, *(_player->_camera) );
 		glfwSwapBuffers(_window->getInstance());
 	}
 

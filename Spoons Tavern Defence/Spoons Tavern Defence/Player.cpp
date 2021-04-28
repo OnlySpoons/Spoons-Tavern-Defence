@@ -1,50 +1,63 @@
 #include "Player.h"
 
 //Constructor
-Player::Player(const spty::Transform& transform,
-	const std::string& modelPath)
+Player::Player(Weapon* gun,
+	const spty::Transform& transform,
+	const std::string& modelPath
+)
 	: Actor(transform, new spty::Camera(), modelPath),
-	_cameraOffset(glm::vec3(0.0f, 0.2f, 0.0f)),
-	_speed(70.0f)
+	  _gun(gun)
 {
-	_transform.setPosition(glm::vec3(10.0f, 0.5f, 10.0f));
-
-	_transform.setRotation(glm::vec3(0.0f, 0.0f, 0.0f));
-
-	_transform.setScale(glm::vec3(1.0f));
+	_cameraOffset = glm::vec3(0.0f, 0.3f, 0.0f);
 
 	_camera->update(_transform, _cameraOffset);
 
 	_rigidBody.setMass(150.0f);
+
+	_gun->enable();
+
+	_speed = 70.0f;
+	_jumpHeight = 70.0f;
+	_jumping = false;
 }
 
-//Render the player Model
-void Player::draw(const spty::Shader& shader, glm::mat4 projection, glm::mat4 view, glm::mat4 model, spty::PassType pass)
-{
-	if (_isEnabled)
-	{
-		shader.use();
-		shader.setMat4("projection", projection);
-		shader.setMat4("view", view);
-
-		model = _transform.getMatrix();
-
-		_model.draw(shader, model);
-	}
-
-	
-}
+Player::~Player() {}
 
 //Update the player
 void Player::update(float& deltaTime)
 {
 	processInput(deltaTime);
+
+	if (onGround())
+		_rigidBody.disableGravity();
+	else
+		_rigidBody.enableGravity();
 }
 
 void Player::physicsUpdate()
 {
 	_transform.setPosition( _rigidBody.getBulletPosition() );
 	//_transform.setRotation( _rigidBody.getBulletRotation() );
+
+	//_gun->_transform._referenceSpace[spty::Axis::X] = _transform.getUp();
+	//_gun->_transform._referenceSpace[spty::Axis::Y] = _transform.getRight();
+	//_gun->_transform._referenceSpace[spty::Axis::Z] = _transform.getFront();
+
+	glm::vec3 gunPos = _transform.getPosition();
+	gunPos += _camera->getFront() * 0.2f;
+	gunPos += _camera->getUp() * 0.01f;
+	gunPos += _transform.getRight() * 0.2f;
+
+	float pitch = _transform.getPitch();
+	float pitchConstraint = 60.0f;
+
+	/*if (abs(pitch) > pitchConstraint)
+		gunPos += _transform.getRight() * 0.3f;*/
+
+	_gun->_transform.setPitch( pitch );
+	_gun->_transform.setYaw(_transform.getYaw() - 180.0f);
+
+	_gun->_transform.setPosition( gunPos );
 }
 
 //Process the input for player controls
@@ -81,21 +94,31 @@ void Player::processInput(float& deltaTime)
 	if (Input::isKeyPressed(KeyCode::A))
 		direction -= right;
 
-	//direction = glm::vec3(direction.x, 0.0f, direction.z);
+	glm::normalize(direction);
+	direction *= velocity;
 
-	_rigidBody.move(direction * velocity);
-	
-	////Flight controls
-	//if (Input::isKeyPressed(KeyCode::Space))
-	//	_rigidBody.move(WorldDir::UP * velocity);
-	//if (Input::isKeyPressed(KeyCode::LeftControl))
-	//	_rigidBody.move(WorldDir::DOWN * velocity);
+	if (Input::isKeyPressed(KeyCode::Space))
+	{
+		if (onGround() && !_jumping)
+		{
+			direction += WorldDir::UP * _jumpHeight * deltaTime;
+			_jumping = true;
+		}
+	}
+	else
+		_jumping = false;
 
-	//Print player position when mouse button is pressed
+	_rigidBody.move(direction);
+
+	//Fire weapon when mouse button is pressed
 	if (Input::isButtonPressed(MouseCode::LeftButton))
 	{
-		const glm::vec3& pos = _transform.getPosition();
-		std::cout << "(" << pos.x << ", " << pos.y << ", " << pos.z << ")" << std::endl;
+		_gun->fire();
+	}
+
+	if (Input::isKeyPressed(KeyCode::R))
+	{
+		_gun->reload();
 	}
 
 	glm::vec2 mouseOffset = Input::getCursorOffset();

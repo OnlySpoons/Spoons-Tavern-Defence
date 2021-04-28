@@ -5,6 +5,9 @@
 
 namespace spty {
 
+	template<typename toType, typename fromType>
+	toType EventCast( fromType& from ) { return *dynamic_cast< toType* >(&from); }
+
 	template<typename T>
 	class Event
 	{
@@ -23,7 +26,7 @@ namespace spty {
 		inline const T type() const { return _type; }
 		inline const std::string& getName() const { return _name; }
 		virtual bool isHandled() const { return _handled; }
-		virtual bool handle() { _handled = true; }
+		virtual void handle() { _handled = true; }
 	};
 
 	class TestEvent : public Event<EventType>

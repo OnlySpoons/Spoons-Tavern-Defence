@@ -3,24 +3,27 @@
 #include "Entity.h"
 #include "Camera.h"
 
+#include "AssaultRifle.h"
+
 class Player : public spty::Actor
 {
-	//Variables
+//Variables
 private:
-	float _speed;
-
 	glm::vec3 _cameraOffset;
 
-	//Functions
+	float _speed, _jumpHeight;
+	bool _jumping;
+
+	Weapon* _gun;
+
+//Functions
 public:
 
 	//Constructor
-	Player(const spty::Transform& data,
-		const std::string& modelPath = ""
-	);
+	Player(Weapon* gun, const spty::Transform& data,
+		const std::string& modelPath = "");
 
-	//Render the player Model
-	void draw(const spty::Shader& shader, glm::mat4 projection, glm::mat4 view, glm::mat4 model, spty::PassType pass) override;
+	virtual ~Player();
 
 	//Update the player
 	void update(float& deltaTime) override;
@@ -29,4 +32,6 @@ public:
 
 	//Process the input for player controls
 	void processInput(float& deltaTime);
+
+	void setWeapon(Weapon* gun) { _gun = gun; }
 };

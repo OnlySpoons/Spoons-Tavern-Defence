@@ -27,6 +27,7 @@ namespace spty {
 		//TODO: Make this an event
 		//Add to the bullet world
 		Physics::addBulletBody(_body);
+		_body->setFriction(0.2f);
 	}
 
 	RigidBody::~RigidBody()
@@ -54,6 +55,11 @@ namespace spty {
 			setMass(0);
 		else
 			setMass(1);
+	}
+
+	void RigidBody::setLinearDamping(float val)
+	{
+		_body->setDamping(val, _body->getAngularDamping());
 	}
 
 	void RigidBody::move(glm::vec3 direction)
@@ -91,5 +97,15 @@ namespace spty {
 		btVector3 localInertia;
 		_collider->_shape->calculateLocalInertia(_mass, localInertia);
 		_inertia = Physics::btVector3ToglmVec3(localInertia);
+	}
+
+	void RigidBody::disableGravity()
+	{
+		_body->setGravity({ 0.0f, 0.0f, 0.0f });
+	}
+
+	void RigidBody::enableGravity()
+	{
+		_body->setGravity( Physics::glmVec3TobtVector3( Physics::getGravityVector() ) );
 	}
 }

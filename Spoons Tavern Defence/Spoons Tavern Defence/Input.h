@@ -67,6 +67,6 @@ namespace spty {
 		static void scrollCallback(GLFWwindow* window, double xOffset, double yOffset);
 
 		//Callback function to handle mouse
-		static void mouseCallback(GLFWwindow* window, double xpos, double ypos);
+		//static void mouseCallback(GLFWwindow* window, double xpos, double ypos);
 	};
 }

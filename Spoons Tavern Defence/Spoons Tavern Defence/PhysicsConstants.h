@@ -4,7 +4,7 @@
 
 namespace PhysicsConstants
 {
-	const float GRAVITY = 9.81f;
+	const float GRAVITY = 9.81f * 3;
 	const float FRICTION = 0.6f;
 	const bool KINEMATIC = false;
 	const glm::vec3 CENTRE = glm::vec3(0.0f);

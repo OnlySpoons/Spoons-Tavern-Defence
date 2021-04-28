@@ -84,15 +84,9 @@ namespace spty {
 
 	void MeshCollider::generateShape()
 	{
-		/*btTriangleMesh trimesh = btTriangleMesh();
-		trimesh.addTriangle(btVector3(1, 0, 0), btVector3(0, 1, 0), btVector3(0, 0, 0));
-		trimesh.addTriangle(btVector3(1, 0, 0), btVector3(0, 1, 0), btVector3(0.5, 0.5, 0.5));
-		trimesh.addTriangle(btVector3(0, 0, 0), btVector3(0, 1, 0), btVector3(0.5, 0.5, 0.5));
-		trimesh.addTriangle(btVector3(1, 0, 0), btVector3(0, 0, 0), btVector3(0.5, 0.5, 0.5));*/
-
 		btConvexTriangleMeshShape convexShape = btConvexTriangleMeshShape(&_mesh);
 		btShapeHull* hull = new btShapeHull(&convexShape);
-		int margin = convexShape.getMargin();
+		btScalar margin = convexShape.getMargin();
 		hull->buildHull(margin);
 		/*convexShape->setUserPointer(hull);*/
 

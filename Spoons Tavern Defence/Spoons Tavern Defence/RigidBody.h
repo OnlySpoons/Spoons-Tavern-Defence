@@ -1,13 +1,10 @@
 #pragma once
-
 #include <bullet/btBulletCollisionCommon.h>
 #include <bullet/btBulletDynamicsCommon.h>
-
 #include <glm/fwd.hpp>
 
-#include "Collider.h"
-
 #include "Physics.h"
+#include "Collider.h"
 
 namespace spty {
 
@@ -25,6 +22,7 @@ namespace spty {
 		void setMass(float m);
 		void setForce(glm::vec3 f);
 		void setKinematic(bool val);
+		void setLinearDamping(float val);
 
 		void move(glm::vec3 direction);
 
@@ -34,6 +32,9 @@ namespace spty {
 		glm::vec3 getBulletInertia();
 
 		void calculateLocalInertia();
+
+		void disableGravity();
+		void enableGravity();
 
 	private:
 		glm::vec3 _inertia = PhysicsConstants::INERTIA;

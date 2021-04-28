@@ -11,16 +11,28 @@ namespace spty
 {
 	class Physics 
 	{
+		//Core Bullet components
+		static btBroadphaseInterface* m_pBroadphase;
+		static btCollisionConfiguration* m_pCollisionConfiguration;
+		static btCollisionDispatcher* m_pDispatcher;
+		static btConstraintSolver* m_pSolver;
+		static btDynamicsWorld* m_pWorld;
+
+		static float _gravity;
+
 	public:
 		static void init(float g = PhysicsConstants::GRAVITY);
 
 		static void cleanup();
 
+		//Parameter functions
 		static void setGravity(float g);
 		static float getGravity();
 		static glm::vec3 getGravityVector();
 
 		static void Update(float& deltaTime, const Scene& scene);
+
+		static bool Raycast(const glm::vec3& start, glm::vec3& end, glm::vec3& normal, const btCollisionObject* shape = nullptr);
 
 		//Helper functions
 		static inline btVector3 glmVec3TobtVector3(const glm::vec3& vec) { return btVector3(vec.x, vec.y, vec.z); }
@@ -38,15 +50,5 @@ namespace spty
 			result.setRotation(asQuaternion(transform.getRotation()));
 			result.setOrigin(glmVec3TobtVector3(transform.getPosition()));
 		}*/
-
-	private:
-		//Core Bullet components
-		static btBroadphaseInterface* m_pBroadphase;
-		static btCollisionConfiguration* m_pCollisionConfiguration;
-		static btCollisionDispatcher* m_pDispatcher;
-		static btConstraintSolver* m_pSolver;
-		static btDynamicsWorld* m_pWorld;
-		
-		static float _gravity;
 	};
 }
