@@ -7,9 +7,9 @@
 
 //Thomas: TEMP
 #include "SoundDevice.h"
-#include "SoundBuffer.h"
-#include "SoundSource.h"
 #include "MusicBuffer.h"
+#include "SoundEffectsLibrary.h"
+#include "SoundEffectsPlayer.h"
 
 enum Level {
 	None = -1,
@@ -22,6 +22,8 @@ class Game : public spty::Engine
 public:
 	spty::SoundDevice* _soundDevice;
 	spty::MusicBuffer* _music;
+	spty::SoundEffectsPlayer* _soundPlayer;
+	spty::SoundEffectsLibrary* _soundLibrary;
 	//Functions
 public:
 

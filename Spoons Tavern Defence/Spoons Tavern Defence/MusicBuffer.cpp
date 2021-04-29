@@ -38,30 +38,35 @@ namespace spty {
 		}
 	}
 
-	//void MusicBuffer::Pause()
-	//{
+	void MusicBuffer::Pause()
+	{
+		alSourcePause(_Source);
+		AL_CheckAndThrow();
+	}
 
-	//}
+	void MusicBuffer::Stop()
+	{
+		alSourceStop(_Source);
+		AL_CheckAndThrow();
+	}
 
-	//void MusicBuffer::Stop()
-	//{
-
-	//}
+	void MusicBuffer::Resume()
+	{
+		alSourcePlay(_Source);
+		AL_CheckAndThrow();
+	}
 
 	void MusicBuffer::UpdateBufferStream()
 	{
 		ALint processed, state;
 
 		//Clear error
-		alGetError();
+		//alGetError();
 
 		//Get source info
 		alGetSourcei(_Source, AL_SOURCE_STATE, &state);
 		alGetSourcei(_Source, AL_BUFFERS_PROCESSED, &processed);
-		if (alGetError() != AL_NO_ERROR)
-		{
-			throw("Error checking music source state!");
-		}
+		AL_CheckAndThrow();
 
 		//Unqueue and handle each processed buffer
 		while (processed > 0)
@@ -97,18 +102,33 @@ namespace spty {
 				return;
 
 			alSourcePlay(_Source);
-			if (alGetError() != AL_NO_ERROR)
-			{
-				throw("Error restarting music playback!");
-			}
+			AL_CheckAndThrow();
 		}
 	}
 
-	MusicBuffer::MusicBuffer() 
-		: _Source(0), _Buffers(), _SndFile(), _SFInfo(), _MemBuffer(), _Format()
-	{}
+	ALint MusicBuffer::getSource()
+	{
+		return _Source;
+	}
 
-	MusicBuffer::MusicBuffer(const char* filename) : _Format()
+	bool MusicBuffer::isPlaying()
+	{
+		ALint state;
+		alGetSourcei(_Source, AL_SOURCE_STATE, &state);
+		AL_CheckAndThrow();
+		return (state == AL_PLAYING);
+	}
+
+	void MusicBuffer::SetGain(const float& val)
+	{
+		float newval = val;
+		if (newval < 0)
+			newval = 0;
+		alSourcef(_Source, AL_GAIN, val);
+		AL_CheckAndThrow();
+	}
+
+	MusicBuffer::MusicBuffer(const char* filename)
 	{
 		alGenSources(1, &_Source);
 		alGenBuffers(_NUM_BUFFERS, _Buffers);
@@ -155,9 +175,7 @@ namespace spty {
 			sf_close(_SndFile);
 
 		_SndFile = nullptr;
-
 		free(_MemBuffer);
-
 		alDeleteBuffers(_NUM_BUFFERS, _Buffers);
 	}
 

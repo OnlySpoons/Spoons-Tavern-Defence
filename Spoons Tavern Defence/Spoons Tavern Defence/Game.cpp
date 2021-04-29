@@ -47,14 +47,18 @@ Game::Game() : Engine()
 		}
 	);
 
-	_soundDevice->get();
-	_music = new spty::MusicBuffer("Data/Sounds/crikey.mp3");
-	_music->Play();
+	SoundDevice::init();
+	_soundDevice = _soundDevice->get();
+	_soundPlayer = new spty::SoundEffectsPlayer();
 
 	//Thomas TODO: add sound effect buffer for each object that plays sound
-	///*Load sound*/ uint32_t sound = spty::SoundBuffer::get()->addSoundEffect("C:\\dev\\clap.ogg"); //Needs double backslash
-	///*Create sound source*/ spty::SoundSource speaker;
-	//speaker.Play(sound);
+	//uint32_t sound = SE_LOAD("C:\\dev\\clap.ogg");
+	////_soundLibrary = new spty::SoundEffectsLibrary();
+	//_soundPlayer->Play(sound);
+	//SE_UNLOAD(sound);
+
+	//_music = new spty::MusicBuffer("C:\\dev\\crikey.wav");
+	//_music->Play();
 
 	//TODO: this shit
 	//_scenes.emplace_back(new Overworld());
@@ -64,12 +68,23 @@ Game::Game() : Engine()
 Game::~Game()
 {
 	_currentScene->removeObject(_player);
+	delete _soundPlayer;
+	//delete _soundLibrary;
+	//delete _music;
+	//delete _soundDevice;
 }
 
 //Overriding gameloop
 void Game::gameLoop(float& deltaTime)
 {
-	_music->UpdateBufferStream();
+	ALint state = AL_PLAYING;
+	if (state == AL_PLAYING && alGetError() == AL_NO_ERROR && _music != nullptr)
+	{
+		std::cout << "Playing music!\n";
+		_music->UpdateBufferStream();
+
+		alGetSourcei(_music->getSource(), AL_SOURCE_STATE, &state);
+	}
 
 	for (auto it = _scenes.begin(); it != _scenes.end(); it++)
 	{
@@ -78,7 +93,6 @@ void Game::gameLoop(float& deltaTime)
 			(*it)->update(deltaTime);
 		}
 	}
-
 }
 
 //Load default scene

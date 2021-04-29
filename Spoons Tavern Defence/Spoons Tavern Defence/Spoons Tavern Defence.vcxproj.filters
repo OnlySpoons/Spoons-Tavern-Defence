@@ -195,13 +195,16 @@
     <ClInclude Include="SoundDevice.h">
       <Filter>Header Files\Spoonity\Audio</Filter>
     </ClInclude>
-    <ClInclude Include="SoundBuffer.h">
-      <Filter>Header Files\Spoonity\Audio</Filter>
-    </ClInclude>
-    <ClInclude Include="SoundSource.h">
-      <Filter>Header Files\Spoonity\Audio</Filter>
-    </ClInclude>
     <ClInclude Include="MusicBuffer.h">
+      <Filter>Header Files\Spoonity\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundEffectsPlayer.h">
+      <Filter>Header Files\Spoonity\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="OpenALErrorCheck.h">
+      <Filter>Header Files\Spoonity\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundEffectsLibrary.h">
       <Filter>Header Files\Spoonity\Audio</Filter>
     </ClInclude>
   </ItemGroup>
@@ -281,13 +284,13 @@
     <ClCompile Include="SoundDevice.cpp">
       <Filter>Source Files\Spoonity\Audio</Filter>
     </ClCompile>
-    <ClCompile Include="SoundBuffer.cpp">
-      <Filter>Source Files\Spoonity\Audio</Filter>
-    </ClCompile>
-    <ClCompile Include="SoundSource.cpp">
-      <Filter>Source Files\Spoonity\Audio</Filter>
-    </ClCompile>
     <ClCompile Include="MusicBuffer.cpp">
+      <Filter>Source Files\Spoonity\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundEffectsPlayer.cpp">
+      <Filter>Source Files\Spoonity\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundEffectsLibrary.cpp">
       <Filter>Source Files\Spoonity\Audio</Filter>
     </ClCompile>
   </ItemGroup>

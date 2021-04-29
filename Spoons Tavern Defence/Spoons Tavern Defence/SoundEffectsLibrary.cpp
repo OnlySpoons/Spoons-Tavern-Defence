@@ -1,26 +1,25 @@
-#include "SoundBuffer.h"
+#include "SoundEffectsLibrary.h"
 
 namespace spty {
 
-
-
-	SoundBuffer* SoundBuffer::get()
+	SoundEffectsLibrary* SoundEffectsLibrary::Get()
 	{
-		static SoundBuffer* sndBuffer = new SoundBuffer();
-		return sndBuffer;
+		static SoundEffectsLibrary* sndbuf = new SoundEffectsLibrary();
+		return sndbuf;
 	}
 
-	ALuint SoundBuffer::addSoundEffect(const char* filename)
+	ALuint SoundEffectsLibrary::Load(const char* filename)
 	{
+
 		ALenum err, format;
 		ALuint buffer;
 		SNDFILE* sndfile;
 		SF_INFO sfinfo;
-		short* memBuffer;
-		sf_count_t numFrames;
-		ALsizei numBytes;
+		short* membuf;
+		sf_count_t num_frames;
+		ALsizei num_bytes;
 
-		//Open audio file and check that it's usable
+		//Open the audio file and check that it's usable
 		sndfile = sf_open(filename, SFM_READ, &sfinfo);
 		if (!sndfile)
 		{
@@ -29,12 +28,12 @@ namespace spty {
 		}
 		if (sfinfo.frames < 1 || sfinfo.frames >(sf_count_t)(INT_MAX / sizeof(short)) / sfinfo.channels)
 		{
-			fprintf(stderr, "Bad sample count in %s (% " PRId64 ")\n", filename, sfinfo.frames);
+			fprintf(stderr, "Bad sample count in %s (%" PRId64 ")\n", filename, sfinfo.frames);
 			sf_close(sndfile);
 			return 0;
 		}
 
-		//Get the sound format and figure out the OpenAL format
+		//Get the sound format, and figure out the OpenAL format
 		format = AL_NONE;
 		if (sfinfo.channels == 1)
 			format = AL_FORMAT_MONO16;
@@ -57,43 +56,43 @@ namespace spty {
 			return 0;
 		}
 
-		//Decode the whole audio file to a buffer
-		memBuffer = static_cast<short*>(malloc((size_t)(sfinfo.frames * sfinfo.channels) * sizeof(short)));
+		//Decode audio file into buffer
+		membuf = static_cast<short*>(malloc((size_t)(sfinfo.frames * sfinfo.channels) * sizeof(short)));
 
-		numFrames = sf_readf_short(sndfile, memBuffer, sfinfo.frames);
-		if (numFrames < 1)
+		num_frames = sf_readf_short(sndfile, membuf, sfinfo.frames);
+		if (num_frames < 1)
 		{
-			free(memBuffer);
+			free(membuf);
 			sf_close(sndfile);
-			fprintf(stderr, "Failed to read samples in %s (%" PRId64 ")\n", filename, numFrames);
+			fprintf(stderr, "Failed to read samples in %s (%" PRId64 ")\n", filename, num_frames);
 			return 0;
 		}
-		numBytes = (ALsizei)(numFrames * sfinfo.channels) * (ALsizei)sizeof(short);
+		num_bytes = (ALsizei)(num_frames * sfinfo.channels) * (ALsizei)sizeof(short);
 
-		//Buffer audio data into a new buffer object then free data and close file
+		//Buffer audio data into buffer object and close file
 		buffer = 0;
 		alGenBuffers(1, &buffer);
-		alBufferData(buffer, format, memBuffer, numBytes, sfinfo.samplerate);
+		alBufferData(buffer, format, membuf, num_bytes, sfinfo.samplerate);
 
-		free(memBuffer);
+		free(membuf);
 		sf_close(sndfile);
 
-		//Check and handle errors
+		//Check and clean up error
 		err = alGetError();
 		if (err != AL_NO_ERROR)
 		{
 			fprintf(stderr, "OpenAL Error: %s\n", alGetString(err));
 			if (buffer && alIsBuffer(buffer))
-				alDeleteBuffers(1, & buffer); 
+				alDeleteBuffers(1, &buffer);
 			return 0;
 		}
 
-		_SoundEffectBuffers.push_back(buffer);
+		_SoundEffectBuffers.push_back(buffer);  // add to the list of known buffers
 
 		return buffer;
 	}
 
-	bool SoundBuffer::removeSoundEffect(const ALuint& buffer)
+	bool SoundEffectsLibrary::UnLoad(const ALuint& buffer)
 	{
 		auto it = _SoundEffectBuffers.begin();
 		while (it != _SoundEffectBuffers.end())
@@ -106,22 +105,22 @@ namespace spty {
 
 				return true;
 			}
-			else
-			{
+			else {
 				++it;
 			}
 		}
-		return false;
+		return false;  // couldn't find to remove
 	}
 
-	SoundBuffer::SoundBuffer()
+	SoundEffectsLibrary::SoundEffectsLibrary()
 	{
 		_SoundEffectBuffers.clear();
 	}
 
-	SoundBuffer::~SoundBuffer()
+	SoundEffectsLibrary::~SoundEffectsLibrary()
 	{
-		alDeleteBuffers(_SoundEffectBuffers.size(), _SoundEffectBuffers.data());
+		alDeleteBuffers((ALsizei)_SoundEffectBuffers.size(), _SoundEffectBuffers.data());
+
 		_SoundEffectBuffers.clear();
 	}
 

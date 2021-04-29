@@ -3,6 +3,7 @@
 #include "AL/al.h"
 #include "AL/alext.h"
 #include "sndfile.h"
+#include "OpenALErrorCheck.h"
 
 #include <cstddef>
 #include <malloc.h>
@@ -13,12 +14,18 @@ namespace spty {
 	{
 	public:
 		void Play();
-		//void Pause();
-		//void Stop();
+		void Pause();
+		void Stop();
+		void Resume();
 
 		void UpdateBufferStream();
 
-		MusicBuffer();
+		ALint getSource();
+
+		bool isPlaying();
+
+		void SetGain(const float& val);
+
 		MusicBuffer(const char* filename);
 		~MusicBuffer();
 
@@ -31,6 +38,8 @@ namespace spty {
 		SF_INFO _SFInfo;
 		short* _MemBuffer;
 		ALenum _Format;
+
+		MusicBuffer() = delete;
 	};
 
 }

@@ -2,22 +2,109 @@
 
 namespace spty {
 
+	static SoundDevice* _Instance = nullptr;
+
 	SoundDevice* SoundDevice::get()
 	{
-		static SoundDevice* sndDevice = new SoundDevice();
-		return sndDevice;
+		init();
+		return _Instance;
+	}
+
+	void SoundDevice::init()
+	{
+		if (_Instance == nullptr)
+			_Instance = new SoundDevice();
+	}
+
+	void SoundDevice::GetLocation(float& x, float& y, float& z)
+	{
+		alGetListener3f(AL_POSITION, &x, &y, &z);
+		AL_CheckAndThrow();
+	}
+
+	/// <summary>
+	/// Gets the current listener Orientation as 'at' and 'up'
+	/// </summary>
+	/// <param name="ori"> Return value: Must be a float array with 6 slots available ex: float myvar[6]</param>
+	void SoundDevice::GetOrientation(float& ori)
+	{
+		alGetListenerfv(AL_ORIENTATION, &ori);
+		AL_CheckAndThrow();
+	}
+
+	float SoundDevice::GetGain()
+	{
+		float curr_gain;
+		alGetListenerf(AL_GAIN, &curr_gain);
+		AL_CheckAndThrow();
+		return curr_gain;
+	}
+
+	/// <summary>
+	/// Sets the Attunation Model.
+	/// </summary>
+	/// <param name="key">
+	///#define AL_INVERSE_DISTANCE                      0xD001
+	///#define AL_INVERSE_DISTANCE_CLAMPED              0xD002
+	///#define AL_LINEAR_DISTANCE                       0xD003
+	///#define AL_LINEAR_DISTANCE_CLAMPED               0xD004
+	///#define AL_EXPONENT_DISTANCE                     0xD005
+	///#define AL_EXPONENT_DISTANCE_CLAMPED             0xD006
+	/// </param>
+	void SoundDevice::SetAttunation(int key)
+	{
+		if (key < 0xD001 || key > 0xD006)
+			throw("bad attunation key");
+
+		alDistanceModel(key);
+		AL_CheckAndThrow();
+	}
+
+	void SoundDevice::SetLocation(const float& x, const float& y, const float& z)
+	{
+		alListener3f(AL_POSITION, x, y, z);
+		AL_CheckAndThrow();
+	}
+
+	void SoundDevice::SetOrientation(const float& atx, const float& aty, const float& atz, const float& upx, const float& upy, const float& upz)
+	{
+		std::vector<float> ori;
+		ori.push_back(atx);
+		ori.push_back(aty);
+		ori.push_back(atz);
+		ori.push_back(upx);
+		ori.push_back(upy);
+		ori.push_back(upz);
+		alListenerfv(AL_ORIENTATION, ori.data());
+		AL_CheckAndThrow();
+	}
+
+	void SoundDevice::SetGain(const float& val)
+	{
+		// clamp between 0 and 5
+		float newVol = val;
+		if (newVol < 0.f)
+			newVol = 0.f;
+		else if (newVol > 5.f)
+			newVol = 5.f;
+
+		alListenerf(AL_GAIN, newVol);
+		AL_CheckAndThrow();
 	}
 
 	SoundDevice::SoundDevice()
 	{
-		_ALCDevice = alcOpenDevice(nullptr);
+		//Create device
+		_ALCDevice = alcOpenDevice(nullptr); //nullptr = current device
 		if (!_ALCDevice)
 			throw("Failed to get sound device!");
 
+		//Create context
 		_ALCContext = alcCreateContext(_ALCDevice, nullptr);
 		if (!_ALCContext)
 			throw("Failed to set sound context!");
 
+		//Make context current
 		if (!alcMakeContextCurrent(_ALCContext))
 			throw("Failed to make sound context current!");
 
@@ -32,15 +119,9 @@ namespace spty {
 
 	SoundDevice::~SoundDevice()
 	{
-		if (!alcMakeContextCurrent(nullptr))
-			throw("Failed to set sound context to nullptr");
-
+		alcMakeContextCurrent(nullptr);
 		alcDestroyContext(_ALCContext);
-		if (_ALCContext)
-			throw("Failed to unset sound context during close!");
-
-		if (!alcCloseDevice(_ALCDevice))
-			throw("Failed to close sound device!");
+		alcCloseDevice(_ALCDevice);
 	}
 
 }
