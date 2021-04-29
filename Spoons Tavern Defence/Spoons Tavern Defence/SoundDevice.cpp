@@ -119,6 +119,9 @@ namespace spty {
 
 	SoundDevice::~SoundDevice()
 	{
+		//Thomas: might not need this line
+		_ALCDevice = alcGetContextsDevice(_ALCContext);
+
 		alcMakeContextCurrent(nullptr);
 		alcDestroyContext(_ALCContext);
 		alcCloseDevice(_ALCDevice);

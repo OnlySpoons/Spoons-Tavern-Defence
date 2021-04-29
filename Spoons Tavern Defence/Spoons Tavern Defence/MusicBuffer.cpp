@@ -61,7 +61,7 @@ namespace spty {
 		ALint processed, state;
 
 		//Clear error
-		//alGetError();
+		alGetError();
 
 		//Get source info
 		alGetSourcei(_Source, AL_SOURCE_STATE, &state);
@@ -128,7 +128,8 @@ namespace spty {
 		AL_CheckAndThrow();
 	}
 
-	MusicBuffer::MusicBuffer(const char* filename)
+	MusicBuffer::MusicBuffer(const char* filename) 
+		: _Format(0)
 	{
 		alGenSources(1, &_Source);
 		alGenBuffers(_NUM_BUFFERS, _Buffers);
@@ -169,6 +170,7 @@ namespace spty {
 
 	MusicBuffer::~MusicBuffer()
 	{
+		alSourceStop(_Source);
 		alDeleteSources(1, &_Source);
 
 		if (_SndFile)

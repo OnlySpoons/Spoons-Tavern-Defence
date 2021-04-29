@@ -2,6 +2,7 @@
 
 #include <AL/alc.h>
 #include <AL/al.h>
+#include <iostream>
 
 namespace spty {
 
@@ -9,7 +10,7 @@ namespace spty {
 	{
 		if (alcGetError(device) != ALC_NO_ERROR)
 		{
-			throw("error with alcDevice");
+			throw("Error with alcDevice!");
 		}
 	}
 
@@ -18,7 +19,7 @@ namespace spty {
 	{
 		if (alGetError() != AL_NO_ERROR)
 		{
-			throw("error with al");
+			throw("Error with OpenAL!");
 		}
 	}
 
