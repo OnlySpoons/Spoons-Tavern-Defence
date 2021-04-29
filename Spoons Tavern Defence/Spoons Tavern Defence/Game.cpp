@@ -51,11 +51,11 @@ Game::Game() : Engine()
 	_soundPlayer = new spty::SoundEffectsPlayer();
 
 	//Thomas TODO: add sound effect buffer for each object that plays sound
-	int _sound = SE_LOAD("C:\\dev\\clap.ogg");
+	int _sound = SE_LOAD("Data/Sounds/clap.ogg");
 	_soundLibrary = new spty::SoundEffectsLibrary();
 	_soundPlayer->Play(_sound);
 	
-	_music = new spty::MusicBuffer("C:\\dev\\crikey.wav");
+	_music = new spty::MusicBuffer("Data/Sounds/crikey.wav");
 	_music->Play();
 
 	//TODO: this shit
