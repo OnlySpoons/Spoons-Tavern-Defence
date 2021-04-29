@@ -82,6 +82,12 @@
     <Filter Include="Source Files\STD\Game Objects\Weapons">
       <UniqueIdentifier>{6734316d-bb1e-4659-85f1-c462498a502f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Spoonity\Audio">
+      <UniqueIdentifier>{18969172-d053-481c-8c2b-282fcf162a59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Spoonity\Audio">
+      <UniqueIdentifier>{281777e6-1a8c-4596-b628-a2db92ba18db}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -186,6 +192,18 @@
     <ClInclude Include="PhysicsEntity.h">
       <Filter>Header Files\Spoonity\Game Objects</Filter>
     </ClInclude>
+    <ClInclude Include="SoundDevice.h">
+      <Filter>Header Files\Spoonity\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundBuffer.h">
+      <Filter>Header Files\Spoonity\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundSource.h">
+      <Filter>Header Files\Spoonity\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="MusicBuffer.h">
+      <Filter>Header Files\Spoonity\Audio</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -259,6 +277,18 @@
     </ClCompile>
     <ClCompile Include="PhysicsEntity.cpp">
       <Filter>Source Files\Spoonity\Game Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundDevice.cpp">
+      <Filter>Source Files\Spoonity\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundBuffer.cpp">
+      <Filter>Source Files\Spoonity\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundSource.cpp">
+      <Filter>Source Files\Spoonity\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="MusicBuffer.cpp">
+      <Filter>Source Files\Spoonity\Audio</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

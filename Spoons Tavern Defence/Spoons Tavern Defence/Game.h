@@ -5,6 +5,12 @@
 #include "Scene.h"
 #include "Shader.h"
 
+//Thomas: TEMP
+#include "SoundDevice.h"
+#include "SoundBuffer.h"
+#include "SoundSource.h"
+#include "MusicBuffer.h"
+
 enum Level {
 	None = -1,
 	Overworld = 0,
@@ -14,7 +20,8 @@ class Game : public spty::Engine
 {
 	//Variables
 public:
-
+	spty::SoundDevice* _soundDevice;
+	spty::MusicBuffer* _music;
 	//Functions
 public:
 

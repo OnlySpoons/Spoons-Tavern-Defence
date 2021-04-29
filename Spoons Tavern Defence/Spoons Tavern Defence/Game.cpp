@@ -47,6 +47,15 @@ Game::Game() : Engine()
 		}
 	);
 
+	_soundDevice->get();
+	_music = new spty::MusicBuffer("Data/Sounds/crikey.mp3");
+	_music->Play();
+
+	//Thomas TODO: add sound effect buffer for each object that plays sound
+	///*Load sound*/ uint32_t sound = spty::SoundBuffer::get()->addSoundEffect("C:\\dev\\clap.ogg"); //Needs double backslash
+	///*Create sound source*/ spty::SoundSource speaker;
+	//speaker.Play(sound);
+
 	//TODO: this shit
 	//_scenes.emplace_back(new Overworld());
 }
@@ -60,6 +69,8 @@ Game::~Game()
 //Overriding gameloop
 void Game::gameLoop(float& deltaTime)
 {
+	_music->UpdateBufferStream();
+
 	for (auto it = _scenes.begin(); it != _scenes.end(); it++)
 	{
 		if ((*it)->_id == Level::Overworld)
@@ -67,7 +78,6 @@ void Game::gameLoop(float& deltaTime)
 			(*it)->update(deltaTime);
 		}
 	}
-
 
 }
 
