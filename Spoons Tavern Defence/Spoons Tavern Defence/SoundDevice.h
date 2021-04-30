@@ -10,7 +10,7 @@
 namespace spty {
 
 #define SD_INIT SoundDevice::init();
-#define LISTENER SoundDevice::get()
+#define LISTENER SoundDevice::get();
 
 	class SoundDevice 
 	{

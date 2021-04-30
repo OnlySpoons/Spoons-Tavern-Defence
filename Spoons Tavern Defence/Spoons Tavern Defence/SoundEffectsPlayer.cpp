@@ -11,7 +11,10 @@ namespace spty {
 
 	SoundEffectsPlayer::~SoundEffectsPlayer()
 	{
+		alSourceStop(_Source);
 		alDeleteSources(1, &_Source);
+
+		alDeleteBuffers(1, &_Buffer);
 	}
 
 	void SoundEffectsPlayer::Play(const ALuint& bufferToPlay)
