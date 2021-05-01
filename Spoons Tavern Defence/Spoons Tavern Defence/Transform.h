@@ -23,6 +23,7 @@ namespace spty {
 		glm::vec3 _pos;
 		glm::vec3 _rot;
 		glm::vec3 _scale;
+		float _angularVelocity = 0.0f;
 
 	public:
 
@@ -47,11 +48,13 @@ namespace spty {
 		void setPosition(const glm::vec3& translation);
 		void setScale(const glm::vec3& scaling);
 		void setRotation(const glm::vec3& rotation);
+		void setAngularVelocity(float angularVelocity) { _angularVelocity = angularVelocity; }
 
 		//Getters for transform data
 		glm::vec3 getPosition() const;
 		glm::vec3 getScale() const;
 		glm::vec3 getRotation() const;
+		float getAngularVelocity() const { return _angularVelocity; }
 
 		//Getters for direction vectors
 		glm::vec3 getRight() const;
@@ -65,6 +68,7 @@ namespace spty {
 	public:
 
 		void move(const glm::vec3& dir);
+		void addAngularVelocity(float amount) { _angularVelocity += amount; }
 
 		//Rotation functions
 		void rotate(const float& angle, Axis axis);

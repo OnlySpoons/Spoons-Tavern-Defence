@@ -20,7 +20,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor.h" />
+    <ClInclude Include="Align.h" />
     <ClInclude Include="AssaultRifle.h" />
+    <ClInclude Include="BlendedSteering.h" />
     <ClInclude Include="BulletDebugDrawer.h" />
     <ClInclude Include="Collider.h" />
     <ClInclude Include="DamageEvent.h" />
@@ -28,6 +30,7 @@
     <ClInclude Include="Event.h" />
     <ClInclude Include="EventType.h" />
     <ClInclude Include="GameEventType.h" />
+    <ClInclude Include="MathConstants.h" />
     <ClInclude Include="MouseCode.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Engine.h" />
@@ -46,17 +49,22 @@
     <ClInclude Include="PassType.h" />
     <ClInclude Include="RigidBody.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="Seek.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Skybox.h" />
     <ClInclude Include="stb_image.h" />
+    <ClInclude Include="SteeringOutput.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Weapon.h" />
     <ClInclude Include="Window.h" />
     <ClInclude Include="WorldDirections.h" />
+    <ClInclude Include="Zombie.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Actor.cpp" />
+    <ClCompile Include="Align.cpp" />
     <ClCompile Include="AssaultRifle.cpp" />
+    <ClCompile Include="BlendedSteering.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Collider.cpp" />
     <ClCompile Include="Dispatcher.cpp" />
@@ -74,11 +82,13 @@
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="RigidBody.cpp" />
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="Seek.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Skybox.cpp" />
     <ClCompile Include="stb_image.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="Window.cpp" />
+    <ClCompile Include="Zombie.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -178,6 +188,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

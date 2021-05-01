@@ -10,13 +10,13 @@ public:
 
 	static constexpr GameEventType Type = GameEventType::DamageEvent;
 
-	DamageEvent(const btRigidBody* target, int amount)
+	DamageEvent(const btCollisionObject* target, int amount)
 		: spty::Event<GameEventType>(Type, "DamageEvent"),
-		target(target), amount(amount)
+		target(btRigidBody::upcast(target)), amount(amount)
 	{
 	}
 
-	virtual ~DamageEvent() { delete target; }
+	virtual ~DamageEvent() { target = nullptr; }
 
 	int amount;
 

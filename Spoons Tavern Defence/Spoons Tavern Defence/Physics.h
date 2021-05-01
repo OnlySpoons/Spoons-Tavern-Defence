@@ -9,6 +9,8 @@
 
 namespace spty
 {
+	using RayCallback = btCollisionWorld::ClosestRayResultCallback;
+
 	class Physics 
 	{
 		//Core Bullet components
@@ -32,7 +34,7 @@ namespace spty
 
 		static void Update(float& deltaTime, const Scene& scene);
 
-		static bool Raycast(const glm::vec3& start, glm::vec3& end, glm::vec3& normal, const btCollisionObject* shape = nullptr);
+		static RayCallback Raycast(const glm::vec3& start, const glm::vec3& end);
 
 		//Helper functions
 		static inline btVector3 glmVec3TobtVector3(const glm::vec3& vec) { return btVector3(vec.x, vec.y, vec.z); }
@@ -43,12 +45,5 @@ namespace spty
 
 		static void setDebugDrawer(BulletDebugDrawer* debugDrawer);
 		static void debugDraw();
-
-		/*static inline btTransform TransformTobtTransform(Transform transform)
-		{
-			btTransform result;
-			result.setRotation(asQuaternion(transform.getRotation()));
-			result.setOrigin(glmVec3TobtVector3(transform.getPosition()));
-		}*/
 	};
 }

@@ -123,6 +123,7 @@ void Player::processInput(float& deltaTime)
 
 	glm::vec2 mouseOffset = Input::getCursorOffset();
 
+	_transform.setAngularVelocity(mouseOffset.x * deltaTime);
 	_transform.yaw(mouseOffset.x);
 	_transform.pitch(mouseOffset.y);
 

@@ -8,7 +8,7 @@ namespace spty {
 	class PhysicsEntity : public Entity
 	{
 	//Variables
-	private:
+	protected:
 		RigidBody _rigidBody;
 
 	//Functions

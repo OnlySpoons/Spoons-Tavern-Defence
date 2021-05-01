@@ -1,5 +1,13 @@
 Spoons: Tavern Defence
 
+Change Log 01/05/2021 - Martin
+- Added Zombie class
+- Added Seek behaviour to follow a target.
+- Added Align behaviour to face a target.
+- Added BlendedSteering behaviour to blend between Seek and Align
+- Tweaked some classes to accomodate AI behaviours
+
+
 Change Log 28/04/2021 - Martin & Thomas
 - Created a PhysicsEntity class to inherit from Entity to allow distiction between entities without physics
 - Added Weapon class for weapons to inherit from

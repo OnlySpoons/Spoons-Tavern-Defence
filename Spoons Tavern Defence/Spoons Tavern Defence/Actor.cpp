@@ -39,10 +39,11 @@ namespace spty {
 		float height = _transform.getScale().y / 2;
 		float offset = 0.0f;
 
-		glm::vec3 collisionNormal = WorldDir::DOWN;
-		glm::vec3 collisionPoint = collisionNormal * 100.0f;
+		glm::vec3 collisionPoint = WorldDir::DOWN * 100.0f;
 
-		if (Physics::Raycast(_transform.getPosition(), collisionPoint, collisionNormal))
+		RayCallback rayData = Physics::Raycast(_transform.getPosition(), collisionPoint);
+
+		if (rayData.hasHit())
 		{
 			glm::vec3 distVec = collisionPoint - _transform.getPosition();
 

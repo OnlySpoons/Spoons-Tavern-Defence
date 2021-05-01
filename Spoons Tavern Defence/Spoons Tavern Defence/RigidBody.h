@@ -11,6 +11,17 @@ namespace spty {
 	class RigidBody
 	{
 		friend class Physics;
+
+	private:
+		glm::vec3 _inertia = PhysicsConstants::INERTIA;
+		bool _kinematic = PhysicsConstants::KINEMATIC;
+		float _mass = 10.0f;
+
+		//Bullet implementation
+		btRigidBody* _body = nullptr;
+		Collider* _collider = nullptr;
+
+
 	public:
 		//Default constructor
 		RigidBody() {}
@@ -30,19 +41,11 @@ namespace spty {
 		glm::vec3 getBulletPosition();
 		glm::vec3 getBulletRotation();
 		glm::vec3 getBulletInertia();
+		const btRigidBody* getBulletBody() const { return _body; }
 
 		void calculateLocalInertia();
 
 		void disableGravity();
 		void enableGravity();
-
-	private:
-		glm::vec3 _inertia = PhysicsConstants::INERTIA;
-		bool _kinematic = PhysicsConstants::KINEMATIC;
-		float _mass = 10.0f;
-
-		//Bullet implementation
-		btRigidBody* _body = nullptr;
-		Collider* _collider = nullptr;
 	};
 }

@@ -25,13 +25,13 @@ void AssaultRifle::fire()
 {
 	if (_cooldownAccum >= _shotCooldown && _ammoCount > 0)
 	{
-		glm::vec3 collisionNormal = _transform.getFront();
-		glm::vec3 collisionPoint = collisionNormal * 100.0f;
-		const btRigidBody* target = nullptr;
+		glm::vec3 collisionPoint = -_transform.getFront() * 1000.0f;
 
-		if (spty::Physics::Raycast(_transform.getPosition(), collisionPoint, collisionNormal, target))
+		spty::RayCallback rayData = spty::Physics::Raycast(_transform.getPosition(), collisionPoint);
+
+		if (rayData.hasHit())
 		{
-			DamageEvent DE = DamageEvent(target, 25);
+			DamageEvent DE = DamageEvent(rayData.m_collisionObject, _damage);
 			spty::Dispatcher<GameEventType>::post(DE);
 
 			//TODO: increase player points

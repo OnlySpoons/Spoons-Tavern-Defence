@@ -82,6 +82,12 @@
     <Filter Include="Source Files\STD\Game Objects\Weapons">
       <UniqueIdentifier>{6734316d-bb1e-4659-85f1-c462498a502f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\STD\AI">
+      <UniqueIdentifier>{63607baf-3ba0-4129-911e-6ae96d49d077}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\STD\AI">
+      <UniqueIdentifier>{6843a852-1279-4e40-838b-bb26a1b9dea1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -186,6 +192,24 @@
     <ClInclude Include="PhysicsEntity.h">
       <Filter>Header Files\Spoonity\Game Objects</Filter>
     </ClInclude>
+    <ClInclude Include="Zombie.h">
+      <Filter>Header Files\STD\Game Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="SteeringOutput.h">
+      <Filter>Header Files\STD\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="Seek.h">
+      <Filter>Header Files\STD\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="Align.h">
+      <Filter>Header Files\STD\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="BlendedSteering.h">
+      <Filter>Header Files\STD\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="MathConstants.h">
+      <Filter>Header Files\Spoonity\Utility</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -259,6 +283,18 @@
     </ClCompile>
     <ClCompile Include="PhysicsEntity.cpp">
       <Filter>Source Files\Spoonity\Game Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Zombie.cpp">
+      <Filter>Source Files\STD\Game Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Seek.cpp">
+      <Filter>Source Files\STD\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="Align.cpp">
+      <Filter>Source Files\STD\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="BlendedSteering.cpp">
+      <Filter>Source Files\STD\AI</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

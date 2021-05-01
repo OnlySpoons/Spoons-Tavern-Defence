@@ -15,7 +15,7 @@ namespace spty {
 	public:
 		using EventFunc = std::function< void( Event<T>& ) >;
 
-	//private:
+	private:
 		static std::map< T, std::vector<EventFunc> > _observers;
 
 	public:

@@ -77,21 +77,14 @@ namespace spty {
 		scene.physics();
 	}
 
-	bool Physics::Raycast(const glm::vec3& start, glm::vec3& end, glm::vec3& normal, const btCollisionObject* object)
+	RayCallback Physics::Raycast(const glm::vec3& start, const glm::vec3& end)
 	{
-		btCollisionWorld::ClosestRayResultCallback RayCallback(glmVec3TobtVector3(start), glmVec3TobtVector3(end));
+		RayCallback rayCallback(glmVec3TobtVector3(start), glmVec3TobtVector3(end));
 
 		// Perform Raycast
-		m_pWorld->rayTest(glmVec3TobtVector3(start), glmVec3TobtVector3(end), RayCallback);
-		if (RayCallback.hasHit())
-		{
-			end = btVector3ToglmVec3(RayCallback.m_hitPointWorld);
-			normal = btVector3ToglmVec3(RayCallback.m_hitNormalWorld);
-			object = RayCallback.m_collisionObject;
-			return true;
-		}
-
-		return false;
+		m_pWorld->rayTest(glmVec3TobtVector3(start), glmVec3TobtVector3(end), rayCallback);
+		
+		return rayCallback;
 	}
 
 }

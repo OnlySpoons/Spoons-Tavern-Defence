@@ -14,9 +14,9 @@ Game::Game() : Engine()
 
 	Weapon* startingWeapon = new AssaultRifle(
 		spty::Transform(
-			glm::vec3(0.1f, 0.0f, 0.2f), //position
-			glm::vec3(0.0f), //rotation
-			glm::vec3(0.0005f) //scale
+			glm::vec3(0.1f, 0.0f, 0.2f),	//position
+			glm::vec3(0.0f),				//rotation
+			glm::vec3(0.0005f)				//scale
 		),
 		"Data/Models/gun/SK_Web_RifleSwat_01.fbx"
 	);
@@ -26,26 +26,26 @@ Game::Game() : Engine()
 	_player = new Player(
 		startingWeapon,
 		spty::Transform(
-			glm::vec3(0.0f, 0.5f, 10.0f), //position
-			glm::vec3(0.0f), //rotation
-			glm::vec3(0.3f, 0.7f, 0.3f) //scale
+			glm::vec3(0.0f, 0.5f, 10.0f),	//position
+			glm::vec3(0.0f),				//rotation
+			glm::vec3(0.3f, 0.7f, 0.3f)		//scale
 		)
 	);
 
 	_currentScene->addObject(_player);
-
-	using namespace spty;
-
-	Dispatcher<GameEventType>::subscribe(DamageEvent::Type,
-		[&](Event<GameEventType>& e)
-		{
-			DamageEvent Damage = EventCast<DamageEvent>(e);
-
-			std::cout << Damage.amount << std::endl;
-
-			e.handle();
-		}
+	
+	Zombie* zombie = new Zombie(
+		spty::Transform(
+			glm::vec3(10.0, 0.0f, 10.0f),	//position
+			glm::vec3(0.0f),				//rotation
+			glm::vec3(0.005f)				//scale
+		),
+		"Data/Models/SyntyStudios/PolygonWestern/_working/Characters/SK_Character_Badguy_01.fbx",
+		_player->_transform
 	);
+
+	zombie->enable();
+	_currentScene->addObject(zombie);
 
 	//TODO: this shit
 	//_scenes.emplace_back(new Overworld());

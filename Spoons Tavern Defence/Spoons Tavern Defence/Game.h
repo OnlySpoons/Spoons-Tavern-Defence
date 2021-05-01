@@ -5,6 +5,8 @@
 #include "Scene.h"
 #include "Shader.h"
 
+#include "Zombie.h"
+
 enum Level {
 	None = -1,
 	Overworld = 0,
@@ -12,10 +14,10 @@ enum Level {
 
 class Game : public spty::Engine
 {
-	//Variables
+//Variables
 public:
 
-	//Functions
+//Functions
 public:
 
 	//Constructor
