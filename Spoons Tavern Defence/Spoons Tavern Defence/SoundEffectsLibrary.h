@@ -18,9 +18,6 @@
 
 namespace spty {
 
-#define SE_LOAD SoundEffectsLibrary::Get()->Load
-#define SE_UNLOAD SoundEffectsLibrary::Get()->UnLoad
-
 	class SoundEffectsLibrary
 	{
 	public:
