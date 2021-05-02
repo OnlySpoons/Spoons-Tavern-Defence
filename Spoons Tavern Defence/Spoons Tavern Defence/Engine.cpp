@@ -15,6 +15,10 @@ namespace spty {
 
 		//Initialise input
 		Input::setWindow(_window);
+
+		//Initialise ImGUI window
+		_guiWindow = new ImGUIWindow(_window);
+		_guiWindow->attach();
 	}
 
 	Engine::~Engine()
@@ -32,6 +36,7 @@ namespace spty {
 		_currentScene = nullptr;
 
 		delete _renderer;
+		_guiWindow->detach();
 		delete _window;
 		delete _player;
 	}
@@ -55,6 +60,12 @@ namespace spty {
 
 		//Render
 		_renderer->renderScene( *_currentScene, *(_player->_camera) );
+
+		//Render GUI
+		_guiWindow->begin();
+		_guiWindow->imGUIRender();
+		_guiWindow->end();
+
 		glfwSwapBuffers(_window->getInstance());
 	}
 

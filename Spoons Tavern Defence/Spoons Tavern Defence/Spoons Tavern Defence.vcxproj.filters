@@ -88,6 +88,12 @@
     <Filter Include="Source Files\STD\AI">
       <UniqueIdentifier>{6843a852-1279-4e40-838b-bb26a1b9dea1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Spoonity\ImGUI">
+      <UniqueIdentifier>{302ed649-8eb5-4f26-aa90-ba798f0fc29f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Spoonity\ImGUI">
+      <UniqueIdentifier>{aa97f157-45ad-447e-b166-bfad0ce4abdf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -210,6 +216,15 @@
     <ClInclude Include="MathConstants.h">
       <Filter>Header Files\Spoonity\Utility</Filter>
     </ClInclude>
+    <ClInclude Include="imgui_impl_opengl3.h">
+      <Filter>Header Files\Spoonity\ImGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGUIWindow.h">
+      <Filter>Header Files\Spoonity\ImGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_impl_glfw.h">
+      <Filter>Header Files\Spoonity\ImGUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -295,6 +310,15 @@
     </ClCompile>
     <ClCompile Include="BlendedSteering.cpp">
       <Filter>Source Files\STD\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_impl_opengl3.cpp">
+      <Filter>Source Files\Spoonity\ImGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGUIWindow.cpp">
+      <Filter>Source Files\Spoonity\ImGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_impl_glfw.cpp">
+      <Filter>Source Files\Spoonity\ImGUI</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -7,6 +7,8 @@
 #include "Player.h"
 #include "Scene.h"
 
+#include "ImGUIWindow.h"
+
 namespace spty {
 
 	class Engine
@@ -15,6 +17,7 @@ namespace spty {
 		//Memeber variables
 	protected:
 		Window* _window;
+		ImGUIWindow* _guiWindow;
 
 		Renderer* _renderer;
 
