@@ -29,9 +29,10 @@ namespace spty {
 		SoundDevice();
 		~SoundDevice();
 	private:
+		static SoundDevice* _instance;
 
-		ALCdevice* _ALCDevice;
-		ALCcontext* _ALCContext;
+		ALCdevice* _alcDevice;
+		ALCcontext* _alcContext; 
 	};
 
 }

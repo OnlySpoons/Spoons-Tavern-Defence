@@ -2,18 +2,18 @@
 
 namespace spty {
 
-	static SoundDevice* _Instance = nullptr;
+	SoundDevice* SoundDevice::_instance = nullptr;
 
 	SoundDevice* SoundDevice::get()
 	{
 		init();
-		return _Instance;
+		return _instance;
 	}
 
 	void SoundDevice::init()
 	{
-		if (_Instance == nullptr)
-			_Instance = new SoundDevice();
+		if (_instance == nullptr)
+			_instance = new SoundDevice();
 	}
 
 	void SoundDevice::GetLocation(float& x, float& y, float& z)
@@ -95,24 +95,24 @@ namespace spty {
 	SoundDevice::SoundDevice()
 	{
 		//Create device
-		_ALCDevice = alcOpenDevice(nullptr); //nullptr = current device
-		if (!_ALCDevice)
+		_alcDevice = alcOpenDevice(nullptr); //nullptr = current device
+		if (!_alcDevice)
 			throw("Failed to get sound device!");
 
 		//Create context
-		_ALCContext = alcCreateContext(_ALCDevice, nullptr);
-		if (!_ALCContext)
+		_alcContext = alcCreateContext(_alcDevice, nullptr);
+		if (!_alcContext)
 			throw("Failed to set sound context!");
 
 		//Make context current
-		if (!alcMakeContextCurrent(_ALCContext))
+		if (!alcMakeContextCurrent(_alcContext))
 			throw("Failed to make sound context current!");
 
 		const ALCchar* name = nullptr;
-		if (alcIsExtensionPresent(_ALCDevice, "ALC_ENUMERATE_ALL_EXT"))
-			name = alcGetString(_ALCDevice, ALC_ALL_DEVICES_SPECIFIER);
-		if (!name || alcGetError(_ALCDevice) != AL_NO_ERROR)
-			name = alcGetString(_ALCDevice, ALC_DEVICE_SPECIFIER);
+		if (alcIsExtensionPresent(_alcDevice, "ALC_ENUMERATE_ALL_EXT"))
+			name = alcGetString(_alcDevice, ALC_ALL_DEVICES_SPECIFIER);
+		if (!name || alcGetError(_alcDevice) != AL_NO_ERROR)
+			name = alcGetString(_alcDevice, ALC_DEVICE_SPECIFIER);
 
 		printf("Opened \"%s\"\n", name);
 	}
@@ -120,11 +120,11 @@ namespace spty {
 	SoundDevice::~SoundDevice()
 	{
 		//Thomas: might not need this line
-		_ALCDevice = alcGetContextsDevice(_ALCContext);
+		_alcDevice = alcGetContextsDevice(_alcContext);
 
 		alcMakeContextCurrent(nullptr);
-		alcDestroyContext(_ALCContext);
-		alcCloseDevice(_ALCDevice);
+		alcDestroyContext(_alcContext);
+		alcCloseDevice(_alcDevice);
 	}
 
 }

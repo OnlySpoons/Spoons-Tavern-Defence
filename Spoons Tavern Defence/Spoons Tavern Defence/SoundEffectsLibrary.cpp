@@ -87,21 +87,21 @@ namespace spty {
 			return 0;
 		}
 
-		_SoundEffectBuffers.push_back(buffer);  // add to the list of known buffers
+		_soundEffectBuffers.push_back(buffer);  // add to the list of known buffers
 
 		return buffer;
 	}
 
 	bool SoundEffectsLibrary::UnLoad(const ALuint& buffer)
 	{
-		auto it = _SoundEffectBuffers.begin();
-		while (it != _SoundEffectBuffers.end())
+		auto it = _soundEffectBuffers.begin();
+		while (it != _soundEffectBuffers.end())
 		{
 			if (*it == buffer)
 			{
 				alDeleteBuffers(1, &*it);
 
-				it = _SoundEffectBuffers.erase(it);
+				it = _soundEffectBuffers.erase(it);
 
 				return true;
 			}
@@ -114,14 +114,14 @@ namespace spty {
 
 	SoundEffectsLibrary::SoundEffectsLibrary()
 	{
-		_SoundEffectBuffers.clear();
+		_soundEffectBuffers.clear();
 	}
 
 	SoundEffectsLibrary::~SoundEffectsLibrary()
 	{
-		alDeleteBuffers((ALsizei)_SoundEffectBuffers.size(), _SoundEffectBuffers.data());
+		alDeleteBuffers((ALsizei)_soundEffectBuffers.size(), _soundEffectBuffers.data());
 
-		_SoundEffectBuffers.clear();
+		_soundEffectBuffers.clear();
 	}
 
 }

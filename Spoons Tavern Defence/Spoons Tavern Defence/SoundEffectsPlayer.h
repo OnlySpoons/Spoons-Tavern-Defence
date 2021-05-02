@@ -25,8 +25,8 @@ namespace spty {
 		bool isPlaying();
 
 	private:
-		ALuint _Source;
-		ALuint _Buffer = 0;
+		ALuint _source;
+		ALuint _buffer = 0;
 	};
 
 }

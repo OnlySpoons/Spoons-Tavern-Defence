@@ -30,14 +30,14 @@ namespace spty {
 		~MusicBuffer();
 
 	private:
-		ALuint _Source;
-		static const int _BUFFER_SAMPLES = 8192;
-		static const int _NUM_BUFFERS = 4;
-		ALuint _Buffers[_NUM_BUFFERS];
-		SNDFILE* _SndFile;
-		SF_INFO _SFInfo;
-		short* _MemBuffer;
-		ALenum _Format;
+		ALuint _source;
+		static constexpr int BUFFER_SAMPLES = 8192;
+		static constexpr int NUM_BUFFERS = 4;
+		ALuint _buffers[NUM_BUFFERS];
+		SNDFILE* _sndFile;
+		SF_INFO _sfInfo;
+		short* _memBuffer;
+		ALenum _format;
 
 		MusicBuffer() = delete;
 	};
