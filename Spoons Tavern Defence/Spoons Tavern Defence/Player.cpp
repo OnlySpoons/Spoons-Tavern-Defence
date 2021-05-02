@@ -52,6 +52,10 @@ void Player::update(float& deltaTime)
 			_rigidBody.enableGravity();
 	}
 
+	//Escape closes the window
+	if (spty::Input::isKeyPressed(spty::KeyCode::Escape))
+		spty::Input::closeWindow();
+
 	std::cout << _health << std::endl;
 }
 
@@ -84,10 +88,6 @@ void Player::physicsUpdate()
 void Player::processInput(float& deltaTime)
 {
 	using namespace spty;
-
-	//Escape closes the window
-	if (Input::isKeyPressed(KeyCode::Escape))
-		Input::closeWindow();
 
 	//Temporary variables
 	glm::vec3 direction = _rigidBody.getBulletInertia();
