@@ -1,5 +1,15 @@
 Spoons: Tavern Defence
 
+Change Log 02/05/2021 - Martin & Thomas
+- Added ScoreEvent to increase the _score variable in game
+- Added PlayerDamageEvent to do damage to the player
+- Added Overworld class to handle initial load
+- Tweaked classes to take model pointers instead of path strings, allowing for instancing
+- Added wave system to Game
+- Added function to disable enemy on death
+- Tweaked classes to accomodate above changes
+
+
 Change Log 01/05/2021 - Martin
 - Added Zombie class
 - Added Seek behaviour to follow a target.

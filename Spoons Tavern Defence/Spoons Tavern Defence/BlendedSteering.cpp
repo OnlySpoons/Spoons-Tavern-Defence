@@ -28,3 +28,8 @@ SteeringOutput BlendedSteering::getSteering() const
 	return result;
 	
 }
+
+glm::vec3 BlendedSteering::getTargetPosition() const
+{
+	return std::visit([](auto& b) { return b.getTargetPosition(); }, _behaviours[0]._behaviour);
+}

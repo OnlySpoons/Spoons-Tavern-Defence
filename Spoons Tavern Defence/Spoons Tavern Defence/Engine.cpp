@@ -50,6 +50,8 @@ namespace spty {
 		//Physics update
 		Physics::Update(_deltaTime, *_currentScene);
 
+		_currentScene->update(_deltaTime);
+
 		//Run gameloop
 		gameLoop(_deltaTime);
 

@@ -1,11 +1,11 @@
 #include "Zombie.h"
 
-Zombie::Zombie(const spty::Transform& data, const std::string& modelPath, const spty::Transform& target)
-	: PhysicsEntity(data, modelPath, new spty::CapsuleCollider(60.0f, 140.0f)),
-	_health(MAX_HEALTH),
-	_damage(BASE_DAMAGE),
+Zombie::Zombie(const spty::Transform& data, spty::Model* model, const spty::Transform& target, int wave)
+	: PhysicsEntity(data, model, new spty::CapsuleCollider(60.0f, 140.0f)),
+	_drawOffset(0.7f),
+	_health(BASE_HEALTH + (BONUS_HEALTH * wave)),
+	_damage(BASE_DAMAGE + (BONUS_DAMAGE * wave)),
 	_attackCooldown(ATTACK_COOLDOWN),
-	_roundMultiplier(1),
 	_blendedAI(
 		BlendedSteering::BehaviourList(
 			{
@@ -16,47 +16,84 @@ Zombie::Zombie(const spty::Transform& data, const std::string& modelPath, const 
 		MAX_ACCELERATION, MAX_ANGULAR_ACCELERATION
 	)
 {
-
-	using namespace spty;
-
-	Dispatcher<GameEventType>::subscribe(DamageEvent::Type,
-		[&](Event<GameEventType>& e)
+	//Handle DamageEvents
+	spty::Dispatcher<GameEventType>::subscribe(DamageEvent::Type,
+		[&](spty::Event<GameEventType>& e)
 		{
-			DamageEvent Damage = EventCast<DamageEvent>(e);
+			DamageEvent damage = spty::EventCast<DamageEvent>(e);
 
-			if (Damage.target == _rigidBody.getBulletBody())
+			if (damage.target == _rigidBody.getBulletBody())
 			{
-				_health -= Damage.amount;
+				_health -= damage.amount;
+				_velocity += damage.direction * 2.5f;
+
+				if(_isEnabled)
+				{
+					ScoreEvent SE(10);
+					spty::Dispatcher<GameEventType>::post(SE);
+				}
+
 				e.handle();
 			}
 		}
 	);
 }
 
+void Zombie::draw(const spty::Shader& shader, glm::mat4 projection, glm::mat4 view, glm::mat4 model, spty::PassType pass)
+{
+	_transform.move(WorldDir::DOWN * _drawOffset);
+	PhysicsEntity::draw(shader, projection, view, model, pass);
+	_transform.move(WorldDir::UP * _drawOffset);
+}
+
 void Zombie::update(float& deltaTime)
 {
+	if (_attackCooldownAccum < _attackCooldown)
+		_attackCooldownAccum += deltaTime;
+
 	if (_health > 0)
 	{
-		auto movementAI = _blendedAI.getSteering();
-
-		_rigidBody.move(movementAI._linear * deltaTime);
-		_transform.yaw(_transform.getAngularVelocity());
-
-		_transform.setAngularVelocity(std::fmod(_transform.getAngularVelocity(), 2 * spty::PI));
-		_transform.addAngularVelocity(movementAI._angular * deltaTime);
+		move(deltaTime * _blendedAI.getSteering());
+		attack();
 	}
-	else
+	else if (_isEnabled)
 		die();
+}
 
+void Zombie::move(SteeringOutput movementAI)
+{
+	_rigidBody.move(_velocity);
+	_transform.yaw(_transform.getAngularVelocity());
+
+	_transform.setAngularVelocity(std::fmod(_transform.getAngularVelocity(), 2 * spty::PI));
+	_transform.addAngularVelocity(movementAI._angular);
+
+	movementAI._linear.y = 0.0f;
+	_velocity = movementAI._linear;
 }
 
 void Zombie::attack()
 {
-	//TODO: check collision with target, when we do AI
+	if (_attackCooldownAccum >= _attackCooldown)
+	{
+		glm::vec3 dist = _blendedAI.getTargetPosition() - _transform.getPosition();
+
+		float length = glm::length(dist);
+ 		if (length < 0.5f)
+		{
+			PlayerDamageEvent PDE = PlayerDamageEvent(_damage, -glm::normalize(dist));
+			spty::Dispatcher<GameEventType>::post(PDE);
+		}
+
+		_attackCooldownAccum = 0.0f;
+	}
 }
 
 void Zombie::die()
 {
-	//TODO
-	std::cout << "i've died" << std::endl;
+	//TODO: send score event
+	ScoreEvent SE = ScoreEvent(100);
+	spty::Dispatcher<GameEventType>::post(SE);
+
+	disable();
 }

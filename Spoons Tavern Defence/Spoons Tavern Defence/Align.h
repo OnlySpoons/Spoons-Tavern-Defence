@@ -13,10 +13,12 @@ private:
 
 public:
 
-	Align(const spty::Transform& character,	const spty::Transform& target,
-		  float angularAcceleration,	float rotation,
-		  float targetRadius,			float slowRadius
+	Align(const spty::Transform& character, const spty::Transform& target,
+		float angularAcceleration, float rotation,
+		float targetRadius, float slowRadius
 	);
 
 	SteeringOutput getSteering() const;
+
+	glm::vec3 getTargetPosition() const { return _target.getPosition(); }
 };

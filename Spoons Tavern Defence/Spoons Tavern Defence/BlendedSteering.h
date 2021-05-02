@@ -28,4 +28,6 @@ public:
 	BlendedSteering(std::vector<BehaviourAndWeight> behvaiours, float acceleration, float angularAcceleration);
 
 	SteeringOutput getSteering() const;
+
+	glm::vec3 getTargetPosition() const;
 };

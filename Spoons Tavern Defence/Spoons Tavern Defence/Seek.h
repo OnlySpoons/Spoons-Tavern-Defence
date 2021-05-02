@@ -16,4 +16,6 @@ public:
 	Seek(const spty::Transform& character, const spty::Transform& target, float maxAcceleration);
 
 	SteeringOutput getSteering() const;
+
+	glm::vec3 getTargetPosition() const { return _target.getPosition(); }
 };

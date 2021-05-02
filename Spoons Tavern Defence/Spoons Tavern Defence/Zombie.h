@@ -1,14 +1,18 @@
 #pragma once
 #include "PhysicsEntity.h"
+
 #include "Dispatcher.h"
 #include "DamageEvent.h"
+#include "ScoreEvent.h"
+#include "PlayerDamageEvent.h"
 
 #include "BlendedSteering.h"
 
 class Zombie : public spty::PhysicsEntity
 {
-	static constexpr int MAX_HEALTH = 100, BASE_DAMAGE = 20;
-	static constexpr int ATTACK_COOLDOWN = 2.0f;
+	static constexpr int BASE_HEALTH = 75, BASE_DAMAGE = 20;
+	static constexpr int BONUS_HEALTH = 5, BONUS_DAMAGE = 1;
+	static constexpr float ATTACK_COOLDOWN = 2.0f;
 
 	static constexpr float MAX_ACCELERATION = 80.0f, MAX_ANGULAR_ACCELERATION = 20.0f;
 	static constexpr float ROTATION = 50.0f;
@@ -18,23 +22,26 @@ class Zombie : public spty::PhysicsEntity
 public:
 	int _health, _damage;
 	float _attackCooldown;
-	int _roundMultiplier;
+	float _attackCooldownAccum = 0.0f;
 
 	glm::vec3 _velocity = glm::vec3(0.0f);
 	float _maxSpeed = 30.0f;
 
 	BlendedSteering _blendedAI;
 
-	Zombie(const spty::Transform& data, const std::string& modelPath, const spty::Transform& target);
+	float _drawOffset;
+
+	Zombie(const spty::Transform& data, spty::Model* model, const spty::Transform& target, int wave);
 
 	virtual ~Zombie() {}
 
+	virtual void draw(const spty::Shader& shader, glm::mat4 projection, glm::mat4 view, glm::mat4 model, spty::PassType pass) override;
+
 	void update(float& deltaTime) override;
+
+	void move(SteeringOutput movementAI);
 
 	void attack();
 
 	void die();
-
-	void setRoundMult(int mult) { _roundMultiplier = mult; }
-
 };

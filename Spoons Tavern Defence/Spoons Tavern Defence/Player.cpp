@@ -19,6 +19,22 @@ Player::Player(Weapon* gun,
 	_speed = 70.0f;
 	_jumpHeight = 70.0f;
 	_jumping = false;
+
+	//Handle DamageEvents
+	spty::Dispatcher<GameEventType>::subscribe(PlayerDamageEvent::Type,
+		[&](spty::Event<GameEventType>& e)
+		{
+			PlayerDamageEvent damage = spty::EventCast<PlayerDamageEvent>(e);
+
+			if (_health > 0)
+			{
+				std::cout << "ouch" << std::endl;
+				_health -= damage.amount;
+				_rigidBody.move(damage.direction * 2.5f);
+			}
+			e.handle();
+		}
+	);
 }
 
 Player::~Player() {}
@@ -26,12 +42,17 @@ Player::~Player() {}
 //Update the player
 void Player::update(float& deltaTime)
 {
-	processInput(deltaTime);
+	if (_health > 0)
+	{
+		processInput(deltaTime);
 
-	if (onGround())
-		_rigidBody.disableGravity();
-	else
-		_rigidBody.enableGravity();
+		if (onGround())
+			_rigidBody.disableGravity();
+		else
+			_rigidBody.enableGravity();
+	}
+
+	std::cout << _health << std::endl;
 }
 
 void Player::physicsUpdate()
@@ -39,9 +60,8 @@ void Player::physicsUpdate()
 	_transform.setPosition( _rigidBody.getBulletPosition() );
 	//_transform.setRotation( _rigidBody.getBulletRotation() );
 
-	//_gun->_transform._referenceSpace[spty::Axis::X] = _transform.getUp();
-	//_gun->_transform._referenceSpace[spty::Axis::Y] = _transform.getRight();
-	//_gun->_transform._referenceSpace[spty::Axis::Z] = _transform.getFront();
+	//Update Camera
+	_camera->update(_transform, _cameraOffset);
 
 	glm::vec3 gunPos = _transform.getPosition();
 	gunPos += _camera->getFront() * 0.2f;
@@ -126,7 +146,4 @@ void Player::processInput(float& deltaTime)
 	_transform.setAngularVelocity(mouseOffset.x * deltaTime);
 	_transform.yaw(mouseOffset.x);
 	_transform.pitch(mouseOffset.y);
-
-	//Update Camera
-	_camera->update(_transform, _cameraOffset);
 }

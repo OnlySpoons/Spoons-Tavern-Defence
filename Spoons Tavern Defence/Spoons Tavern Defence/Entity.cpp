@@ -3,10 +3,15 @@
 namespace spty {
 
 	Entity::Entity(const Transform& data,
-		const std::string& modelPath)
+		Model* model)
 		: GameObject(data),
-		_model(modelPath == "" ? Model() : Model(modelPath))
+		_model(model != nullptr ? model : new Model())
 	{
+	}
+
+	Entity::~Entity()
+	{
+		_model = nullptr;
 	}
 
 	void Entity::draw(const Shader& shader, glm::mat4 projection, glm::mat4 view, glm::mat4 model, PassType pass)
@@ -19,11 +24,7 @@ namespace spty {
 
 			model = _transform.getMatrix();
 
-			_model.draw(shader, model);
+			_model->draw(shader, model);
 		}
-	}
-
-	void Entity::update(float& deltaTime)
-	{
 	}
 }

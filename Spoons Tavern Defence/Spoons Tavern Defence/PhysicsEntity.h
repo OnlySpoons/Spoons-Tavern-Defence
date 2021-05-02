@@ -18,13 +18,15 @@ namespace spty {
 		PhysicsEntity() {}
 
 		PhysicsEntity(const Transform& data,
-			const std::string& modelPath,
+			Model* model,
 			Collider* collider = nullptr
 		);
 
 		virtual ~PhysicsEntity() {}
 
-		virtual void update(float& deltaTime) override;
+		virtual void draw(const Shader& shader, glm::mat4 projection, glm::mat4 view, glm::mat4 model, PassType pass) override;
+
+		virtual void update(float& deltaTime) override {}
 
 		virtual void physicsUpdate() override;
 

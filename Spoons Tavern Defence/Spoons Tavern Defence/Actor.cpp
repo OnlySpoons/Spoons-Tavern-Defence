@@ -45,7 +45,7 @@ namespace spty {
 
 		if (rayData.hasHit())
 		{
-			glm::vec3 distVec = collisionPoint - _transform.getPosition();
+			glm::vec3 distVec = Physics::btVector3ToglmVec3(rayData.m_hitPointWorld) - _transform.getPosition();
 
 			float dist = abs(distVec.y);
 

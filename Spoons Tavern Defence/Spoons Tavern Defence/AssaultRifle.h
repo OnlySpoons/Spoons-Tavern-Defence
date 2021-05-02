@@ -12,7 +12,7 @@ public:
 
 	float _reloadAccum = RELOAD_TIME, _cooldownAccum = SHOT_COOLDOWN;
 
-	AssaultRifle(const spty::Transform& data, const std::string& modelPath);
+	AssaultRifle(const spty::Transform& data, spty::Model* model);
 
 	virtual ~AssaultRifle() {}
 

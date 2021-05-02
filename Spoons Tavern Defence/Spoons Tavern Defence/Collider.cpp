@@ -54,7 +54,7 @@ namespace spty {
 	//Mesh Collider Constuctors
 	MeshCollider::MeshCollider()
 	{
-		_mesh = new btTriangleMesh();
+		_mesh = btTriangleMesh();
 		generateShape();
 	}
 	MeshCollider::MeshCollider(const btTriangleMesh& m)
@@ -98,6 +98,7 @@ namespace spty {
 		}
 
 		_shape = convexHull;
+		delete hull;
 	}
 
 	void CompoundCollider::generateShape()

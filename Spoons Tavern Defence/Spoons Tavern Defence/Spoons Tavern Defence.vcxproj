@@ -41,14 +41,17 @@
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="Observer.h" />
+    <ClInclude Include="Overworld.h" />
     <ClInclude Include="Physics.h" />
     <ClInclude Include="PhysicsConstants.h" />
     <ClInclude Include="PhysicsEntity.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayerDamageEvent.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="PassType.h" />
     <ClInclude Include="RigidBody.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="ScoreEvent.h" />
     <ClInclude Include="Seek.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Skybox.h" />
@@ -76,6 +79,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Model.cpp" />
+    <ClCompile Include="Overworld.cpp" />
     <ClCompile Include="Physics.cpp" />
     <ClCompile Include="PhysicsEntity.cpp" />
     <ClCompile Include="Player.cpp" />

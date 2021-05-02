@@ -10,9 +10,9 @@ public:
 	Weapon(int damage, int maxAmmo, 
 		   float reloadTime, float shotCooldown,
 		   const spty::Transform&	data,
-		   const std::string&		modelPath = ""
+		   spty::Model* model = nullptr
 	)
-		: Entity(data, modelPath),
+		: Entity(data, model),
 		_damage(damage), _maxAmmo(maxAmmo), _ammoCount(maxAmmo),
 		_reloadTime(reloadTime),
 		_shotCooldown(shotCooldown)

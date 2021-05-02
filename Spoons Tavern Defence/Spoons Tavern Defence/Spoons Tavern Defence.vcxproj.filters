@@ -88,6 +88,12 @@
     <Filter Include="Source Files\STD\AI">
       <UniqueIdentifier>{6843a852-1279-4e40-838b-bb26a1b9dea1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\STD\Scenes">
+      <UniqueIdentifier>{92bba4cb-fb44-44e6-90b2-2daab50476eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\STD\Scenes">
+      <UniqueIdentifier>{951fe81a-27ef-4015-a4d1-699d5f77a316}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -210,6 +216,15 @@
     <ClInclude Include="MathConstants.h">
       <Filter>Header Files\Spoonity\Utility</Filter>
     </ClInclude>
+    <ClInclude Include="Overworld.h">
+      <Filter>Header Files\STD\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="ScoreEvent.h">
+      <Filter>Header Files\STD\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerDamageEvent.h">
+      <Filter>Header Files\STD\Events</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -295,6 +310,9 @@
     </ClCompile>
     <ClCompile Include="BlendedSteering.cpp">
       <Filter>Source Files\STD\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="Overworld.cpp">
+      <Filter>Source Files\STD\Scenes</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

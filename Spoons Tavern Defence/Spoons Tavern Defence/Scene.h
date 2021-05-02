@@ -8,18 +8,16 @@ namespace spty {
 	class Scene
 	{
 		//Variables
-	public:
-		int _id;
-
+	private:
 		std::vector<GameObject*> _sceneObjects;
 
 		//Functions
 	public:
 
 		//Constructor
-		Scene(int id);
+		Scene();
 
-		~Scene();
+		virtual ~Scene();
 
 		//Draw the objects in the scene
 		void draw(const Shader& shader, glm::mat4 projection, glm::mat4 view, glm::mat4 model, PassType pass) const;

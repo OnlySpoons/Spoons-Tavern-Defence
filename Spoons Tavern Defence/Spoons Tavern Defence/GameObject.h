@@ -10,8 +10,6 @@ namespace spty {
 	//Variables
 	public:
 		Transform _transform;
-
-	protected:
 		bool _isEnabled;
 
 	//Functions

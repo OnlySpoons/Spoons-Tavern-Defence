@@ -1,16 +1,17 @@
 #include "PhysicsEntity.h"
 
 spty::PhysicsEntity::PhysicsEntity(const Transform& data,
-	const std::string& modelPath, Collider* collider)
-	: Entity(data, modelPath),
+	Model* model, Collider* collider)
+	: Entity(data, model),
 	_rigidBody(_transform, 
-		collider != nullptr ? collider : _model.getCompoundShape()
+		collider != nullptr ? collider : _model->getCompoundShape()
 	)
 {
 }
 
-void spty::PhysicsEntity::update(float& deltaTime)
+void spty::PhysicsEntity::draw(const Shader& shader, glm::mat4 projection, glm::mat4 view, glm::mat4 model, PassType pass)
 {
+	Entity::draw(shader, projection, view, model, pass);
 }
 
 void spty::PhysicsEntity::physicsUpdate()

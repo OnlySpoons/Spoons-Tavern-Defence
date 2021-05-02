@@ -3,8 +3,7 @@
 namespace spty {
 
 	//Constructor
-	Scene::Scene(int id)
-		: _id(id)
+	Scene::Scene()
 	{
 	}
 
