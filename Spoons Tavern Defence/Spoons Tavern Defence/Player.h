@@ -2,6 +2,9 @@
 #include "Actor.h"
 #include "Entity.h"
 #include "Camera.h"
+#include "SoundDevice.h"
+#include "SoundEffectsPlayer.h"
+#include "SoundEffectsLibrary.h"
 
 #include "Dispatcher.h"
 #include "PlayerDamageEvent.h"
@@ -22,6 +25,10 @@ private:
 	int _health = MAX_HEALTH;
 
 	Weapon* _gun;
+
+	spty::SoundEffectsPlayer* _soundPlayer;
+
+	int _hurtSound, _deathSound;
 
 //Functions
 public:

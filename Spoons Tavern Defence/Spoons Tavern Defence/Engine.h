@@ -1,11 +1,12 @@
 #pragma once
-
 #include <vector>
 
 #include "Window.h"
 #include "Renderer.h"
 #include "Player.h"
 #include "Scene.h"
+
+#include "SoundEffectsLibrary.h"
 
 namespace spty {
 

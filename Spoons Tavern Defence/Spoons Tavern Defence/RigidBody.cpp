@@ -32,7 +32,10 @@ namespace spty {
 
 	RigidBody::~RigidBody()
 	{
+		delete _body->getMotionState();
 		delete _collider;
+
+		Physics::removeBulletBody(_body);
 		delete _body;
 	}
 

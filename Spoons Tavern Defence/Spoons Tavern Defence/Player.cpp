@@ -6,7 +6,10 @@ Player::Player(Weapon* gun,
 	const std::string& modelPath
 )
 	: Actor(transform, new spty::Camera(), modelPath),
-	  _gun(gun)
+	_gun(gun),
+	_soundPlayer(new spty::SoundEffectsPlayer()),
+	_hurtSound(spty::SoundEffectsLibrary::load("Data/Sounds/bounce.wav")),
+	_deathSound(spty::SoundEffectsLibrary::load("Data/Sounds/bounce.wav"))
 {
 	_cameraOffset = glm::vec3(0.0f, 0.3f, 0.0f);
 
@@ -28,16 +31,23 @@ Player::Player(Weapon* gun,
 
 			if (_health > 0)
 			{
-				std::cout << "ouch" << std::endl;
+				_soundPlayer->Play(_hurtSound);
 				_health -= damage.amount;
 				_rigidBody.move(damage.direction * 2.5f);
 			}
 			e.handle();
 		}
 	);
+
+	spty::SoundDevice::get()->SetAttunation(AL_INVERSE_DISTANCE_CLAMPED);
 }
 
-Player::~Player() {}
+Player::~Player()
+{
+	delete _soundPlayer;
+	spty::SoundEffectsLibrary::unLoad(_hurtSound);
+	spty::SoundEffectsLibrary::unLoad(_deathSound);
+}
 
 //Update the player
 void Player::update(float& deltaTime)
@@ -51,12 +61,14 @@ void Player::update(float& deltaTime)
 		else
 			_rigidBody.enableGravity();
 	}
-
-	//Escape closes the window
-	if (spty::Input::isKeyPressed(spty::KeyCode::Escape))
+	else
+	{
+		_soundPlayer->Play(_deathSound);
+		while (_soundPlayer->isPlaying()) {}
 		spty::Input::closeWindow();
+	}
 
-	std::cout << _health << std::endl;
+	//TODO: Display health, max ammo, and current ammo
 }
 
 void Player::physicsUpdate()
@@ -64,8 +76,10 @@ void Player::physicsUpdate()
 	_transform.setPosition( _rigidBody.getBulletPosition() );
 	//_transform.setRotation( _rigidBody.getBulletRotation() );
 
-	//Update Camera
+	//Update Cameraand listener position
 	_camera->update(_transform, _cameraOffset);
+	spty::SoundDevice::get()->SetLocation(_transform.getPosition());
+	//spty::SoundDevice::get()->SetOrientation(-_transform.getFront(), -_transform.getUp());
 
 	glm::vec3 gunPos = _transform.getPosition();
 	gunPos += _camera->getFront() * 0.2f;
@@ -88,6 +102,10 @@ void Player::physicsUpdate()
 void Player::processInput(float& deltaTime)
 {
 	using namespace spty;
+
+	//Escape closes the window
+	if (spty::Input::isKeyPressed(spty::KeyCode::Escape))
+		spty::Input::closeWindow();
 
 	//Temporary variables
 	glm::vec3 direction = _rigidBody.getBulletInertia();

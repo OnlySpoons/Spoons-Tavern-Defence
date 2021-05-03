@@ -1,4 +1,7 @@
 #pragma once
+#include "SoundEffectsPlayer.h"
+#include "SoundEffectsLibrary.h"
+
 #include "Weapon.h"
 
 #include "DamageEvent.h"
@@ -12,9 +15,13 @@ public:
 
 	float _reloadAccum = RELOAD_TIME, _cooldownAccum = SHOT_COOLDOWN;
 
+	spty::SoundEffectsPlayer* _soundPlayer;
+
+	int _fireSound, _emptySound, _reloadSound;
+
 	AssaultRifle(const spty::Transform& data, spty::Model* model);
 
-	virtual ~AssaultRifle() {}
+	virtual ~AssaultRifle();
 
 	void update(float& deltaTime) override;
 

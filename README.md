@@ -1,5 +1,21 @@
 Spoons: Tavern Defence
 
+Change Log 03/05/2021 - Martin & Thomas
+- Audio
+	- Added SoundDevice class to control OpenAL
+	- Added SoundEffectsLibrary class to load sound effects
+	- Added SoundEffectsPlayer class to play sound effects
+	- Added MusicBuffer class to handle loading and playing music
+	- Added Sounds folder to hold audio files
+	- Added OpenALErrorCheck file with functions to check if there were any OpenAL errors
+	- Added dlls for OpenAL and sndfile
+	- Implimented sound effects for zombies moaning, being hurt and dying
+	- Implimented sound effects for player being hurt and dying
+	- Implimented sound effects for gun being fired, fired when empty, and when reloading
+- Updated "animations" for weapon reloading
+- Tweaked physics classes to try and deal with memory leaks
+
+
 Change Log 02/05/2021 - Martin & Thomas
 - Added ScoreEvent to increase the _score variable in game
 - Added PlayerDamageEvent to do damage to the player

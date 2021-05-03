@@ -1,7 +1,8 @@
 #include "Zombie.h"
 
-Zombie::Zombie(const spty::Transform& data, spty::Model* model, const spty::Transform& target, int wave)
+Zombie::Zombie(const spty::Transform& data, spty::Model* model, const spty::Transform& target, std::mt19937 seed, int wave)
 	: PhysicsEntity(data, model, new spty::CapsuleCollider(60.0f, 140.0f)),
+	_seed(seed),
 	_drawOffset(0.7f),
 	_health(BASE_HEALTH + (BONUS_HEALTH * wave)),
 	_damage(BASE_DAMAGE + (BONUS_DAMAGE * wave)),
@@ -14,7 +15,11 @@ Zombie::Zombie(const spty::Transform& data, spty::Model* model, const spty::Tran
 			}
 		),
 		MAX_ACCELERATION, MAX_ANGULAR_ACCELERATION
-	)
+	),
+	_soundPlayer(new spty::SoundEffectsPlayer()),
+	_moanSound(spty::SoundEffectsLibrary::load("Data/Sounds/bounce.wav")),
+	_hurtSound(spty::SoundEffectsLibrary::load("Data/Sounds/bounce.wav")),
+	_deathSound(spty::SoundEffectsLibrary::load("Data/Sounds/bounce.wav"))
 {
 	//Handle DamageEvents
 	spty::Dispatcher<GameEventType>::subscribe(DamageEvent::Type,
@@ -37,6 +42,16 @@ Zombie::Zombie(const spty::Transform& data, spty::Model* model, const spty::Tran
 			}
 		}
 	);
+
+	
+}
+
+Zombie::~Zombie()
+{
+	delete _soundPlayer;
+	spty::SoundEffectsLibrary::unLoad(_moanSound);
+	spty::SoundEffectsLibrary::unLoad(_hurtSound);
+	spty::SoundEffectsLibrary::unLoad(_deathSound);
 }
 
 void Zombie::draw(const spty::Shader& shader, glm::mat4 projection, glm::mat4 view, glm::mat4 model, spty::PassType pass)
@@ -58,6 +73,20 @@ void Zombie::update(float& deltaTime)
 	}
 	else if (_isEnabled)
 		die();
+
+	_soundPlayer->SetPosition(_transform.getPosition());
+
+	std::uniform_int_distribution moanPercent(0, 100);
+	if (moanPercent(_seed) < 5 && !isMoaning)
+	{
+		isMoaning = true;
+		_soundPlayer->Play(_moanSound);
+	}
+	
+	if (!_soundPlayer->isPlaying(_moanSound))
+	{
+		isMoaning = false;
+	}
 }
 
 void Zombie::move(SteeringOutput movementAI)
@@ -94,6 +123,8 @@ void Zombie::die()
 	//TODO: send score event
 	ScoreEvent SE = ScoreEvent(100);
 	spty::Dispatcher<GameEventType>::post(SE);
+
+	_soundPlayer->Play(_deathSound);
 
 	disable();
 }

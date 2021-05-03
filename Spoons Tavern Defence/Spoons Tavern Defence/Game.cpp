@@ -27,17 +27,34 @@ Game::Game()
 			e.handle();
 		}
 	);
+
+	_music = new spty::MusicBuffer("Data/Sounds/crikey.wav");
+	_music->SetGain(0.0005f);
+	_music->Play();
+
+	_soundPlayer = new spty::SoundEffectsPlayer();
+	_newWaveSound = spty::SoundEffectsLibrary::load("Data/Sounds/bounce.wav");
+	_endWaveSound = spty::SoundEffectsLibrary::load("Data/Sounds/bounce.wav");
 }
 
 //Destructor
 Game::~Game()
 {
 	_currentScene->removeObject(_player);
+
+	delete _music;
+
+	delete _soundPlayer;
+	spty::SoundEffectsLibrary::unLoad(_newWaveSound);
+	spty::SoundEffectsLibrary::unLoad(_endWaveSound);
 }
 
 //Overriding gameloop
 void Game::gameLoop(float& deltaTime)
 {
+	if (_music->isPlaying() && _music != nullptr)
+		_music->UpdateBufferStream();
+
 	if (_waveEnded)
 	{
 		_waveCooldownAccum += deltaTime;
@@ -56,6 +73,7 @@ void Game::gameLoop(float& deltaTime)
 				spawnZombie( spawnPos );
 			}
 
+			_soundPlayer->Play(_newWaveSound);
 			_waveCooldownAccum = 0.0f;
 			_wave++;
 		}
@@ -70,19 +88,21 @@ void Game::gameLoop(float& deltaTime)
 		killedAll &= !(_zombies[i]->_isEnabled);
 	}
 	
-	if (killedAll)
+	if (killedAll && !_zombies.empty())
 	{
 		for (int i = 0; i < _zombies.size(); i++)
 		{
 			_currentScene->removeObject(_zombies[i]);
+			delete _zombies[i];
 		}
 
 		_zombies.clear();
 
 		_waveEnded = true;
+		_soundPlayer->Play(_newWaveSound);
 	}
 
-	//std::cout << _score << std::endl;
+	//TODO: display score & round number
 }
 
 void Game::spawnPlayer()
@@ -120,6 +140,7 @@ void Game::spawnZombie(glm::vec3 position)
 		),
 		_zombieModel,			//Model
 		_player->_transform,	//AI target
+		seed,					//Mersenne twister generator
 		_wave					//Health/Damage multiplier
 	);
 

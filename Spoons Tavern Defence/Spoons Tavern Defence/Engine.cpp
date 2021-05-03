@@ -15,12 +15,13 @@ namespace spty {
 
 		//Initialise input
 		Input::setWindow(_window);
+
+		SoundDevice::init();
 	}
 
 	Engine::~Engine()
 	{
 		Input::clearWindow();
-		Physics::cleanup();
 
 		for (auto it = _scenes.begin(); it != _scenes.end(); ++it)
 		{
@@ -31,9 +32,14 @@ namespace spty {
 
 		_currentScene = nullptr;
 
+		delete _player;
+		Physics::cleanup();
+
+		delete SoundDevice::get();
+
 		delete _renderer;
 		delete _window;
-		delete _player;
+
 	}
 
 	//Function for controlling runtime loop

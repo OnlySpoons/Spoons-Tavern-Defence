@@ -12,6 +12,11 @@
 #include "AssaultRifle.h"
 #include "Zombie.h"
 
+#include "SoundDevice.h"
+#include "MusicBuffer.h"
+#include "SoundEffectsLibrary.h"
+#include "SoundEffectsPlayer.h"
+
 
 class Game : public spty::Engine
 {
@@ -31,6 +36,10 @@ public:
 	std::vector<Zombie*> _zombies{};
 
 	spty::Model* _gunModel, * _zombieModel;
+
+	spty::MusicBuffer* _music;
+	spty::SoundEffectsPlayer* _soundPlayer;
+	int _newWaveSound, _endWaveSound;
 
 //Functions
 public:

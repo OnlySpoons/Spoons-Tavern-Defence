@@ -9,6 +9,10 @@ spty::PhysicsEntity::PhysicsEntity(const Transform& data,
 {
 }
 
+spty::PhysicsEntity::~PhysicsEntity()
+{
+}
+
 void spty::PhysicsEntity::draw(const Shader& shader, glm::mat4 projection, glm::mat4 view, glm::mat4 model, PassType pass)
 {
 	Entity::draw(shader, projection, view, model, pass);

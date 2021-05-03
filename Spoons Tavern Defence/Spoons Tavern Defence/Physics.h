@@ -42,6 +42,7 @@ namespace spty
 		static inline btQuaternion asQuaternion(glm::vec3 rot) { return btQuaternion(rot.x, rot.y, rot.z); }
 
 		static void addBulletBody(btRigidBody* r);
+		static void removeBulletBody(btRigidBody* r);
 
 		static void setDebugDrawer(BulletDebugDrawer* debugDrawer);
 		static void debugDraw();

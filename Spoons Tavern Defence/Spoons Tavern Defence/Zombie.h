@@ -1,5 +1,9 @@
 #pragma once
+#include <random>
+
 #include "PhysicsEntity.h"
+#include "SoundEffectsPlayer.h"
+#include "SoundEffectsLibrary.h"
 
 #include "Dispatcher.h"
 #include "DamageEvent.h"
@@ -19,6 +23,8 @@ class Zombie : public spty::PhysicsEntity
 	static constexpr float TARGET_RADIUS = 5.0f, SLOW_RADIUS = 60.0f;
 	static constexpr float WEIGHT = 0.5f;
 
+	std::mt19937 _seed;
+
 public:
 	int _health, _damage;
 	float _attackCooldown;
@@ -29,11 +35,15 @@ public:
 
 	BlendedSteering _blendedAI;
 
+	spty::SoundEffectsPlayer* _soundPlayer;
+	int _moanSound, _hurtSound, _deathSound;
+	bool isMoaning = false;
+
 	float _drawOffset;
 
-	Zombie(const spty::Transform& data, spty::Model* model, const spty::Transform& target, int wave);
+	Zombie(const spty::Transform& data, spty::Model* model, const spty::Transform& target, std::mt19937 seed, int wave);
 
-	virtual ~Zombie() {}
+	virtual ~Zombie();
 
 	virtual void draw(const spty::Shader& shader, glm::mat4 projection, glm::mat4 view, glm::mat4 model, spty::PassType pass) override;
 

@@ -42,6 +42,11 @@ namespace spty {
 		m_pWorld->addRigidBody(r);
 	}
 
+	void Physics::removeBulletBody(btRigidBody* r)
+	{
+		m_pWorld->removeRigidBody(r);
+	}
+
 	void Physics::setDebugDrawer(BulletDebugDrawer* debugDrawer)
 	{
 		m_pWorld->setDebugDrawer(debugDrawer);

@@ -62,6 +62,7 @@ namespace spty {
 		{
 			//Erase the object
 			_sceneObjects.erase(it);
+			//delete *it;
 			return true;
 		}
 

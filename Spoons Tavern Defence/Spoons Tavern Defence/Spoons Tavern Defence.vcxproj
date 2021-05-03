@@ -40,13 +40,16 @@
     <ClInclude Include="Input.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Model.h" />
+    <ClInclude Include="MusicBuffer.h" />
     <ClInclude Include="Observer.h" />
+    <ClInclude Include="OpenALErrorCheck.h" />
     <ClInclude Include="Overworld.h" />
     <ClInclude Include="Physics.h" />
     <ClInclude Include="PhysicsConstants.h" />
     <ClInclude Include="PhysicsEntity.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerDamageEvent.h" />
+    <ClInclude Include="PlaySoundEvent.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="PassType.h" />
     <ClInclude Include="RigidBody.h" />
@@ -55,6 +58,9 @@
     <ClInclude Include="Seek.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Skybox.h" />
+    <ClInclude Include="SoundDevice.h" />
+    <ClInclude Include="SoundEffectsLibrary.h" />
+    <ClInclude Include="SoundEffectsPlayer.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="SteeringOutput.h" />
     <ClInclude Include="Transform.h" />
@@ -79,6 +85,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Model.cpp" />
+    <ClCompile Include="MusicBuffer.cpp" />
     <ClCompile Include="Overworld.cpp" />
     <ClCompile Include="Physics.cpp" />
     <ClCompile Include="PhysicsEntity.cpp" />
@@ -89,6 +96,9 @@
     <ClCompile Include="Seek.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Skybox.cpp" />
+    <ClCompile Include="SoundDevice.cpp" />
+    <ClCompile Include="SoundEffectsLibrary.cpp" />
+    <ClCompile Include="SoundEffectsPlayer.cpp" />
     <ClCompile Include="stb_image.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="Window.cpp" />

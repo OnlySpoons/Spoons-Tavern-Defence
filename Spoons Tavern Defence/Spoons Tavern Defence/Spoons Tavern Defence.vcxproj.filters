@@ -94,6 +94,12 @@
     <Filter Include="Source Files\STD\Scenes">
       <UniqueIdentifier>{951fe81a-27ef-4015-a4d1-699d5f77a316}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Spoonity\Audio">
+      <UniqueIdentifier>{5e424dcf-e29d-43ba-b36d-8e7e9ac4b004}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Spoonity\Audio">
+      <UniqueIdentifier>{6f2db415-bc76-4e26-bc9c-779c5831e184}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -225,6 +231,24 @@
     <ClInclude Include="PlayerDamageEvent.h">
       <Filter>Header Files\STD\Events</Filter>
     </ClInclude>
+    <ClInclude Include="MusicBuffer.h">
+      <Filter>Header Files\Spoonity\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundDevice.h">
+      <Filter>Header Files\Spoonity\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundEffectsLibrary.h">
+      <Filter>Header Files\Spoonity\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundEffectsPlayer.h">
+      <Filter>Header Files\Spoonity\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="PlaySoundEvent.h">
+      <Filter>Header Files\STD\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="OpenALErrorCheck.h">
+      <Filter>Header Files\Spoonity\Audio</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -313,6 +337,18 @@
     </ClCompile>
     <ClCompile Include="Overworld.cpp">
       <Filter>Source Files\STD\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="MusicBuffer.cpp">
+      <Filter>Source Files\Spoonity\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundDevice.cpp">
+      <Filter>Source Files\Spoonity\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundEffectsLibrary.cpp">
+      <Filter>Source Files\Spoonity\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundEffectsPlayer.cpp">
+      <Filter>Source Files\Spoonity\Audio</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
