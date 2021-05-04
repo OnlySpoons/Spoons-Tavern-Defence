@@ -5,6 +5,7 @@
 #include "Renderer.h"
 #include "Player.h"
 #include "Scene.h"
+#include "ImGUIWindow.h"
 
 #include "SoundEffectsLibrary.h"
 
@@ -16,6 +17,9 @@ namespace spty {
 		//Memeber variables
 	protected:
 		Window* _window;
+		ImGUIWindow* _imguiWindow;
+
+		ImGUIWindow::ImguiDrawFunc _imguiDraw;
 
 		Renderer* _renderer;
 

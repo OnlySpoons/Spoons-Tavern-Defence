@@ -3,9 +3,9 @@
 AssaultRifle::AssaultRifle(const spty::Transform& data, spty::Model* model)
 	: Weapon(DAMAGE, MAX_AMMO, RELOAD_TIME, SHOT_COOLDOWN, data, model),
 	_soundPlayer(new spty::SoundEffectsPlayer()),
-	_fireSound(spty::SoundEffectsLibrary::load("Data/Sounds/bounce.wav")),
-	_reloadSound(spty::SoundEffectsLibrary::load("Data/Sounds/bounce.wav")),
-	_emptySound(spty::SoundEffectsLibrary::load("Data/Sounds/bounce.wav"))
+	_fireSound(spty::SoundEffectsLibrary::load("Data/Sounds/Serious/gunFire.wav")),
+	_reloadSound(spty::SoundEffectsLibrary::load("Data/Sounds/Serious/gunReload.ogg")),
+	_emptySound(spty::SoundEffectsLibrary::load("Data/Sounds/Serious/gunEmpty.wav"))
 {
 }
 
@@ -29,7 +29,15 @@ void AssaultRifle::update(float& deltaTime)
 		_reloadAccum += deltaTime;
 	}
 	else
+	{ 
 		_transform.setRoll(0.0f);
+
+		if (_reloading)
+		{
+			_ammoCount = _maxAmmo;
+			_reloading = false;
+		}
+	}
 
 	_soundPlayer->SetPosition(_transform.getPosition());
 }
@@ -59,8 +67,11 @@ void AssaultRifle::fire()
 
 		_soundPlayer->Play(_fireSound);
 	}
-	else
+	else if (!_firingEmpty && !_reloading)
+	{
 		_soundPlayer->Play(_emptySound);
+		_firingEmpty = true;
+	}
 }
 
 void AssaultRifle::reload()
@@ -69,9 +80,8 @@ void AssaultRifle::reload()
 	{
 		_transform.setRoll(-45.0f);
 
-		_ammoCount = _maxAmmo;
-
 		_reloadAccum = 0.0f;
+		_reloading = true;
 
 		_soundPlayer->Play(_reloadSound);
 	}

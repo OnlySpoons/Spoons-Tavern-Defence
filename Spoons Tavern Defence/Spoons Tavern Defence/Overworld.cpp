@@ -1,7 +1,7 @@
 #include "Overworld.h"
 
 Overworld::Overworld()
-	: Scene(), _worldModel( new spty::Model("Data/Models/SyntyStudios/PolygonHeist/Main_Scene_V1.0.6.fbx") )
+	: Scene(), _worldModel( new spty::Model("Data/Models/SyntyStudios/PolygonHeist/Main_Scene_V1.2.4.fbx") )
 {
 	spty::Skybox* sky = new spty::Skybox(
 		spty::Transform(),

@@ -17,9 +17,9 @@ Zombie::Zombie(const spty::Transform& data, spty::Model* model, const spty::Tran
 		MAX_ACCELERATION, MAX_ANGULAR_ACCELERATION
 	),
 	_soundPlayer(new spty::SoundEffectsPlayer()),
-	_moanSound(spty::SoundEffectsLibrary::load("Data/Sounds/bounce.wav")),
-	_hurtSound(spty::SoundEffectsLibrary::load("Data/Sounds/bounce.wav")),
-	_deathSound(spty::SoundEffectsLibrary::load("Data/Sounds/bounce.wav"))
+	_moanSound(spty::SoundEffectsLibrary::load("Data/Sounds/Serious/zombieMoan.wav")),
+	_hitSound(spty::SoundEffectsLibrary::load("Data/Sounds/Serious/zombieHit.wav")),
+	_deathSound(spty::SoundEffectsLibrary::load("Data/Sounds/Serious/zombieDeath.wav"))
 {
 	//Handle DamageEvents
 	spty::Dispatcher<GameEventType>::subscribe(DamageEvent::Type,
@@ -50,7 +50,7 @@ Zombie::~Zombie()
 {
 	delete _soundPlayer;
 	spty::SoundEffectsLibrary::unLoad(_moanSound);
-	spty::SoundEffectsLibrary::unLoad(_hurtSound);
+	spty::SoundEffectsLibrary::unLoad(_hitSound);
 	spty::SoundEffectsLibrary::unLoad(_deathSound);
 }
 
@@ -112,9 +112,11 @@ void Zombie::attack()
 		{
 			PlayerDamageEvent PDE = PlayerDamageEvent(_damage, -glm::normalize(dist));
 			spty::Dispatcher<GameEventType>::post(PDE);
+
+			_attackCooldownAccum = 0.0f;
 		}
 
-		_attackCooldownAccum = 0.0f;
+		
 	}
 }
 

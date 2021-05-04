@@ -26,7 +26,7 @@ private:
 	std::mt19937 seed;
 
 public:
-	int _wave = 1, _zombieCount = 2;
+	int _wave = 0, _zombieCount = 15;
 	float _waveCooldown = 10.0f, _waveCooldownAccum = 0.0f;
 	bool _waveEnded = true;
 

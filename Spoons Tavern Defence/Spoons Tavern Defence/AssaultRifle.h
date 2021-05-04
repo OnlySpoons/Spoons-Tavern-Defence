@@ -14,7 +14,7 @@ public:
 	static constexpr float RELOAD_TIME = 1.5f, SHOT_COOLDOWN = 0.1f;
 
 	float _reloadAccum = RELOAD_TIME, _cooldownAccum = SHOT_COOLDOWN;
-
+	bool _reloading = false, _firingEmpty = false;
 	spty::SoundEffectsPlayer* _soundPlayer;
 
 	int _fireSound, _emptySound, _reloadSound;

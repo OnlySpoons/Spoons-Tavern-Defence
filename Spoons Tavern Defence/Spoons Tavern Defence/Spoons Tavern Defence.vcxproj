@@ -30,6 +30,9 @@
     <ClInclude Include="Event.h" />
     <ClInclude Include="EventType.h" />
     <ClInclude Include="GameEventType.h" />
+    <ClInclude Include="ImGUIWindow.h" />
+    <ClInclude Include="imgui_impl_glfw.h" />
+    <ClInclude Include="imgui_impl_opengl3.h" />
     <ClInclude Include="MathConstants.h" />
     <ClInclude Include="MouseCode.h" />
     <ClInclude Include="Camera.h" />
@@ -80,6 +83,9 @@
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="ImGUIWindow.cpp" />
+    <ClCompile Include="imgui_impl_glfw.cpp" />
+    <ClCompile Include="imgui_impl_opengl3.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="KeyCode.h" />
     <ClCompile Include="main.cpp" />

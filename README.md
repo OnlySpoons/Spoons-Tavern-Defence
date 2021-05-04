@@ -1,5 +1,14 @@
 Spoons: Tavern Defence
 
+Change Log 04/05/2021 - Martin, Thomas & Harry
+- Added ImGui for UI implementation
+- Tweaked classes to improve game feel
+- Added new sounds for each audio player
+- Added game over screen
+- Updated scene to a fully textured version
+- Finished Game
+
+
 Change Log 03/05/2021 - Martin & Thomas
 - Audio
 	- Added SoundDevice class to control OpenAL

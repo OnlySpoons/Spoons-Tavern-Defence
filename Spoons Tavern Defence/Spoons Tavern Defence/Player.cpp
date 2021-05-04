@@ -8,8 +8,8 @@ Player::Player(Weapon* gun,
 	: Actor(transform, new spty::Camera(), modelPath),
 	_gun(gun),
 	_soundPlayer(new spty::SoundEffectsPlayer()),
-	_hurtSound(spty::SoundEffectsLibrary::load("Data/Sounds/bounce.wav")),
-	_deathSound(spty::SoundEffectsLibrary::load("Data/Sounds/bounce.wav"))
+	_hurtSound(spty::SoundEffectsLibrary::load("Data/Sounds/Serious/playerHurt.ogg")),
+	_deathSound(spty::SoundEffectsLibrary::load("Data/Sounds/Serious/playerDeath.ogg"))
 {
 	_cameraOffset = glm::vec3(0.0f, 0.3f, 0.0f);
 
@@ -40,6 +40,7 @@ Player::Player(Weapon* gun,
 	);
 
 	spty::SoundDevice::get()->SetAttunation(AL_INVERSE_DISTANCE_CLAMPED);
+	spty::SoundDevice::get()->SetGain(0.1f);
 }
 
 Player::~Player()
@@ -63,12 +64,17 @@ void Player::update(float& deltaTime)
 	}
 	else
 	{
-		_soundPlayer->Play(_deathSound);
-		while (_soundPlayer->isPlaying()) {}
-		spty::Input::closeWindow();
+		static bool died = true;
+		if (died)
+		{
+			died = false;
+			_soundPlayer->Play(_deathSound);
+		}
 	}
 
-	//TODO: Display health, max ammo, and current ammo
+	//Escape closes the window
+	if (spty::Input::isKeyPressed(spty::KeyCode::Escape))
+		spty::Input::closeWindow();
 }
 
 void Player::physicsUpdate()
@@ -103,9 +109,12 @@ void Player::processInput(float& deltaTime)
 {
 	using namespace spty;
 
-	//Escape closes the window
-	if (spty::Input::isKeyPressed(spty::KeyCode::Escape))
-		spty::Input::closeWindow();
+	//Position Selecting utility button
+	/*if (Input::isButtonPressed(MouseCode::RightButton))
+	{
+		glm::vec3 pos = _transform.getPosition();
+		std::cout << "(" << pos.x << ", " << pos.y << ", " << pos.z << ")" << std::endl;
+	}*/
 
 	//Temporary variables
 	glm::vec3 direction = _rigidBody.getBulletInertia();
@@ -152,6 +161,11 @@ void Player::processInput(float& deltaTime)
 	if (Input::isButtonPressed(MouseCode::LeftButton))
 	{
 		_gun->fire();
+	}
+	else
+	{
+		AssaultRifle* AR = dynamic_cast<AssaultRifle*>(_gun);
+		AR->_firingEmpty = false;
 	}
 
 	if (Input::isKeyPressed(KeyCode::R))

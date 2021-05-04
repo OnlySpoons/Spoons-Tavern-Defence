@@ -36,7 +36,7 @@ public:
 	BlendedSteering _blendedAI;
 
 	spty::SoundEffectsPlayer* _soundPlayer;
-	int _moanSound, _hurtSound, _deathSound;
+	int _moanSound, _hitSound, _deathSound;
 	bool isMoaning = false;
 
 	float _drawOffset;

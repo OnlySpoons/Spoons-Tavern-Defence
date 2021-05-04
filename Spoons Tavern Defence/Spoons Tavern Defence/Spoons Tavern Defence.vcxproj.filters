@@ -100,6 +100,12 @@
     <Filter Include="Source Files\Spoonity\Audio">
       <UniqueIdentifier>{6f2db415-bc76-4e26-bc9c-779c5831e184}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Spoonity\UI">
+      <UniqueIdentifier>{653a938e-c629-48bd-a7e7-d5f1dfc00c61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Spoonity\UI">
+      <UniqueIdentifier>{08200ef4-5c8e-4b44-b0be-04e263da395b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -249,6 +255,15 @@
     <ClInclude Include="OpenALErrorCheck.h">
       <Filter>Header Files\Spoonity\Audio</Filter>
     </ClInclude>
+    <ClInclude Include="imgui_impl_glfw.h">
+      <Filter>Header Files\Spoonity\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_impl_opengl3.h">
+      <Filter>Header Files\Spoonity\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGUIWindow.h">
+      <Filter>Header Files\Spoonity\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -349,6 +364,15 @@
     </ClCompile>
     <ClCompile Include="SoundEffectsPlayer.cpp">
       <Filter>Source Files\Spoonity\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_impl_glfw.cpp">
+      <Filter>Source Files\Spoonity\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_impl_opengl3.cpp">
+      <Filter>Source Files\Spoonity\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGUIWindow.cpp">
+      <Filter>Source Files\Spoonity\UI</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

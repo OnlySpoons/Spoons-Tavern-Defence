@@ -16,15 +16,16 @@ class Player : public spty::Actor
 	static constexpr int MAX_HEALTH = 100;
 
 //Variables
+public:
+	int _health = MAX_HEALTH;
+
+	Weapon* _gun;
+
 private:
 	glm::vec3 _cameraOffset;
 
 	float _speed, _jumpHeight;
 	bool _jumping;
-
-	int _health = MAX_HEALTH;
-
-	Weapon* _gun;
 
 	spty::SoundEffectsPlayer* _soundPlayer;
 

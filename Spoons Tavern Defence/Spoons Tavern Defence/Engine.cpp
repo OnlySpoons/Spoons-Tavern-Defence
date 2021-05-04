@@ -16,6 +16,11 @@ namespace spty {
 		//Initialise input
 		Input::setWindow(_window);
 
+		//Initialise ImGUI window
+		_imguiWindow = new ImGUIWindow(_window);
+
+		_imguiWindow->attach();
+
 		SoundDevice::init();
 	}
 
@@ -38,6 +43,7 @@ namespace spty {
 		delete SoundDevice::get();
 
 		delete _renderer;
+		_imguiWindow->detach();
 		delete _window;
 
 	}
@@ -53,6 +59,7 @@ namespace spty {
 		//Input
 		glfwPollEvents();
 
+
 		//Physics update
 		Physics::Update(_deltaTime, *_currentScene);
 
@@ -63,6 +70,10 @@ namespace spty {
 
 		//Render
 		_renderer->renderScene( *_currentScene, *(_player->_camera) );
+
+		//IMGUI
+		_imguiWindow->imGUIRender(_imguiDraw);
+
 		glfwSwapBuffers(_window->getInstance());
 	}
 
