@@ -321,10 +321,13 @@ namespace spty {
     //Apply post processing by iterating over a screen filled quad pixel by pixel using a Screen texture
     void Renderer::postProcessing(const Scene& scene, RenderData& data)
     {
-        /*_debugDrawer.debugShader.use();
-        _debugDrawer.setDebugMode(btIDebugDraw::DBG_DrawWireframe);
-        _debugDrawer.SetMatrices(data.view, data.projection);
-        Physics::debugDraw();*/
+        if (_physicsDebug)
+        {
+            _debugDrawer.debugShader.use();
+            _debugDrawer.setDebugMode(btIDebugDraw::DBG_DrawWireframe);
+            _debugDrawer.SetMatrices(data.view, data.projection);
+            Physics::debugDraw();
+        }
 
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 

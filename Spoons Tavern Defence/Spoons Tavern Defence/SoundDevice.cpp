@@ -118,7 +118,7 @@ namespace spty {
 		if (!name || alcGetError(_alcDevice) != AL_NO_ERROR)
 			name = alcGetString(_alcDevice, ALC_DEVICE_SPECIFIER);
 
-		printf("Opened \"%s\"\n", name);
+		printf("Opened %s\n", name);
 	}
 
 	SoundDevice::~SoundDevice()

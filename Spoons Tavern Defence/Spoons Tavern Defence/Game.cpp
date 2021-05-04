@@ -7,6 +7,16 @@ Game::Game()
 	_gunModel(new spty::Model("Data/Models/gun/SK_Web_RifleSwat_01.fbx")),
 	_zombieModel(new spty::Model("Data/Models/SyntyStudios/PolygonWestern/_working/Characters/SK_Character_Badguy_01.fbx"))
 {
+	//Handle ScoreEvents
+	spty::Dispatcher<GameEventType>::subscribe(ScoreEvent::Type,
+		[&](spty::Event<GameEventType>& e)
+		{
+			ScoreEvent score = spty::EventCast<ScoreEvent>(e);
+			_score += score.amount;
+			e.handle();
+		}
+	);
+
 	//Load the current Scene
 	_currentScene = new Overworld();
 	_scenes.emplace_back(_currentScene);
@@ -18,16 +28,6 @@ Game::Game()
 		glm::vec3(0.0, 0.5f, 15.0f)
 	};
 
-	//Handle ScoreEvents
-	spty::Dispatcher<GameEventType>::subscribe(ScoreEvent::Type,
-		[&](spty::Event<GameEventType>& e)
-		{
-			ScoreEvent score = spty::EventCast<ScoreEvent>(e);
-			_score += score.amount;
-			e.handle();
-		}
-	);
-
 	_music = new spty::MusicBuffer("Data/Sounds/crikey.wav");
 	_music->SetGain(0.0005f);
 	_music->Play();
@@ -35,6 +35,8 @@ Game::Game()
 	_soundPlayer = new spty::SoundEffectsPlayer();
 	_newWaveSound = spty::SoundEffectsLibrary::load("Data/Sounds/bounce.wav");
 	_endWaveSound = spty::SoundEffectsLibrary::load("Data/Sounds/bounce.wav");
+
+	//_renderer->_physicsDebug = true;
 }
 
 //Destructor

@@ -36,6 +36,8 @@ namespace spty {
 	public:
 		Shader _postProcessShader;
 
+		bool _physicsDebug = false;
+
 	private:
 
 		Shader _depthShader, _geometryShader, _lightingShader, _debugDepthShader;
