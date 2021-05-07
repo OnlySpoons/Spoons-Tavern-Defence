@@ -1,4 +1,13 @@
 #pragma once
+/*
+Group Name: OnlySpoons
+
+Members: Martin Harvey(B00329330), Thomas Cole(B00269678) & Harry Durham(B00347454)
+
+We declare that the following code was produced by OnlySpoons as a group assignment for the CGT Group Project module and that it is our own work.
+
+We are aware of the penalties incurred by submitting in full or in part work that is not our own and that was developed by third parties that are not appropriately acknowledged.
+*/
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <GLFW/glfw3.h>
@@ -7,66 +16,45 @@
 #include "MouseCode.h"
 
 namespace spty {
-
-	//A promise that the Window class will exist (avoids include loop)
 	class Window;
-	class Actor;
 
-	//A static class to handle user input (Must be static for callback functions to work correctly).
+	//A static class to handle user input
 	class Input
 	{
-
-		//Member variables
+	//Variables
 	private:
-		//Reference to the window
-		static Window* _window;
+		static Window* window_;
 
-		static glm::vec2 _scrollOffset;
-		static glm::vec2 _lastPos;
-		static bool firstMouse;
+		static glm::vec2 scrollOffset_;
+		static glm::vec2 lastPos_;
+		static bool firstMouse_;
 
-		//Functions
+	//Functions
 	public:
-
-		//Functions to set member variables
-		static void setWindow(Window* window);
-
-		//Functions to check if window is set
-		static void checkWindow();
-
-		//Functions to check for key input
 		static bool isKeyPressed(KeyCode key);
 		static bool isKeyHeld(KeyCode key);
 		static bool isKeyReleased(KeyCode key);
 
-		//Functions to get mouse button input
 		static bool isButtonPressed(MouseCode button);
 		static bool isButtonHeld(MouseCode button);
 		static bool isButtonReleased(MouseCode button);
 
-		//Function to get cursor positon
 		static glm::vec2 getCursorPos();
-
-		//Function to get cursor offset
 		static glm::vec2 getCursorOffset();
+		static glm::vec2 getScrollOffset() { return scrollOffset_; }
 
-		//Function to get scroll offset
-		static glm::vec2 getScrollOffset();
-
-		//TODO: remove this function when events are implimented
-		//Function to close the window
+		static void setWindow(Window* window) { window_ = window; }
+		static void clearWindow() { window_ = nullptr; }
+		static void checkWindow() { if (!window_) throw "Input has no assigned Window"; }
 		static void closeWindow();
 
-		//Function to clear the window pointer
-		static void clearWindow();
 
 		//Window resizing callback
-		static void framebufferSizeCallback(GLFWwindow* window, int width, int height);
+		static void framebufferSizeCallback(GLFWwindow* window, int width, int height)
+		{ glViewport(0, 0, width, height); }
 
-		//Callback function to handle scroll wheel usage
-		static void scrollCallback(GLFWwindow* window, double xOffset, double yOffset);
-
-		//Callback function to handle mouse
-		//static void mouseCallback(GLFWwindow* window, double xpos, double ypos);
+		//Scroll wheel usage callback
+		static void scrollCallback(GLFWwindow* window, double xOffset, double yOffset)
+		{ scrollOffset_ = glm::vec2((float)xOffset, (float)yOffset); }
 	};
 }

@@ -1,7 +1,17 @@
 #pragma once
+/*
+Group Name: OnlySpoons
+
+Members: Martin Harvey(B00329330), Thomas Cole(B00269678) & Harry Durham(B00347454)
+
+We declare that the following code was produced by OnlySpoons as a group assignment for the CGT Group Project module and that it is our own work.
+
+We are aware of the penalties incurred by submitting in full or in part work that is not our own and that was developed by third parties that are not appropriately acknowledged.
+*/
 #include <random>
 
 #include "PhysicsEntity.h"
+
 #include "SoundEffectsPlayer.h"
 #include "SoundEffectsLibrary.h"
 
@@ -23,11 +33,12 @@ class Zombie : public spty::PhysicsEntity
 	static constexpr float TARGET_RADIUS = 5.0f, SLOW_RADIUS = 60.0f;
 	static constexpr float WEIGHT = 0.5f;
 
-	std::mt19937 _seed;
+	std::mt19937 seed_;
 
+//Variables
 public:
-	int _health, _damage;
-	float _attackCooldown;
+	int health_ = BASE_HEALTH, damage_ = BASE_DAMAGE;
+	float _attackCooldown = ATTACK_COOLDOWN;
 	float _attackCooldownAccum = 0.0f;
 
 	glm::vec3 _velocity = glm::vec3(0.0f);
@@ -35,14 +46,18 @@ public:
 
 	BlendedSteering _blendedAI;
 
-	spty::SoundEffectsPlayer* _soundPlayer;
-	int _moanSound, _hitSound, _deathSound;
+	spty::SoundEffectsPlayer* soundPlayer_;
+	spty::SoundEffect _moanSound, _hitSound, deathSound_;
 	bool isMoaning = false;
 
-	float _drawOffset;
+	float _drawOffset = 0.65f;
 
+//Functions
+public:
+	//Constructor
 	Zombie(const spty::Transform& data, spty::Model* model, const spty::Transform& target, std::mt19937 seed, int wave);
 
+	//Destructor
 	virtual ~Zombie();
 
 	virtual void draw(const spty::Shader& shader, glm::mat4 projection, glm::mat4 view, glm::mat4 model, spty::PassType pass) override;
@@ -50,8 +65,6 @@ public:
 	void update(float& deltaTime) override;
 
 	void move(SteeringOutput movementAI);
-
 	void attack();
-
 	void die();
 };

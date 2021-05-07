@@ -1,7 +1,7 @@
 #include "BlendedSteering.h"
 
 BlendedSteering::BlendedSteering(std::vector<BehaviourAndWeight> behvaiours, float acceleration, float angularAcceleration)
-	: _behaviours(behvaiours), _maxAcceleration(acceleration), _maxAngularAcceleration(angularAcceleration)
+	: behaviours_(behvaiours), maxAcceleration_(acceleration), maxAngularAcceleration_(angularAcceleration)
 {
 }
 
@@ -9,27 +9,26 @@ SteeringOutput BlendedSteering::getSteering() const
 {
 	SteeringOutput result{};
 
-	for (auto& bw : _behaviours)
-		result += bw._weight * std::visit([](auto& b) { return b.getSteering(); }, bw._behaviour);
+	for (auto& bw : behaviours_)
+		result += bw.Weight * std::visit([](auto&& elem){ return elem.getSteering(); }, bw.Behaviour);
 
-	if (result._linear.length() > _maxAcceleration)
+	if (result.Linear.length() > maxAcceleration_)
 	{
-		glm::normalize(result._linear);
-		result._linear *= _maxAcceleration;
+		glm::normalize(result.Linear);
+		result.Linear *= maxAcceleration_;
 	}
 
-	float angularAcceleration = std::abs(result._angular);
-	if (angularAcceleration > _maxAngularAcceleration)
+	float angularAcceleration = std::abs(result.Angular);
+	if (angularAcceleration > maxAngularAcceleration_)
 	{
-		result._angular /= angularAcceleration;
-		result._angular *= _maxAngularAcceleration;
+		result.Angular /= angularAcceleration;
+		result.Angular *= maxAngularAcceleration_;
 	}
 
 	return result;
-	
 }
 
 glm::vec3 BlendedSteering::getTargetPosition() const
 {
-	return std::visit([](auto& b) { return b.getTargetPosition(); }, _behaviours[0]._behaviour);
+	return std::visit([](auto& b) { return b.getTargetPosition(); }, behaviours_[0].Behaviour);
 }

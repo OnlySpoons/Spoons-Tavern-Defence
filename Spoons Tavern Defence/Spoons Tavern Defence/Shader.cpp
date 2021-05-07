@@ -2,21 +2,16 @@
 
 namespace spty {
 
-	//Constructors
 	Shader::Shader()
-		: _id(0)
+		: id_(0)
 	{
 	}
 
 	Shader::Shader(std::string const&& vertexPath, std::string const&& fragmentPath, std::string const&& geometryPath)
 	{
 		//Retrieve vertex/fragment/geometry source code from filePath
-		std::string vertexCode;
-		std::string fragmentCode;
-		std::string geometryCode;
-		std::ifstream vShaderFile;
-		std::ifstream fShaderFile;
-		std::ifstream gShaderFile;
+		std::string vertexCode, fragmentCode, geometryCode;
+		std::ifstream vShaderFile, fShaderFile, gShaderFile;
 
 		//Ensure ifstream objects can throw exceptions
 		vShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
@@ -86,13 +81,13 @@ namespace spty {
 		}
 
 		//Shader program
-		_id = glCreateProgram();
-		glAttachShader(_id, vertex);
-		glAttachShader(_id, fragment);
+		id_ = glCreateProgram();
+		glAttachShader(id_, vertex);
+		glAttachShader(id_, fragment);
 		if (geometryPath != "")
-			glAttachShader(_id, geometry);
-		glLinkProgram(_id);
-		checkCompileErrors(_id, "PROGRAM");
+			glAttachShader(id_, geometry);
+		glLinkProgram(id_);
+		checkCompileErrors(id_, "PROGRAM");
 
 		//Delete the shaders
 		glDeleteShader(vertex);
@@ -104,67 +99,67 @@ namespace spty {
 	//Use the shader
 	void Shader::use() const
 	{
-		glUseProgram(_id);
+		glUseProgram(id_);
 	}
 
-	//Utility uniform functions
 	void Shader::setBool(const std::string& name, bool value) const
 	{
-		glUniform1i(glGetUniformLocation(_id, name.c_str()), (int)value);
+		glUniform1i(glGetUniformLocation(id_, name.c_str()), (int)value);
 	}
 
 	void Shader::setInt(const std::string& name, int value) const
 	{
-		glUniform1i(glGetUniformLocation(_id, name.c_str()), value);
+		glUniform1i(glGetUniformLocation(id_, name.c_str()), value);
 	}
 
 	void Shader::setFloat(const std::string& name, float value) const
 	{
-		glUniform1f(glGetUniformLocation(_id, name.c_str()), value);
+		glUniform1f(glGetUniformLocation(id_, name.c_str()), value);
 	}
 
 	void Shader::setVec2(const std::string& name, glm::vec2 value)
 	{
-		glUniform2fv(glGetUniformLocation(_id, name.c_str()), 1, glm::value_ptr(value));
+		glUniform2fv(glGetUniformLocation(id_, name.c_str()), 1, glm::value_ptr(value));
 	}
 
 	void Shader::setVec3(const std::string& name, glm::vec3 value) const
 	{
-		glUniform3fv(glGetUniformLocation(_id, name.c_str()), 1, glm::value_ptr(value));
+		glUniform3fv(glGetUniformLocation(id_, name.c_str()), 1, glm::value_ptr(value));
 	}
 
 	void Shader::setVec4(const std::string& name, glm::vec4 value) const
 	{
-		glUniform4fv(glGetUniformLocation(_id, name.c_str()), 1, glm::value_ptr(value));
+		glUniform4fv(glGetUniformLocation(id_, name.c_str()), 1, glm::value_ptr(value));
 	}
 
 	void Shader::setMat2(const std::string& name, glm::mat2 value) const
 	{
-		glUniformMatrix2fv(glGetUniformLocation(_id, name.c_str()), 1, GL_FALSE, glm::value_ptr(value));
+		glUniformMatrix2fv(glGetUniformLocation(id_, name.c_str()), 1, GL_FALSE, glm::value_ptr(value));
 	}
 
 	void Shader::setMat3(const std::string& name, glm::mat3 value) const
 	{
-		glUniformMatrix3fv(glGetUniformLocation(_id, name.c_str()), 1, GL_FALSE, glm::value_ptr(value));
+		glUniformMatrix3fv(glGetUniformLocation(id_, name.c_str()), 1, GL_FALSE, glm::value_ptr(value));
 	}
 
 	void Shader::setMat4(const std::string& name, glm::mat4 value) const
 	{
-		glUniformMatrix4fv(glGetUniformLocation(_id, name.c_str()), 1, GL_FALSE, glm::value_ptr(value));
+		glUniformMatrix4fv(glGetUniformLocation(id_, name.c_str()), 1, GL_FALSE, glm::value_ptr(value));
 	}
 
-	//Check compilation errors for shader
 	void Shader::checkCompileErrors(GLuint shader, std::string type) const
 	{
 		GLint success;
 		GLchar infoLog[1024];
+		std::string seperator = "\n -- --------------------------------------------------- -- ";
+
 		if (type != "PROGRAM")
 		{
 			glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
 			if (!success)
 			{
 				glGetShaderInfoLog(shader, 1024, NULL, infoLog);
-				std::cout << "ERROR::" << type << "_SHADER_COMPILATION_ERROR\n" << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
+				std::cout << "ERROR::" << type << "_SHADER_COMPILATION_ERROR\n" << infoLog << seperator  << std::endl;
 			}
 		}
 		else
@@ -173,7 +168,7 @@ namespace spty {
 			if (!success)
 			{
 				glGetProgramInfoLog(shader, 1024, NULL, infoLog);
-				std::cout << "ERROR::PROGRAM_LINKING_ERROR\n" << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
+				std::cout << "ERROR::PROGRAM_LINKING_ERROR\n" << infoLog << seperator << std::endl;
 			}
 		}
 	}

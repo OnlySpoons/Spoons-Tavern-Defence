@@ -1,17 +1,4 @@
 #pragma once
-#include <glad/glad.h>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <assimp/Importer.hpp>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
-
-
-#include "stb_image.h"
-
-#include "Shader.h"
-#include "Mesh.h"
-
 #include <string>
 #include <fstream>
 #include <sstream>
@@ -19,55 +6,51 @@
 #include <map>
 #include <vector>
 
-namespace spty {
+#include <glad/glad.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+
+#include "stb_image.h"
+
+#include "Shader.h"
+#include "Mesh.h"
+
+namespace spty {
 	class Model
 	{
-		//Variables
+	//Variables
 	private:
-		//Model Data
-		std::vector<Texture> _texturesLoaded;	//Stores loaded textures
-		std::vector<Mesh> _meshes;				//Stores loaded meshes
-		std::vector<glm::mat4> _transforms;		//Stores node transformations
+		std::vector<Texture> texturesLoaded_;
+		std::vector<Mesh> meshes_;
+		std::vector<glm::mat4> transforms_;
 
-		std::string _directory;
-		bool _gammaCorrection;
+		std::string directory_;
+		bool gammaCorrection_;
 
-		//Functions
+	//Functions
 	public:
-
 		//Constructors
 		Model();
-
 		Model(std::string const& path, bool gamma = false);
 
-		//Render the model
 		void draw(const Shader shader, const glm::mat4& model) const;
 
-		//Return a trimesh for collision detection
 		CompoundCollider* getCompoundShape() const;
 
 	private:
-
-		//Converts aiMatrix4x4 to glm::mat4
 		inline glm::mat4 aiMatrix4x4ToGlm(const aiMatrix4x4& from);
-
-		//Converts aiVector3D to glm::vec3
 		inline glm::vec3 aiVector3DToGlm(const aiVector3D& from);
 
-		//Loads a model from file with ASSIMP
 		void loadModel(std::string const& path);
 
-		//Processes nodes recursively
 		void processNode(aiNode* node, const aiScene* scene);
-
-		//Processes the mesh
 		Mesh processMesh(aiMesh* mesh, const aiScene* scene);
 
-		//Load material textures
 		std::vector<Texture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName);
-
-		//Loads a texture from a file path
 		unsigned int TextureFromFile(const char* path, bool gamma = false);
 	};
 }

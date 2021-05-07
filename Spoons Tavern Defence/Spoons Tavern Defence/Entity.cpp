@@ -5,26 +5,25 @@ namespace spty {
 	Entity::Entity(const Transform& data,
 		Model* model)
 		: GameObject(data),
-		_model(model != nullptr ? model : new Model())
+		model_(model != nullptr ? model : new Model())
 	{
 	}
 
 	Entity::~Entity()
 	{
-		_model = nullptr;
+		model_ = nullptr;
 	}
 
 	void Entity::draw(const Shader& shader, glm::mat4 projection, glm::mat4 view, glm::mat4 model, PassType pass)
 	{
-		if (_isEnabled)
-		{
-			shader.use();
-			shader.setMat4("projection", projection);
-			shader.setMat4("view", view);
+		if (!isEnabled_) return;
 
-			model = _transform.getMatrix();
+		shader.use();
+		shader.setMat4("projection", projection);
+		shader.setMat4("view", view);
 
-			_model->draw(shader, model);
-		}
+		model = transform_.getMatrix();
+
+		model_->draw(shader, model);
 	}
 }

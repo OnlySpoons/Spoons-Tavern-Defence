@@ -5,90 +5,90 @@ namespace spty {
 	//Physics Material Constructors
 	PhysicsMaterial::PhysicsMaterial(float f, float b)
 	{
-		_friction = f;
-		_bounciness = b;
+		friction_ = f;
+		bounciness_ = b;
 	}
 	PhysicsMaterial::PhysicsMaterial() 
 	{
-		_friction = PhysicsConstants::FRICTION;
-		_bounciness = 0.0f;
+		friction_ = PhysicsConstants::FRICTION;
+		bounciness_ = 0.0f;
 	}
 
 	//Box Collider Constructors
 	BoxCollider::BoxCollider()
 	{ 
-		_size = glm::vec3(1.0f, 1.0f, 1.0f);
+		size_ = glm::vec3(1.0f, 1.0f, 1.0f);
 		generateShape();
 	}
 	BoxCollider::BoxCollider(glm::vec3 s)
 	{ 
-		_size = s;
+		size_ = s;
 		generateShape();
 	}
 
 	//Sphere Collider Constructors
 	SphereCollider::SphereCollider() 
 	{ 
-		_radius = 1.0f;
+		radius_ = 1.0f;
 		generateShape();
 	}
 	SphereCollider::SphereCollider(float r)
 	{ 
-		_radius = r;
+		radius_ = r;
 		generateShape();
 	}
 
+	//Capsule Collider Constructors
 	CapsuleCollider::CapsuleCollider()
 	{
-		_radius = 0.5f;
-		_height = 1.0f;
+		radius_ = 0.5f;
+		height_ = 1.0f;
 		generateShape();
 	}
 	CapsuleCollider::CapsuleCollider(float r, float h)
 	{
-		_radius = r;
-		_height = h;
+		radius_ = r;
+		height_ = h;
 		generateShape();
 	}
 
 	//Mesh Collider Constuctors
 	MeshCollider::MeshCollider()
 	{
-		_mesh = btTriangleMesh();
+		mesh_ = btTriangleMesh();
 		generateShape();
 	}
 	MeshCollider::MeshCollider(const btTriangleMesh& m)
 	{
-		_mesh = m;
+		mesh_ = m;
 		generateShape();
 	}
 
 	//Compound Collider Constructors
 	CompoundCollider::CompoundCollider()
 	{
-		_colliders = {};
-		_transforms = {};
+		colliders_ = {};
+		transforms_ = {};
 		generateShape();
 	}
 	CompoundCollider::CompoundCollider(const std::vector<Collider*>& colliders, const std::vector<glm::mat4>& transforms)
 	{
-		_colliders = colliders;
-		_transforms = transforms;
+		colliders_ = colliders;
+		transforms_ = transforms;
 		generateShape();
 	}
 
-	//Generate shape functions
-	void BoxCollider::generateShape() { _shape = new btBoxShape(Physics::glmVec3TobtVector3(_size)); }
-	void SphereCollider::generateShape() { _shape = new btSphereShape(_radius); }
-	void CapsuleCollider::generateShape() { _shape = new btCapsuleShape(_radius, _height); }
+
+	void BoxCollider::generateShape() { shape_ = new btBoxShape(Physics::glmVec3TobtVector3(size_)); }
+	void SphereCollider::generateShape() { shape_ = new btSphereShape(radius_); }
+	void CapsuleCollider::generateShape() { shape_ = new btCapsuleShape(radius_, height_); }
 
 	void MeshCollider::generateShape()
 	{
-		btConvexTriangleMeshShape convexShape = btConvexTriangleMeshShape(&_mesh);
+		btConvexTriangleMeshShape convexShape = btConvexTriangleMeshShape(&mesh_);
 		btShapeHull* hull = new btShapeHull(&convexShape);
 		btScalar margin = convexShape.getMargin();
 		hull->buildHull(margin);
-		/*convexShape->setUserPointer(hull);*/
 
 		btConvexHullShape* convexHull = new btConvexHullShape();
 		for (int i = 0; i < hull->numVertices(); i++)
@@ -97,34 +97,27 @@ namespace spty {
 			convexHull->addPoint(point);
 		}
 
-		_shape = convexHull;
+		shape_ = convexHull;
 		delete hull;
 	}
 
 	void CompoundCollider::generateShape()
 	{
 		btCompoundShape* tmpShape = new btCompoundShape();
-		for (int i = 0; i < _colliders.size(); i++)
+		for (int i = 0; i < colliders_.size(); i++)
 		{
 			btTransform trans;
-			trans.setFromOpenGLMatrix(glm::value_ptr(_transforms[i]));
-			tmpShape->addChildShape(trans, _colliders[i]->getShape());
+			trans.setFromOpenGLMatrix(glm::value_ptr(transforms_[i]));
+			tmpShape->addChildShape(trans, colliders_[i]->getShape());
 		}
 
-		_shape = tmpShape;
+		shape_ = tmpShape;
 	}
-
-	//Getters, Setters and Adders
-	void BoxCollider::setSize(glm::vec3 s) { _size = s; generateShape();  }
-	glm::vec3 BoxCollider::getSize() { return _size; }
-
-	void SphereCollider::setRadius(float r) { _radius = r; generateShape(); }
-	float SphereCollider::getRadius() { return _radius; }
 
 	void CompoundCollider::addCollider(Collider* collider, glm::mat4 transform)
 	{
-		_colliders.emplace_back(collider);
-		_transforms.push_back(transform);
+		colliders_.emplace_back(collider);
+		transforms_.push_back(transform);
 	}
 	
 }

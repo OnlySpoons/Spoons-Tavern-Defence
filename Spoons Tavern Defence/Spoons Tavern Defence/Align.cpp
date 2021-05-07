@@ -1,12 +1,10 @@
 #include "Align.h"
 
 Align::Align(const spty::Transform& character, const spty::Transform& target,
-	float angularAcceleration, float rotation,
-	float targetRadius, float slowRadius
-)	
-	: _character(character), _target(target),
-	_maxAngularAcceleration(angularAcceleration), _maxRotation(rotation),
-	_targetRadius(targetRadius), _slowRadius(slowRadius)
+	float angularAcceleration, float rotation, float targetRadius, float slowRadius)
+	: character_(character), target_(target),
+	maxAngularAcceleration_(angularAcceleration), maxRotation_(rotation),
+	targetRadius_(targetRadius), slowRadius_(slowRadius)
 {
 }
 
@@ -14,32 +12,26 @@ SteeringOutput Align::getSteering() const
 {
 	SteeringOutput result{};
 
-	float rotation = _target.getYaw() - _character.getYaw();
+	float rotation = target_.getYaw() - character_.getYaw();
 
 	rotation = std::abs(rotation) > spty::PI ? rotation - 2 * spty::PI : rotation;
 	float rotationSize = std::abs(rotation);
-	float targetRotation;
 
-	if (rotationSize < _targetRadius)
-		return result;
-
-	if (rotationSize > _slowRadius)
-		targetRotation = _maxRotation;
-	else
-		targetRotation = _maxRotation * rotationSize / _slowRadius;
+	float targetRotation =
+		rotationSize <= slowRadius_ ?
+		maxRotation_ * rotationSize / slowRadius_
+		: maxRotation_;
 
 	targetRotation *= rotation / rotationSize;
 
 	//TODO: figure out how to add the commented section
-	result._angular = targetRotation - _target.getAngularVelocity() / _timeToTarget;
+	float temp = targetRotation - target_.getAngularVelocity() / timeToTarget_;
 
-	float angularAccel = std::abs(result._angular);
-	if (angularAccel > _maxAngularAcceleration)
-	{
-		result._angular /= angularAccel;
-		result._angular *= _maxAngularAcceleration;
-	}
+	result.Angular = 
+		abs(temp) > maxAngularAcceleration_ ?
+		temp / abs(temp) * maxAngularAcceleration_
+		: temp;
 
-	result._linear = glm::vec3(0.0f);
+	result.Linear = glm::vec3(0.0f);
 	return result;
 }

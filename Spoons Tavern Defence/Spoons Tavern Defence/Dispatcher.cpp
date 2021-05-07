@@ -3,11 +3,8 @@
 #include "GameEventType.h"	
 
 namespace spty {
-
-	using sptyDispatch = Dispatcher<EventType>;
-	std::map < EventType, std::vector< sptyDispatch::EventFunc > >sptyDispatch::_observers;
-
-	using gameDispatch = Dispatcher<GameEventType>;
-	std::map<GameEventType, std::vector<gameDispatch::EventFunc> > gameDispatch::_observers;
-
+	using EngineDispatcher = Dispatcher< EventType >;
+	std::map < EventType, std::vector< EngineDispatcher::EventFunc > > EngineDispatcher::observers_;
 }
+	using GameDispatcher = spty::Dispatcher<GameEventType>;
+	std::map< GameEventType, std::vector< GameDispatcher::EventFunc > > GameDispatcher::observers_;

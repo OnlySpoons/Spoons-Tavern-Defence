@@ -2,84 +2,44 @@
 
 namespace spty {
 
-	btBroadphaseInterface* Physics::m_pBroadphase = nullptr;
-	btCollisionConfiguration* Physics::m_pCollisionConfiguration = nullptr;
-	btCollisionDispatcher* Physics::m_pDispatcher = nullptr;
-	btConstraintSolver* Physics::m_pSolver = nullptr;
-	btDynamicsWorld* Physics::m_pWorld = nullptr;
+	btBroadphaseInterface* Physics::pBroadphase_ = nullptr;
+	btCollisionConfiguration* Physics::pCollisionConfiguration_ = nullptr;
+	btCollisionDispatcher* Physics::pDispatcher_ = nullptr;
+	btConstraintSolver* Physics::pSolver_ = nullptr;
+	btDynamicsWorld* Physics::pWorld_ = nullptr;
 
-	float Physics::_gravity = PhysicsConstants::GRAVITY;
+	float Physics::gravity_ = PhysicsConstants::GRAVITY;
 
 	void Physics::init(float G)
 	{
-		_gravity = PhysicsConstants::GRAVITY;
-
+		gravity_ = PhysicsConstants::GRAVITY;
 
 		// create the collision configuration
-		m_pCollisionConfiguration = new btDefaultCollisionConfiguration();
+		pCollisionConfiguration_ = new btDefaultCollisionConfiguration();
 		// create the dispatcher
-		m_pDispatcher = new btCollisionDispatcher(m_pCollisionConfiguration);
+		pDispatcher_ = new btCollisionDispatcher(pCollisionConfiguration_);
 		// create the broadphase
-		m_pBroadphase = new btDbvtBroadphase();
+		pBroadphase_ = new btDbvtBroadphase();
 		// create the constraint solver
-		m_pSolver = new btSequentialImpulseConstraintSolver();
+		pSolver_ = new btSequentialImpulseConstraintSolver();
 		// create the world
-		m_pWorld = new btDiscreteDynamicsWorld(m_pDispatcher, m_pBroadphase, m_pSolver, m_pCollisionConfiguration);
-		setGravity(_gravity);
+		pWorld_ = new btDiscreteDynamicsWorld(pDispatcher_, pBroadphase_, pSolver_, pCollisionConfiguration_);
+		setGravity(gravity_);
 	}
 
 	void Physics::cleanup()
 	{
-		delete m_pWorld;
-		delete m_pSolver;
-		delete m_pBroadphase;
-		delete m_pDispatcher;
-		delete m_pCollisionConfiguration;
-	}
-
-	void Physics::addBulletBody(btRigidBody* r)
-	{
-		m_pWorld->addRigidBody(r);
-	}
-
-	void Physics::removeBulletBody(btRigidBody* r)
-	{
-		m_pWorld->removeRigidBody(r);
-	}
-
-	void Physics::setDebugDrawer(BulletDebugDrawer* debugDrawer)
-	{
-		m_pWorld->setDebugDrawer(debugDrawer);
-	}
-
-	void Physics::debugDraw()
-	{
-
-		m_pWorld->debugDrawWorld();
-	}
-
-	void Physics::setGravity(float g)
-	{
-		_gravity = g;
-
-		m_pWorld->setGravity(btVector3(0, -_gravity, 0));
-	}
-
-	float Physics::getGravity()
-	{
-		return _gravity;
-	}
-
-	glm::vec3 Physics::getGravityVector()
-	{
-		return glm::vec3(0.0f, -_gravity, 0.0f);
+		delete pWorld_;
+		delete pSolver_;
+		delete pBroadphase_;
+		delete pDispatcher_;
+		delete pCollisionConfiguration_;
 	}
 
 	void Physics::Update(float& deltaTime, const Scene& scene)
 	{
-		m_pWorld->stepSimulation(deltaTime);
-
-		scene.physics();
+		pWorld_->stepSimulation(deltaTime);
+		scene.physicsUpdate();
 	}
 
 	RayCallback Physics::Raycast(const glm::vec3& start, const glm::vec3& end)
@@ -87,9 +47,34 @@ namespace spty {
 		RayCallback rayCallback(glmVec3TobtVector3(start), glmVec3TobtVector3(end));
 
 		// Perform Raycast
-		m_pWorld->rayTest(glmVec3TobtVector3(start), glmVec3TobtVector3(end), rayCallback);
-		
+		pWorld_->rayTest(glmVec3TobtVector3(start), glmVec3TobtVector3(end), rayCallback);
+
 		return rayCallback;
 	}
 
+	void Physics::addBulletBody(btRigidBody* r)
+	{
+		pWorld_->addRigidBody(r);
+	}
+
+	void Physics::removeBulletBody(btRigidBody* r)
+	{
+		pWorld_->removeRigidBody(r);
+	}
+
+	void Physics::setGravity(float g)
+	{
+		gravity_ = g;
+		pWorld_->setGravity(btVector3(0, -gravity_, 0));
+	}
+
+	void Physics::setDebugDrawer(BulletDebugDrawer* debugDrawer)
+	{
+		pWorld_->setDebugDrawer(debugDrawer);
+	}
+
+	void Physics::debugDraw()
+	{
+		pWorld_->debugDrawWorld();
+	}
 }

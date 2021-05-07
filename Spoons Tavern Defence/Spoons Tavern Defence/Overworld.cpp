@@ -1,7 +1,8 @@
 #include "Overworld.h"
 
 Overworld::Overworld()
-	: Scene(), _worldModel( new spty::Model("Data/Models/SyntyStudios/PolygonHeist/Main_Scene_V1.2.4.fbx") )
+	: Scene(),
+	worldModel_( new spty::Model("Data/Models/SyntyStudios/PolygonHeist/Main_Scene_V1.2.6.fbx") )
 {
 	spty::Skybox* sky = new spty::Skybox(
 		spty::Transform(),
@@ -22,16 +23,19 @@ Overworld::Overworld()
 
 	spty::PhysicsEntity* demo = new spty::PhysicsEntity(
 		spty::Transform(
-			glm::vec3(0.0f), //position
-			glm::vec3(0.0f), //rotation
-			glm::vec3(0.005f) //scale
+			glm::vec3(0.0f),	//position
+			glm::vec3(0.0f),	//rotation
+			glm::vec3(0.005f)	//scale
 		),
-		_worldModel
+		worldModel_
 	);
 
-	demo->enable(); //enable the object to be drawn
-
+	demo->enable();
 	demo->setKinematic(true);
-
 	addObject(demo);
+}
+
+Overworld::~Overworld()
+{
+	delete worldModel_;
 }

@@ -1,21 +1,30 @@
 #pragma once
+/*
+Group Name: OnlySpoons
+
+Members: Martin Harvey(B00329330), Thomas Cole(B00269678) & Harry Durham(B00347454)
+
+We declare that the following code was produced by OnlySpoons as a group assignment for the CGT Group Project module and that it is our own work.
+
+We are aware of the penalties incurred by submitting in full or in part work that is not our own and that was developed by third parties that are not appropriately acknowledged.
+*/
 #include "Transform.h"
 #include "SteeringOutput.h"
 
 class Seek
 {
+//Variables
 private:
-	const spty::Transform &_character, &_target;
+	const spty::Transform &character_, &target_;
 
-	float _maxAcceleration;
+	float maxAcceleration_;
 
+//Functions
 public:
-
-	Seek();
-
+	//Constructor
 	Seek(const spty::Transform& character, const spty::Transform& target, float maxAcceleration);
 
 	SteeringOutput getSteering() const;
 
-	glm::vec3 getTargetPosition() const { return _target.getPosition(); }
+	glm::vec3 getTargetPosition() const { return target_.getPosition(); }
 };

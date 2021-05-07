@@ -2,7 +2,7 @@
 
 namespace spty {
 
-	std::vector<ALuint> SoundEffectsLibrary::_soundEffectBuffers{};
+	std::vector<ALuint> SoundEffectsLibrary::soundEffectBuffers_{};
 
 	ALuint SoundEffectsLibrary::load(const char* filename)
 	{
@@ -82,21 +82,21 @@ namespace spty {
 			return 0;
 		}
 
-		_soundEffectBuffers.push_back(buffer);  // add to the list of known buffers
+		soundEffectBuffers_.push_back(buffer);  // add to the list of known buffers
 
 		return buffer;
 	}
 
 	bool SoundEffectsLibrary::unLoad(const ALuint& buffer)
 	{
-		auto it = _soundEffectBuffers.begin();
-		while (it != _soundEffectBuffers.end())
+		auto it = soundEffectBuffers_.begin();
+		while (it != soundEffectBuffers_.end())
 		{
 			if (*it == buffer)
 			{
 				alDeleteBuffers(1, &*it);
 
-				it = _soundEffectBuffers.erase(it);
+				it = soundEffectBuffers_.erase(it);
 
 				return true;
 			}
@@ -109,12 +109,12 @@ namespace spty {
 
 	void SoundEffectsLibrary::clearBuffers()
 	{
-		_soundEffectBuffers.clear();
+		soundEffectBuffers_.clear();
 	}
 
 	void SoundEffectsLibrary::deleteBuffers()
 	{
-		alDeleteBuffers((ALsizei)_soundEffectBuffers.size(), _soundEffectBuffers.data());
+		alDeleteBuffers((ALsizei)soundEffectBuffers_.size(), soundEffectBuffers_.data());
 
 		clearBuffers();
 	}

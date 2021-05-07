@@ -3,7 +3,7 @@
 namespace spty {
 
 	RigidBody::RigidBody(const Transform& transform, Collider* col)
-		: _collider(col)
+		: collider_(col)
 	{
 		btDefaultMotionState* motion = new btDefaultMotionState(
 			btTransform(
@@ -16,45 +16,44 @@ namespace spty {
 			)
 		);
 
-		_collider->getShape()->setLocalScaling( Physics::glmVec3TobtVector3( transform.getScale() ) );
+		collider_->getShape()->setLocalScaling( Physics::glmVec3TobtVector3( transform.getScale() ) );
 
 		//Construct
-		btRigidBody::btRigidBodyConstructionInfo construction(_mass, motion, _collider->_shape, Physics::glmVec3TobtVector3(_inertia));
-		_body = new btRigidBody(construction);
+		btRigidBody::btRigidBodyConstructionInfo construction(mass_, motion, collider_->shape_, Physics::glmVec3TobtVector3(inertia_));
+		body_ = new btRigidBody(construction);
 
-		_body->setActivationState(4);
+		body_->setActivationState(4);
 
-		//TODO: Make this an event
 		//Add to the bullet world
-		Physics::addBulletBody(_body);
-		_body->setFriction(0.2f);
+		Physics::addBulletBody(body_);
+		body_->setFriction(0.2f);
 	}
 
 	RigidBody::~RigidBody()
 	{
-		delete _body->getMotionState();
-		delete _collider;
+		delete body_->getMotionState();
+		delete collider_;
 
-		Physics::removeBulletBody(_body);
-		delete _body;
+		Physics::removeBulletBody(body_);
+		delete body_;
 	}
 
 	void spty::RigidBody::setMass(float m)
 	{
-		_mass = m;
-		_body->setMassProps(_mass, Physics::glmVec3TobtVector3(_inertia));
+		mass_ = m;
+		body_->setMassProps(mass_, Physics::glmVec3TobtVector3(inertia_));
 	}
 
 	void spty::RigidBody::setForce(glm::vec3 f)
 	{
-		_inertia = f;
-		_body->setMassProps(_mass, Physics::glmVec3TobtVector3(_inertia));
+		inertia_ = f;
+		body_->setMassProps(mass_, Physics::glmVec3TobtVector3(inertia_));
 	}
 
 	void spty::RigidBody::setKinematic(bool val)
 	{
-		_kinematic = val; 
-		if (_kinematic)
+		kinematic_ = val; 
+		if (kinematic_)
 			setMass(0);
 		else
 			setMass(1);
@@ -62,19 +61,19 @@ namespace spty {
 
 	void RigidBody::setLinearDamping(float val)
 	{
-		_body->setDamping(val, _body->getAngularDamping());
+		body_->setDamping(val, body_->getAngularDamping());
 	}
 
 	void RigidBody::move(glm::vec3 direction)
 	{
-		direction.y += _body->getLinearVelocity().y();
-		_body->setLinearVelocity(Physics::glmVec3TobtVector3(direction));
+		direction.y += body_->getLinearVelocity().y();
+		body_->setLinearVelocity(Physics::glmVec3TobtVector3(direction));
 	}
 
 	btTransform spty::RigidBody::getWorldTransform()
 	{
 		btTransform result;
-		_body->getMotionState()->getWorldTransform(result);
+		body_->getMotionState()->getWorldTransform(result);
 		return result;
 	}
 
@@ -92,23 +91,23 @@ namespace spty {
 
 	glm::vec3 RigidBody::getBulletInertia()
 	{
-		return _inertia;
+		return inertia_;
 	}
 
 	void RigidBody::calculateLocalInertia()
 	{
 		btVector3 localInertia;
-		_collider->_shape->calculateLocalInertia(_mass, localInertia);
-		_inertia = Physics::btVector3ToglmVec3(localInertia);
+		collider_->shape_->calculateLocalInertia(mass_, localInertia);
+		inertia_ = Physics::btVector3ToglmVec3(localInertia);
 	}
 
 	void RigidBody::disableGravity()
 	{
-		_body->setGravity({ 0.0f, 0.0f, 0.0f });
+		body_->setGravity({ 0.0f, 0.0f, 0.0f });
 	}
 
 	void RigidBody::enableGravity()
 	{
-		_body->setGravity( Physics::glmVec3TobtVector3( Physics::getGravityVector() ) );
+		body_->setGravity( Physics::glmVec3TobtVector3( Physics::getGravityVector() ) );
 	}
 }

@@ -4,107 +4,106 @@ namespace spty {
 
 	SoundEffectsPlayer::SoundEffectsPlayer()
 	{
-		alGenSources(1, &_source);
-		alSourcei(_source, AL_BUFFER, _buffer);
-		
-		alSourcef(_source, AL_ROLLOFF_FACTOR, 6.0f);
-		alSourcef(_source, AL_REFERENCE_DISTANCE, 6.0f);
-		alSourcef(_source, AL_MAX_DISTANCE, 50.0f);
+		alGenSources(1, &source_);
+		alSourcei(source_, AL_BUFFER, buffer_);
+
+		alSourcef(source_, AL_ROLLOFF_FACTOR, 6.0f);
+		alSourcef(source_, AL_REFERENCE_DISTANCE, 6.0f);
+		alSourcef(source_, AL_MAX_DISTANCE, 50.0f);
 
 		AL_CheckAndThrow();
 	}
 
 	SoundEffectsPlayer::SoundEffectsPlayer(glm::vec3 position, glm::vec3 velocity, bool loop)
 	{
-		alGenSources(1, &_source);
-		alSourcei(_source, AL_BUFFER, _buffer);
+		alGenSources(1, &source_);
+		alSourcei(source_, AL_BUFFER, buffer_);
 
-		alSourcef(_source, AL_ROLLOFF_FACTOR, 6.0f);
-		alSourcef(_source, AL_REFERENCE_DISTANCE, 6.0f);
-		alSourcef(_source, AL_MAX_DISTANCE, 50.0f);
+		alSourcef(source_, AL_ROLLOFF_FACTOR, 6.0f);
+		alSourcef(source_, AL_REFERENCE_DISTANCE, 6.0f);
+		alSourcef(source_, AL_MAX_DISTANCE, 50.0f);
 
 		AL_CheckAndThrow();
 
-		SetPosition(position);
-		SetVelocity(velocity);
-		SetLooping(loop);
+		setPosition(position);
+		setVelocity(velocity);
+		setLooping(loop);
 	}
 
 	SoundEffectsPlayer::~SoundEffectsPlayer()
 	{
-		Stop();
-		alSourcei(_source, AL_BUFFER, NULL);
-		alDeleteSources(1, &_source);
+		stop();
+		alSourcei(source_, AL_BUFFER, NULL);
+		alDeleteSources(1, &source_);
 	}
 
-	void SoundEffectsPlayer::Play(const ALuint& bufferToPlay)
+	void SoundEffectsPlayer::play(const ALuint& bufferToPlay)
 	{
 		if (isPlaying())
-			Stop();
-		SetBufferToPlay(bufferToPlay);
-		alSourcePlay(_source);
+			stop();
+		setBufferToPlay(bufferToPlay);
+		alSourcePlay(source_);
 		AL_CheckAndThrow();
 	}
 
-	void SoundEffectsPlayer::Stop()
+	void SoundEffectsPlayer::stop()
 	{
-		alSourceStop(_source);
+		alSourceStop(source_);
 		AL_CheckAndThrow();
 	}
 
-	void SoundEffectsPlayer::Pause()
+	void SoundEffectsPlayer::pause()
 	{
-		alSourcePause(_source);
+		alSourcePause(source_);
 		AL_CheckAndThrow();
 	}
 
-	void SoundEffectsPlayer::Resume()
+	void SoundEffectsPlayer::resume()
 	{
-		alSourcePlay(_source);
+		alSourcePlay(source_);
 		AL_CheckAndThrow();
 	}
 
-	void SoundEffectsPlayer::SetBufferToPlay(const ALuint& bufferToPlay)
+	void SoundEffectsPlayer::setBufferToPlay(const ALuint& bufferToPlay)
 	{
-		if (bufferToPlay != _buffer)
+		if (bufferToPlay != buffer_)
 		{
-			_buffer = bufferToPlay;
-			alSourcei(_source, AL_BUFFER, (ALint)_buffer);
+			buffer_ = bufferToPlay;
+			alSourcei(source_, AL_BUFFER, (ALint)buffer_);
 			AL_CheckAndThrow();
 		}
 	}
 
-	void SoundEffectsPlayer::SetLooping(const bool& loop)
+	void SoundEffectsPlayer::setLooping(const bool& loop)
 	{
-		alSourcei(_source, AL_LOOPING, (ALint)loop);
+		alSourcei(source_, AL_LOOPING, (ALint)loop);
 		AL_CheckAndThrow();
 	}
 
-	void SoundEffectsPlayer::SetPosition(glm::vec3 position)
+	void SoundEffectsPlayer::setPosition(glm::vec3 position)
 	{
-		alSource3f(_source, AL_POSITION, position.x, position.y, position.z);
+		alSource3f(source_, AL_POSITION, position.x, position.y, position.z);
 		AL_CheckAndThrow();
 	}
 
-	void SoundEffectsPlayer::SetVelocity(glm::vec3 velocity)
+	void SoundEffectsPlayer::setVelocity(glm::vec3 velocity)
 	{
-		alSource3f(_source, AL_VELOCITY, velocity.x, velocity.y, velocity.z);
+		alSource3f(source_, AL_VELOCITY, velocity.x, velocity.y, velocity.z);
 		AL_CheckAndThrow();
 	}
 
 	bool SoundEffectsPlayer::isPlaying()
 	{
 		ALint playState;
-		alGetSourcei(_source, AL_SOURCE_STATE, &playState);
+		alGetSourcei(source_, AL_SOURCE_STATE, &playState);
 		return (playState == AL_PLAYING);
 	}
 
 	bool SoundEffectsPlayer::isPlaying(const ALuint& buffer)
 	{
-		if (buffer == _buffer)
-		{
-			return isPlaying();
-		}
+		if (buffer != buffer_) return false;
+
+		return isPlaying();
 	}
 
 }

@@ -1,33 +1,29 @@
 #include "Model.h"
 
-namespace spty
-{
-	//Constructors
+namespace spty {
+
 	Model::Model()
-		: _gammaCorrection(false)
+		: gammaCorrection_(false)
 	{
 	}
 
-	Model::Model(std::string const& path, bool gamma) : _gammaCorrection(gamma)
+	Model::Model(std::string const& path, bool gamma) : gammaCorrection_(gamma)
 	{
 		loadModel(path);
 	}
 
-	//Render the model
 	void Model::draw(const Shader shader, const glm::mat4& model) const
 	{
-		if (!_meshes.empty())
+		if (meshes_.empty()) return;
+
+		for (unsigned int i = 0; i < meshes_.size(); i++)
 		{
-			for (unsigned int i = 0; i < _meshes.size(); i++)
-			{
-				//Modifies the model matrix for the mesh's relative position
-				shader.setMat4("model", model * _transforms[i]);
-				_meshes[i].Draw(shader);
-			}
+			//Modifies the model matrix for the mesh's relative position
+			shader.setMat4("model", model * transforms_[i]);
+			meshes_[i].draw(shader);
 		}
 	}
 
-	//Converts aiMatrix4x4 to glm::mat4
 	inline glm::mat4 Model::aiMatrix4x4ToGlm(const aiMatrix4x4& from)
 	{
 		glm::mat4 to;
@@ -38,7 +34,6 @@ namespace spty
 		return to;
 	}
 
-	//Converts aiVector3D to glm::vec3
 	inline glm::vec3 Model::aiVector3DToGlm(const aiVector3D& from)
 	{
 		glm::vec3 to;
@@ -48,7 +43,6 @@ namespace spty
 		return to;
 	}
 
-	//Loads a model from file with ASSIMP
 	void Model::loadModel(std::string const& path)
 	{
 		//Read file via ASSIMP
@@ -63,13 +57,12 @@ namespace spty
 		}
 
 		//Retrieve the directory path of the filepath
-		_directory = path.substr(0, path.find_last_of('/'));
+		directory_ = path.substr(0, path.find_last_of('/'));
 
 		//Process ASSIMP's root node recursively
 		processNode(scene->mRootNode, scene);
 	}
 
-	//Processes nodes recursively
 	void Model::processNode(aiNode* node, const aiScene* scene)
 	{
 		//Process each mesh at the current node
@@ -82,13 +75,14 @@ namespace spty
 				transform = navNode->mTransformation * transform;
 				navNode = navNode->mParent;
 			}
-			_transforms.push_back(aiMatrix4x4ToGlm(transform));
+			transforms_.push_back(aiMatrix4x4ToGlm(transform));
 
 			//The node object only contains indices to index the actual objects in the scene.
 			//The scene contains all the data, node is just to keep stuff organized (like relations between nodes)
 			aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-			_meshes.push_back(processMesh(mesh, scene));
+			meshes_.push_back(processMesh(mesh, scene));
 		}
+
 		//After all meshes are processed, process each child node
 		for (unsigned int i = 0; i < node->mNumChildren; i++)
 		{
@@ -96,7 +90,6 @@ namespace spty
 		}
 	}
 
-	//Processes the mesh
 	Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
 	{
 		//Data to fill
@@ -191,7 +184,6 @@ namespace spty
 		return Mesh(vertices, indices, textures);
 	}
 
-	//Load material textures
 	std::vector<Texture> Model::loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName)
 	{
 		std::vector<Texture> textures;
@@ -203,12 +195,12 @@ namespace spty
 			mat->GetTexture(type, i, &str);
 
 			bool skip = false;
-			for (unsigned int j = 0; j < _texturesLoaded.size(); j++)
+			for (unsigned int j = 0; j < texturesLoaded_.size(); j++)
 			{
 				//Check if texture was loaded before
-				if (std::strcmp(_texturesLoaded[j].path.data(), str.C_Str()) == 0)
+				if (std::strcmp(texturesLoaded_[j].path.data(), str.C_Str()) == 0)
 				{
-					textures.push_back(_texturesLoaded[j]);
+					textures.push_back(texturesLoaded_[j]);
 					skip = true;
 					break;
 				}
@@ -223,17 +215,16 @@ namespace spty
 				texture.path = str.C_Str();
 				textures.push_back(texture);
 				//Store it as texture loaded to avoid duplicates
-				_texturesLoaded.push_back(texture);
+				texturesLoaded_.push_back(texture);
 			}
 		}
 		return textures;
 	}
 
-	//Loads a texture from a file path
 	unsigned int Model::TextureFromFile(const char* path, bool gamma)
 	{
 		std::string filename = std::string(path);
-		filename = _directory + '/' + filename;
+		filename = directory_ + '/' + filename;
 
 		//Generate texture ID
 		unsigned int textureID;
@@ -282,11 +273,11 @@ namespace spty
 		//TODO: add trianlge mesh generation
 		std::vector<Collider*> colliders;
 
-		for (int i = 0; i < _meshes.size(); i++)
+		for (int i = 0; i < meshes_.size(); i++)
 		{
-			colliders.emplace_back(_meshes[i].getMeshCollider());
+			colliders.emplace_back(meshes_[i].getMeshCollider());
 		}
 
-		return new CompoundCollider(colliders, _transforms);
+		return new CompoundCollider(colliders, transforms_);
 	}
 }

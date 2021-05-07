@@ -2,21 +2,21 @@
 
 namespace spty {
 
-	SoundDevice* SoundDevice::_instance = nullptr;
+	SoundDevice* SoundDevice::instance_ = nullptr;
 
 	SoundDevice* SoundDevice::get()
 	{
 		init();
-		return _instance;
+		return instance_;
 	}
 
 	void SoundDevice::init()
 	{
-		if (_instance == nullptr)
-			_instance = new SoundDevice();
+		if (instance_ == nullptr)
+			instance_ = new SoundDevice();
 	}
 
-	glm::vec3 SoundDevice::GetLocation()
+	glm::vec3 SoundDevice::getLocation()
 	{
 		float x, y, z;
 		alGetListener3f(AL_POSITION, &x, &y, &z);
@@ -28,7 +28,7 @@ namespace spty {
 	/// Gets the current listener Orientation as 'at' and 'up'
 	/// </summary>
 	/// <param name="ori"> Return value: Must be a float array with 6 slots available ex: float myvar[6]</param>
-	float SoundDevice::GetOrientation()
+	float SoundDevice::getOrientation()
 	{
 		float ori;
 		alGetListenerfv(AL_ORIENTATION, &ori);
@@ -36,7 +36,7 @@ namespace spty {
 		return ori;
 	}
 
-	float SoundDevice::GetGain()
+	float SoundDevice::getGain()
 	{
 		float curr_gain;
 		alGetListenerf(AL_GAIN, &curr_gain);
@@ -44,18 +44,7 @@ namespace spty {
 		return curr_gain;
 	}
 
-	/// <summary>
-	/// Sets the Attunation Model.
-	/// </summary>
-	/// <param name="key">
-	///#define AL_INVERSE_DISTANCE                      0xD001
-	///#define AL_INVERSE_DISTANCE_CLAMPED              0xD002
-	///#define AL_LINEAR_DISTANCE                       0xD003
-	///#define AL_LINEAR_DISTANCE_CLAMPED               0xD004
-	///#define AL_EXPONENT_DISTANCE                     0xD005
-	///#define AL_EXPONENT_DISTANCE_CLAMPED             0xD006
-	/// </param>
-	void SoundDevice::SetAttunation(int key)
+	void SoundDevice::setAttunationModel(int key)
 	{
 		if (key < 0xD001 || key > 0xD006)
 			throw("bad attunation key");
@@ -64,13 +53,13 @@ namespace spty {
 		AL_CheckAndThrow();
 	}
 
-	void SoundDevice::SetLocation(glm::vec3 position)
+	void SoundDevice::setLocation(glm::vec3 position)
 	{
 		alListener3f(AL_POSITION, position.x, position.y, position.z);
 		AL_CheckAndThrow();
 	}
 
-	void SoundDevice::SetOrientation(glm::vec3 at, glm::vec3 up)
+	void SoundDevice::setOrientation(glm::vec3 at, glm::vec3 up)
 	{
 		std::vector<float> ori;
 		ori.push_back(at.x);
@@ -83,7 +72,7 @@ namespace spty {
 		AL_CheckAndThrow();
 	}
 
-	void SoundDevice::SetGain(const float& val)
+	void SoundDevice::setGain(const float& val)
 	{
 		// clamp between 0 and 5
 		float newVol = val;
@@ -99,24 +88,24 @@ namespace spty {
 	SoundDevice::SoundDevice()
 	{
 		//Create device
-		_alcDevice = alcOpenDevice(nullptr); //nullptr = current device
-		if (!_alcDevice)
+		alcDevice_ = alcOpenDevice(nullptr); //nullptr = current device
+		if (!alcDevice_)
 			throw("Failed to get sound device!");
 
 		//Create context
-		_alcContext = alcCreateContext(_alcDevice, nullptr);
-		if (!_alcContext)
+		alcContext_ = alcCreateContext(alcDevice_, nullptr);
+		if (!alcContext_)
 			throw("Failed to set sound context!");
 
 		//Make context current
-		if (!alcMakeContextCurrent(_alcContext))
+		if (!alcMakeContextCurrent(alcContext_))
 			throw("Failed to make sound context current!");
 
 		const ALCchar* name = nullptr;
-		if (alcIsExtensionPresent(_alcDevice, "ALC_ENUMERATE_ALL_EXT"))
-			name = alcGetString(_alcDevice, ALC_ALL_DEVICES_SPECIFIER);
-		if (!name || alcGetError(_alcDevice) != AL_NO_ERROR)
-			name = alcGetString(_alcDevice, ALC_DEVICE_SPECIFIER);
+		if (alcIsExtensionPresent(alcDevice_, "ALC_ENUMERATE_ALL_EXT"))
+			name = alcGetString(alcDevice_, ALC_ALL_DEVICES_SPECIFIER);
+		if (!name || alcGetError(alcDevice_) != AL_NO_ERROR)
+			name = alcGetString(alcDevice_, ALC_DEVICE_SPECIFIER);
 
 		printf("Opened %s\n", name);
 	}
@@ -124,11 +113,11 @@ namespace spty {
 	SoundDevice::~SoundDevice()
 	{
 		//Thomas: might not need this line
-		_alcDevice = alcGetContextsDevice(_alcContext);
+		alcDevice_ = alcGetContextsDevice(alcContext_);
 
 		alcMakeContextCurrent(nullptr);
-		alcDestroyContext(_alcContext);
-		alcCloseDevice(_alcDevice);
+		alcDestroyContext(alcContext_);
+		alcCloseDevice(alcDevice_);
 	}
 
 }

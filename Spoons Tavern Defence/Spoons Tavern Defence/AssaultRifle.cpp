@@ -1,88 +1,83 @@
 #include "AssaultRifle.h"
 
 AssaultRifle::AssaultRifle(const spty::Transform& data, spty::Model* model)
-	: Weapon(DAMAGE, MAX_AMMO, RELOAD_TIME, SHOT_COOLDOWN, data, model),
-	_soundPlayer(new spty::SoundEffectsPlayer()),
-	_fireSound(spty::SoundEffectsLibrary::load("Data/Sounds/Serious/gunFire.wav")),
-	_reloadSound(spty::SoundEffectsLibrary::load("Data/Sounds/Serious/gunReload.ogg")),
-	_emptySound(spty::SoundEffectsLibrary::load("Data/Sounds/Serious/gunEmpty.wav"))
+	: Weapon(DAMAGE, MAX_AMMO, RELOAD_TIME, SHOT_COOLDOWN, data, model)
 {
+	soundPlayer_ = new spty::SoundEffectsPlayer();
+	fireSound_ = spty::SoundEffectsLibrary::load("Data/Sounds/Serious/gunFire.wav");
+	reloadSound_ = spty::SoundEffectsLibrary::load("Data/Sounds/Serious/gunReload.ogg");
+	emptySound_ = spty::SoundEffectsLibrary::load("Data/Sounds/Serious/gunEmpty.wav");
 }
 
 AssaultRifle::~AssaultRifle()
 {
-	delete _soundPlayer;
-	spty::SoundEffectsLibrary::unLoad(_fireSound);
-	spty::SoundEffectsLibrary::unLoad(_emptySound);
-	spty::SoundEffectsLibrary::unLoad(_reloadSound);
+	delete soundPlayer_;
+	spty::SoundEffectsLibrary::unLoad(fireSound_);
+	spty::SoundEffectsLibrary::unLoad(emptySound_);
+	spty::SoundEffectsLibrary::unLoad(reloadSound_);
 }
 
 void AssaultRifle::update(float& deltaTime)
 {
-	if (_cooldownAccum < _shotCooldown)
+	soundPlayer_->setPosition(transform_.getPosition());
+
+	if (cooldownAccum_ < shotCooldown_)
+		cooldownAccum_ += deltaTime;
+
+	if (reloadAccum_ < reloadTime_)
 	{
-		_cooldownAccum += deltaTime;
+		reloadAccum_ += deltaTime;
+		return;
 	}
-
-	if (_reloadAccum < _reloadTime)
+	
+	if(reloading_)
 	{
-		_reloadAccum += deltaTime;
-	}
-	else
-	{ 
-		_transform.setRoll(0.0f);
-
-		if (_reloading)
-		{
-			_ammoCount = _maxAmmo;
-			_reloading = false;
-		}
+		transform_.setRoll(0.0f);
+		ammoCount_ = maxAmmo_;
+		reloading_ = false;
 	}
 
-	_soundPlayer->SetPosition(_transform.getPosition());
 }
 
 void AssaultRifle::fire()
 {
-	if (_ammoCount > 0 && _reloadAccum >= _reloadTime)
+	if (reloading_) return;
+
+	if (ammoCount_ == 0)
 	{
-		if (_cooldownAccum >= _shotCooldown)
+		if (!hasFired_ && !reloading_)
 		{
-			spty::RayCallback rayData = spty::Physics::Raycast(_transform.getPosition(), -_transform.getFront() * 1000.0f);
-
-			if (rayData.hasHit())
-			{
-				DamageEvent DE = DamageEvent(rayData.m_collisionObject, _damage, -_transform.getFront());
-				spty::Dispatcher<GameEventType>::post(DE);
-			}
-
-			_ammoCount--;
-			_cooldownAccum = 0.0f;
+			soundPlayer_->play(emptySound_);
+			hasFired_ = true;
 		}
-
-		if (_cooldownAccum == 0.0f)
-			_transform.move(_transform.getFront() * 0.1f);
-		else if (_cooldownAccum >= _shotCooldown)
-			_transform.move(-_transform.getFront() * 0.1f);
-
-		_soundPlayer->Play(_fireSound);
+		return;
 	}
-	else if (!_firingEmpty && !_reloading)
-	{
-		_soundPlayer->Play(_emptySound);
-		_firingEmpty = true;
-	}
+
+
+	if (cooldownAccum_ < shotCooldown_) return;
+
+	transform_.move(transform_.getFront() * 0.1f);
+	soundPlayer_->play(fireSound_);
+
+	ammoCount_--;
+	cooldownAccum_ = 0.0f;
+
+	spty::RayCallback rayData = spty::Physics::Raycast(transform_.getPosition(), -transform_.getFront() * 1000.0f);
+
+	if (!rayData.hasHit()) return;
+
+	DamageEvent DE = DamageEvent(rayData.m_collisionObject, damage_, -transform_.getFront());
+	spty::Dispatcher<GameEventType>::post(DE);
 }
 
 void AssaultRifle::reload()
 {
-	if (_reloadAccum >= _reloadTime && _ammoCount < _maxAmmo)
-	{
-		_transform.setRoll(-45.0f);
+	if (reloadAccum_ < reloadTime_ || ammoCount_ == maxAmmo_) return;
 
-		_reloadAccum = 0.0f;
-		_reloading = true;
+	transform_.setRoll(-45.0f);
 
-		_soundPlayer->Play(_reloadSound);
-	}
+	reloadAccum_ = 0.0f;
+	reloading_ = true;
+
+	soundPlayer_->play(reloadSound_);
 }

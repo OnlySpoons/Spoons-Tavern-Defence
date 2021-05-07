@@ -7,54 +7,45 @@ namespace spty {
 		Camera* camera,
 		const std::string& modelPath)
 		: GameObject(data, true),
-		_model(modelPath == "" ? Model() : Model(modelPath)),
-		_camera(camera),
-		_rigidBody(_transform, new CapsuleCollider(_transform.getScale().x, _transform.getScale().y))
+		model_(modelPath == "" ? Model() : Model(modelPath)),
+		camera_(camera),
+		rigidBody_(transform_, new CapsuleCollider(transform_.getScale().x, transform_.getScale().y))
 	{
 	}
 
 	//Destructor
 	Actor::~Actor()
 	{
-		delete _camera;
+		delete camera_;
 	}
 
 	//Render the object
 	void Actor::draw(const Shader& shader, glm::mat4 projection, glm::mat4 view, glm::mat4 model, PassType pass)
 	{
-		if (_isEnabled)
-		{
-			shader.use();
-			shader.setMat4("projection", projection);
-			shader.setMat4("view", view);
+		if (!isEnabled_) return;
 
-			model = _transform.getMatrix();
+		shader.use();
+		shader.setMat4("projection", projection);
+		shader.setMat4("view", view);
 
-			_model.draw(shader, model);
-		}
+		model = transform_.getMatrix();
+
+		model_.draw(shader, model);
 	}
 
-	bool Actor::onGround()
+	bool Actor::onGround() const
 	{
-		float height = _transform.getScale().y / 2;
-		float offset = 0.0f;
+		RayCallback rayData = Physics::Raycast(transform_.getPosition(), WorldDir::DOWN * 100.0f);
 
-		glm::vec3 collisionPoint = WorldDir::DOWN * 100.0f;
+		if (!rayData.hasHit()) return false;
 
-		RayCallback rayData = Physics::Raycast(_transform.getPosition(), collisionPoint);
+		glm::vec3 distVec = Physics::btVector3ToglmVec3(rayData.m_hitPointWorld) - transform_.getPosition();
 
-		if (rayData.hasHit())
-		{
-			glm::vec3 distVec = Physics::btVector3ToglmVec3(rayData.m_hitPointWorld) - _transform.getPosition();
+		float dist = abs(distVec.y);
+		float height = transform_.getScale().y / 2;
 
-			float dist = abs(distVec.y);
+		if (dist > height) return false;
 
-			if (dist < height + offset)
-			{
-				return true;
-			}
-		}
-
-		return false;
+		return true;
 	}
 }

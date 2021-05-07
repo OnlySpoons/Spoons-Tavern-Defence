@@ -3,23 +3,23 @@
 namespace spty {
 
 	Engine::Engine(Scene* scene) 
-		: _lastFrame(0.0f), _deltaTime(0.0f),
-		_currentScene(scene), _player(nullptr)
+		: lastFrame_(0.0f), deltaTime_(0.0f),
+		currentScene_(scene),
+		player_(nullptr)
 	{
-		_window = new Window(WindowProps("Spoonity", 1920, 1080));
+		window_ = new Window(WindowProps{ "Spoonity", 1920, 1080 });
 
-		//Initialise physics
 		Physics::init();
 
-		_renderer = new Renderer(_window->getWidth(), _window->getHeight());
+		renderer_ = new Renderer(window_->getWidth(), window_->getHeight());
 
-		//Initialise input
-		Input::setWindow(_window);
+		Input::setWindow(window_);
 
-		//Initialise ImGUI window
-		_imguiWindow = new ImGUIWindow(_window);
+		imguiWindow_ = new ImGUIWindow(window_);
 
-		_imguiWindow->attach();
+		imguiWindow_->attach();
+
+		imguiDraw_ = []{};
 
 		SoundDevice::init();
 	}
@@ -28,23 +28,23 @@ namespace spty {
 	{
 		Input::clearWindow();
 
-		for (auto it = _scenes.begin(); it != _scenes.end(); ++it)
+		for (auto it = scenes_.begin(); it != scenes_.end(); ++it)
 		{
 			delete* it;
 		}
 
-		_scenes.clear();
+		scenes_.clear();
 
-		_currentScene = nullptr;
+		currentScene_ = nullptr;
 
-		delete _player;
+		delete player_;
 		Physics::cleanup();
 
 		delete SoundDevice::get();
 
-		delete _renderer;
-		_imguiWindow->detach();
-		delete _window;
+		delete renderer_;
+		imguiWindow_->detach();
+		delete window_;
 
 	}
 
@@ -53,33 +53,33 @@ namespace spty {
 	{
 		//Per-frame time logic
 		float currentFrame = (float)glfwGetTime();
-		_deltaTime = currentFrame - _lastFrame;
-		_lastFrame = currentFrame;
+		deltaTime_ = currentFrame - lastFrame_;
+		lastFrame_ = currentFrame;
 
 		//Input
 		glfwPollEvents();
 
-
 		//Physics update
-		Physics::Update(_deltaTime, *_currentScene);
+		Physics::Update(deltaTime_, *currentScene_);
 
-		_currentScene->update(_deltaTime);
+		//Update scene
+		currentScene_->update(deltaTime_);
 
 		//Run gameloop
-		gameLoop(_deltaTime);
+		gameLoop(deltaTime_);
 
 		//Render
-		_renderer->renderScene( *_currentScene, *(_player->_camera) );
+		renderer_->renderScene( *currentScene_, *(player_->camera_) );
 
-		//IMGUI
-		_imguiWindow->imGUIRender(_imguiDraw);
+		//IMGUI render
+		imguiWindow_->imGUIRender(imguiDraw_);
 
-		glfwSwapBuffers(_window->getInstance());
+		glfwSwapBuffers(window_->getInstance());
 	}
 
 	//Function to check if the engine is running
 	bool Engine::isRunning() const
 	{
-		return !glfwWindowShouldClose(_window->getInstance());
+		return !glfwWindowShouldClose(window_->getInstance());
 	}
 }

@@ -1,50 +1,41 @@
 #pragma once
+/*
+Group Name: OnlySpoons
+
+Members: Martin Harvey(B00329330), Thomas Cole(B00269678) & Harry Durham(B00347454)
+
+We declare that the following code was produced by OnlySpoons as a group assignment for the CGT Group Project module and that it is our own work.
+
+We are aware of the penalties incurred by submitting in full or in part work that is not our own and that was developed by third parties that are not appropriately acknowledged.
+*/
 #include "Shader.h"
-#include "Transform.h"
 #include "PassType.h"
+#include "Transform.h"
 
 namespace spty {
-
 	class GameObject
 	{
 	//Variables
 	public:
-		Transform _transform;
-		bool _isEnabled;
+		Transform transform_;
+		bool isEnabled_;
 
 	//Functions
 	public:
-
 		//Constructors
-		GameObject() :_transform(Transform()), _isEnabled(false) {}
-
-		GameObject(const Transform& data,
-			const bool& enabled = false)
-			: _transform(data), _isEnabled(enabled)
-		{
-		}
+		GameObject() :transform_(Transform()), isEnabled_(false) {}
+		GameObject(const Transform& data, const bool& enabled = false)
+			: transform_(data), isEnabled_(enabled) {}
 
 		//Destructor
 		virtual ~GameObject() {}
 
-		//Render the object
 		virtual void draw(const Shader& shader, glm::mat4 projection, glm::mat4 view, glm::mat4 model, PassType pass) = 0;
 
-		//Update the object
 		virtual void update(float& deltaTime) = 0;
-
 		virtual void physicsUpdate() = 0;
 
-		//Enable object to be rendered and process physics
-		void enable()
-		{
-			_isEnabled = true;
-		}
-
-		//Disable object from being rendered and processing physics
-		void disable()
-		{
-			_isEnabled = false;
-		}
+		void enable() { isEnabled_ = true;}
+		void disable() { isEnabled_ = false; }
 	};
 }

@@ -1,4 +1,13 @@
 #pragma once
+/*
+Group Name: OnlySpoons
+
+Members: Martin Harvey(B00329330), Thomas Cole(B00269678) & Harry Durham(B00347454)
+
+We declare that the following code was produced by OnlySpoons as a group assignment for the CGT Group Project module and that it is our own work.
+
+We are aware of the penalties incurred by submitting in full or in part work that is not our own and that was developed by third parties that are not appropriately acknowledged.
+*/
 #include <GLFW/glfw3.h>
 
 namespace spty {
@@ -50,8 +59,8 @@ namespace spty {
 		Backtick = GLFW_KEY_GRAVE_ACCENT,
 		Minus = GLFW_KEY_MINUS,
 		Equal = GLFW_KEY_EQUAL,
-		OpenBracket = GLFW_KEY_LEFT_BRACKET,
-		CloseBracket = GLFW_KEY_RIGHT_BRACKET,
+		LeftBracket = GLFW_KEY_LEFT_BRACKET,
+		RightBracket = GLFW_KEY_RIGHT_BRACKET,
 		Semicolon = GLFW_KEY_SEMICOLON,
 		Apostrophe = GLFW_KEY_APOSTROPHE,
 		Comma = GLFW_KEY_COMMA,

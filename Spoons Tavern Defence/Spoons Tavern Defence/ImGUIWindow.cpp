@@ -3,7 +3,7 @@
 namespace spty {
 
 	ImGUIWindow::ImGUIWindow(Window* window)
-		: _window(window) 
+		: window_(window) 
 	{
 	}
 
@@ -33,7 +33,7 @@ namespace spty {
 		}
 
 		//Set up platform/renderer bindings
-		ImGui_ImplGlfw_InitForOpenGL(_window->getInstance(), true);
+		ImGui_ImplGlfw_InitForOpenGL(window_->getInstance(), true);
 		ImGui_ImplOpenGL3_Init("#version 410");
 	}
 
@@ -84,7 +84,7 @@ namespace spty {
 	void ImGUIWindow::end()
 	{
 		ImGuiIO& io = ImGui::GetIO();
-		io.DisplaySize = ImVec2((float)_window->getWidth(), (float)_window->getHeight());
+		io.DisplaySize = ImVec2((float)window_->getWidth(), (float)window_->getHeight());
 
 		//Rendering
 		ImGui::Render();

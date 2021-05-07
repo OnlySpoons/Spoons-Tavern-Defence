@@ -1,11 +1,7 @@
 #include "PhysicsEntity.h"
 
-spty::PhysicsEntity::PhysicsEntity(const Transform& data,
-	Model* model, Collider* collider)
-	: Entity(data, model),
-	_rigidBody(_transform, 
-		collider != nullptr ? collider : _model->getCompoundShape()
-	)
+spty::PhysicsEntity::PhysicsEntity(const Transform& data, Model* model, Collider* collider)
+	: Entity(data, model), rigidBody_(transform_, collider ? collider : model_->getCompoundShape())
 {
 }
 
@@ -20,6 +16,6 @@ void spty::PhysicsEntity::draw(const Shader& shader, glm::mat4 projection, glm::
 
 void spty::PhysicsEntity::physicsUpdate()
 {
-	_transform.setPosition(_rigidBody.getBulletPosition());
-	//_transform.setRotation( _rigidBody.getBulletRotation() );
+	transform_.setPosition(rigidBody_.getBulletPosition());
+	//transform_.setRotation( rigidBody_.getBulletRotation() );
 }

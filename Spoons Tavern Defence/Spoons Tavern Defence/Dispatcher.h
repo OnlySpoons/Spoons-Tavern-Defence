@@ -1,4 +1,13 @@
 #pragma once
+/*
+Group Name: OnlySpoons
+
+Members: Martin Harvey(B00329330), Thomas Cole(B00269678) & Harry Durham(B00347454)
+
+We declare that the following code was produced by OnlySpoons as a group assignment for the CGT Group Project module and that it is our own work.
+
+We are aware of the penalties incurred by submitting in full or in part work that is not our own and that was developed by third parties that are not appropriately acknowledged.
+*/
 #include <map>
 #include <vector>
 #include <functional>
@@ -15,22 +24,16 @@ namespace spty {
 	public:
 		using EventFunc = std::function< void( Event<T>& ) >;
 
+	//Variables
 	private:
-		static std::map< T, std::vector<EventFunc> > _observers;
+		static std::map< T, std::vector< EventFunc > > observers_;
 
+	//Functions
 	public:
 
 		static void subscribe(const T& type, EventFunc func)
 		{
-			_observers[type].emplace_back(func);
-		}
-
-		template<typename ObserverType>
-		static void subscribe(const T& type, ObserverType& observer)
-		{
-			EventFunc func = std::bind(&ObserverType::handle, observer, std::placeholders::_1);
-
-			_observers[type].emplace_back(func);
+			observers_[type].emplace_back(func);
 		}
 
 		static void post(Event<T>& event)
@@ -40,10 +43,9 @@ namespace spty {
 			auto type = event.type();
 
 			//Ignore events for which we do not have any observers.
-			if (_observers.find(type) == _observers.end())
-				return;
+			if (observers_.find(type) == observers_.end()) return;
 
-			for (auto&& observer : _observers.at(type))
+			for (auto&& observer : observers_.at(type))
 			{
 				observer(event);
 				if (event.isHandled()) return;

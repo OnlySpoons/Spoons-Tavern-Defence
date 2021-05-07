@@ -1,51 +1,48 @@
 #pragma once
+/*
+Group Name: OnlySpoons
+
+Members: Martin Harvey(B00329330), Thomas Cole(B00269678) & Harry Durham(B00347454)
+
+We declare that the following code was produced by OnlySpoons as a group assignment for the CGT Group Project module and that it is our own work.
+
+We are aware of the penalties incurred by submitting in full or in part work that is not our own and that was developed by third parties that are not appropriately acknowledged.
+*/
+#include <string>
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-
-#include <string>
 
 #include "Input.h"
 
 namespace spty {
-
 	struct WindowProps
 	{
 		std::string title;
 		unsigned int width;
 		unsigned int height;
-
-		WindowProps(const std::string& title = "Window", unsigned int width = 1280, unsigned int height = 720)
-			: title(title), width(width), height(height)
-		{
-		}
 	};
 
-	//A wrapper class for the GLFWwindow creation and manipulation
+	//A wrapper class for the GLFWwindow
 	class Window
 	{
-
-		//Member variables
+	//Variables
 	private:
-		GLFWwindow* _instance; //The GLFWwindow instance
+		GLFWwindow* instance_;
 
-		WindowProps _properties; //Window Properties
+		WindowProps properties_;
 
 	//Functions
 	public:
-
 		//Constructor
-		Window(WindowProps properties);
+		Window(WindowProps properties = WindowProps{ "Spoonity", 1280, 720 });
 
 		//Destructor
 		~Window();
 
-		//Function to get instance
 		GLFWwindow* getInstance() const;
 
-		//Function to get width
 		unsigned int getWidth() const;
-
-		//Function to get height
 		unsigned int getHeight() const;
 
 		void close() const;

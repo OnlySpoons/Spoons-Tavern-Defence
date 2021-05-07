@@ -2,7 +2,7 @@
 
 namespace spty {
 
-	void MusicBuffer::Play()
+	void MusicBuffer::play()
 	{
 		ALsizei i;
 
@@ -10,53 +10,54 @@ namespace spty {
 		alGetError();
 
 		//Rewind source position and clear buffer queue
-		alSourceRewind(_source);
-		alSourcei(_source, AL_BUFFER, 0);
+		alSourceRewind(source_);
+		alSourcei(source_, AL_BUFFER, 0);
 
 		//Fill buffer queue
 		for (i = 0; i < NUM_BUFFERS; i++)
 		{
 			//Get data to give to buffer
-			sf_count_t slen = sf_readf_short(_sndFile, _memBuffer, BUFFER_SAMPLES);
+			sf_count_t slen = sf_readf_short(sndFile_, memBuffer_, BUFFER_SAMPLES);
 			if (slen < 1)
 				break;
 
-			slen *= _sfInfo.channels * (sf_count_t)sizeof(short);
-			alBufferData(_buffers[i], _format, _memBuffer, (ALsizei)slen, _sfInfo.samplerate);
+			slen *= sfInfo_.channels * (sf_count_t)sizeof(short);
+			alBufferData(buffers_[i], format_, memBuffer_, (ALsizei)slen, sfInfo_.samplerate);
 		}
+
 		if (alGetError() != AL_NO_ERROR)
 		{
 			throw("Error buffering for playback!");
 		}
 
 		//Queue and start playback
-		alSourceQueueBuffers(_source, i, _buffers);
-		alSourcePlay(_source);
+		alSourceQueueBuffers(source_, i, buffers_);
+		alSourcePlay(source_);
 		if (alGetError() != AL_NO_ERROR)
 		{
 			throw("Error starting playback!");
 		}
 	}
 
-	void MusicBuffer::Pause()
+	void MusicBuffer::pause()
 	{
-		alSourcePause(_source);
+		alSourcePause(source_);
 		AL_CheckAndThrow();
 	}
 
-	void MusicBuffer::Stop()
+	void MusicBuffer::stop()
 	{
-		alSourceStop(_source);
+		alSourceStop(source_);
 		AL_CheckAndThrow();
 	}
 
-	void MusicBuffer::Resume()
+	void MusicBuffer::resume()
 	{
-		alSourcePlay(_source);
+		alSourcePlay(source_);
 		AL_CheckAndThrow();
 	}
 
-	void MusicBuffer::UpdateBufferStream()
+	void MusicBuffer::updateBufferStream()
 	{
 		ALint processed, state;
 
@@ -64,8 +65,8 @@ namespace spty {
 		alGetError();
 
 		//Get source info
-		alGetSourcei(_source, AL_SOURCE_STATE, &state);
-		alGetSourcei(_source, AL_BUFFERS_PROCESSED, &processed);
+		alGetSourcei(source_, AL_SOURCE_STATE, &state);
+		alGetSourcei(source_, AL_BUFFERS_PROCESSED, &processed);
 		AL_CheckAndThrow();
 
 		//Unqueue and handle each processed buffer
@@ -74,16 +75,16 @@ namespace spty {
 			ALuint bufid;
 			sf_count_t slen;
 
-			alSourceUnqueueBuffers(_source, 1, &bufid);
+			alSourceUnqueueBuffers(source_, 1, &bufid);
 			processed--;
 
 			//Read next chunk of data, refull buffer and queue it on source
-			slen = sf_readf_short(_sndFile, _memBuffer, BUFFER_SAMPLES);
+			slen = sf_readf_short(sndFile_, memBuffer_, BUFFER_SAMPLES);
 			if (slen > 0)
 			{
-				slen *= _sfInfo.channels * (sf_count_t)sizeof(short);
-				alBufferData(bufid, _format, _memBuffer, (ALsizei)slen, _sfInfo.samplerate);
-				alSourceQueueBuffers(_source, 1, &bufid);
+				slen *= sfInfo_.channels * (sf_count_t)sizeof(short);
+				alBufferData(bufid, format_, memBuffer_, (ALsizei)slen, sfInfo_.samplerate);
+				alSourceQueueBuffers(source_, 1, &bufid);
 			}
 			if (alGetError() != AL_NO_ERROR)
 			{
@@ -97,88 +98,88 @@ namespace spty {
 			ALint queued;
 
 			//If no bufferes are queued, playback is finished
-			alGetSourcei(_source, AL_BUFFERS_QUEUED, &queued);
+			alGetSourcei(source_, AL_BUFFERS_QUEUED, &queued);
 			if (queued == 0)
 				return;
 
-			alSourcePlay(_source);
+			alSourcePlay(source_);
 			AL_CheckAndThrow();
 		}
 	}
 
 	ALint MusicBuffer::getSource()
 	{
-		return _source;
+		return source_;
 	}
 
 	bool MusicBuffer::isPlaying()
 	{
 		ALint state;
-		alGetSourcei(_source, AL_SOURCE_STATE, &state);
+		alGetSourcei(source_, AL_SOURCE_STATE, &state);
 		AL_CheckAndThrow();
 		return (state == AL_PLAYING);
 	}
 
-	void MusicBuffer::SetGain(const float& val)
+	void MusicBuffer::setGain(const float& val)
 	{
 		float newval = val;
 		if (newval < 0)
 			newval = 0;
-		alSourcef(_source, AL_GAIN, val);
+		alSourcef(source_, AL_GAIN, val);
 		AL_CheckAndThrow();
 	}
 
-	MusicBuffer::MusicBuffer(const char* filename) 
-		: _format(0)
+	MusicBuffer::MusicBuffer(const char* filename)
+		: format_(0)
 	{
-		alGenSources(1, &_source);
-		alGenBuffers(NUM_BUFFERS, _buffers);
+		alGenSources(1, &source_);
+		alGenBuffers(NUM_BUFFERS, buffers_);
 
 		std::size_t frameSize;
 
-		_sndFile = sf_open(filename, SFM_READ, &_sfInfo);
-		if (!_sndFile)
+		sndFile_ = sf_open(filename, SFM_READ, &sfInfo_);
+		if (!sndFile_)
 		{
 			throw("Could not open provided music file - check path!");
 		}
 
 		//Get sound format and figure out the OpenAL format
-		if (_sfInfo.channels == 1)
-			_format = AL_FORMAT_MONO16;
-		else if (_sfInfo.channels == 2)
-			_format = AL_FORMAT_STEREO16;
-		else if (_sfInfo.channels == 3)
+		if (sfInfo_.channels == 1)
+			format_ = AL_FORMAT_MONO16;
+		else if (sfInfo_.channels == 2)
+			format_ = AL_FORMAT_STEREO16;
+		else if (sfInfo_.channels == 3)
 		{
-			if (sf_command(_sndFile, SFC_WAVEX_GET_AMBISONIC, NULL, 0) == SF_AMBISONIC_B_FORMAT)
-				_format = AL_FORMAT_BFORMAT2D_16;
+			if (sf_command(sndFile_, SFC_WAVEX_GET_AMBISONIC, NULL, 0) == SF_AMBISONIC_B_FORMAT)
+				format_ = AL_FORMAT_BFORMAT2D_16;
 		}
-		else if (_sfInfo.channels == 4)
+		else if (sfInfo_.channels == 4)
 		{
-			if (sf_command(_sndFile, SFC_WAVEX_GET_AMBISONIC, NULL, 0) == SF_AMBISONIC_B_FORMAT)
-				_format = AL_FORMAT_BFORMAT3D_16;
+			if (sf_command(sndFile_, SFC_WAVEX_GET_AMBISONIC, NULL, 0) == SF_AMBISONIC_B_FORMAT)
+				format_ = AL_FORMAT_BFORMAT3D_16;
 		}
-		if (!_format)
+		if (!format_)
 		{
-			sf_close(_sndFile);
-			_sndFile = NULL;
+			sf_close(sndFile_);
+			sndFile_ = NULL;
 			throw("Unsupported channel count from file!");
 		}
 
-		frameSize = ((size_t)BUFFER_SAMPLES * (size_t)_sfInfo.channels) * sizeof(short);
-		_memBuffer = static_cast<short*>(malloc(frameSize));
+		frameSize = ((size_t)BUFFER_SAMPLES * (size_t)sfInfo_.channels) * sizeof(short);
+		memBuffer_ = static_cast<short*>(malloc(frameSize));
 	}
 
 	MusicBuffer::~MusicBuffer()
 	{
-		alSourceStop(_source);
-		alDeleteSources(1, &_source);
+		alSourceStop(source_);
+		alDeleteSources(1, &source_);
 
-		if (_sndFile)
-			sf_close(_sndFile);
+		if (sndFile_)
+			sf_close(sndFile_);
 
-		_sndFile = nullptr;
-		free(_memBuffer);
-		alDeleteBuffers(NUM_BUFFERS, _buffers);
+		sndFile_ = nullptr;
+		free(memBuffer_);
+		alDeleteBuffers(NUM_BUFFERS, buffers_);
 	}
 
 }

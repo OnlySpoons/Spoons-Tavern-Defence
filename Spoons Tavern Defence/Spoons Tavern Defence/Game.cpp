@@ -1,45 +1,28 @@
 #include "Game.h"
 
-//Constructor
 Game::Game()
 	: Engine(),
-	seed(rd()),
-	_gunModel(new spty::Model("Data/Models/gun/SK_Web_RifleSwat_01.fbx")),
-	_zombieModel(new spty::Model("Data/Models/SyntyStudios/PolygonWestern/_working/Characters/SK_Character_Badguy_01.fbx"))
+	zombieModel_(new spty::Model("Data/Models/SyntyStudios/PolygonWestern/_working/Characters/SK_Character_Badguy_01.fbx")),
+	gunModel_(new spty::Model("Data/Models/gun/SK_Web_RifleSwat_01.fbx")),
+	seed(rd())
 {
 	//Handle ScoreEvents
 	spty::Dispatcher<GameEventType>::subscribe(ScoreEvent::Type,
 		[&](spty::Event<GameEventType>& e)
 		{
 			ScoreEvent score = spty::EventCast<ScoreEvent>(e);
-			_score += score.amount;
+			score_ += score.amount;
 			e.handle();
 		}
 	);
 
 	//Load the current Scene
-	_currentScene = new Overworld();
-	_scenes.emplace_back(_currentScene);
+	currentScene_ = new Overworld();
+	scenes_.emplace_back(currentScene_);
 
 	spawnPlayer();
-
-	_spawnPoints = {
-		glm::vec3(5.0f, 0.2f, 30.0f),
-		glm::vec3(10.0f, 0.2f, 10.0f),
-		glm::vec3(1.0f, 0.4f, -2.0f),
-		glm::vec3(-10.0f, 0.2f, 20.0f),
-		glm::vec3(0.0f, 0.2f, 25.0f)
-	};
-
-	_music = new spty::MusicBuffer("Data/Sounds/Background/marchOfTheSpoons.wav");
-	_music->SetGain(0.5f);
-	_music->Play();
-
-	_soundPlayer = new spty::SoundEffectsPlayer();
-	_newWaveSound = spty::SoundEffectsLibrary::load("Data/Sounds/Memes/yaaaaay.wav");
-	_endWaveSound = spty::SoundEffectsLibrary::load("Data/Sounds/Memes/ahShit.wav");
-
-	_imguiDraw = [&]()
+	
+	imguiDraw_ = [&]()
 	{
 		ImGuiWindowFlags window_flags
 			= ImGuiWindowFlags_NoMove
@@ -61,8 +44,21 @@ Game::Game()
 		winPos.y -= 20.0f;
 		ImGui::SetWindowPos("Stats", winPos, ImGuiCond_Once);
 
-		ImGui::Text("Wave: %i", _wave);
-		ImGui::Text("Score: %i\n", _score);
+		ImGui::Text("Wave: %i", wave_);
+		ImGui::Text("Score: %i", score_);
+
+		int numZombies = 0;
+		std::for_each(zombies_.begin(), zombies_.end(),
+			[&](Zombie* zombie)
+			{
+				if (zombie->isEnabled_)
+				{
+					numZombies++;
+				}
+			}
+		);
+
+		ImGui::Text("Zombies Remaining: %i", numZombies);
 
 		ImGui::End();
 
@@ -77,13 +73,13 @@ Game::Game()
 		winPos.y += 850.0f;
 		ImGui::SetWindowPos("Player", winPos, ImGuiCond_Once);
 
-		Player* player = dynamic_cast<Player*>(_player);
-		ImGui::Text("Health: %i", player->_health);
-		ImGui::Text("Ammo: %2i/%2i", player->_gun->_ammoCount, player->_gun->_maxAmmo);
+		Player* player = dynamic_cast<Player*>(player_);
+		ImGui::Text("Health: %i", player->health_);
+		ImGui::Text("Ammo: %2i/%2i", player->gun_->ammoCount_, player->gun_->maxAmmo_);
 
 		ImGui::End();
 
-		if (player->_health <= 0)
+		if (player->health_ <= 0)
 		{
 			ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.0f, 0.0f, 0.0f, 0.5f));
 			ImGui::Begin("GameOver", &open, window_flags);
@@ -101,81 +97,91 @@ Game::Game()
 		}
 	};
 
-	//_renderer->_physicsDebug = true;
+	spawnPoints_ = {
+		glm::vec3(5.0f, 0.2f, 30.0f),
+		glm::vec3(10.0f, 0.2f, 10.0f),
+		glm::vec3(1.0f, 0.4f, -2.0f),
+		glm::vec3(-10.0f, 0.2f, 20.0f),
+		glm::vec3(10.0f, 0.2f, 25.0f)
+	};
+
+	music_ = new spty::MusicBuffer("Data/Sounds/Background/marchOfTheSpoons.wav");
+	music_->setGain(1.0f);
+	music_->play();
+
+	soundPlayer_ = new spty::SoundEffectsPlayer();
+	newWaveSound_ = spty::SoundEffectsLibrary::load("Data/Sounds/Memes/ahShit.wav");
+	endWaveSound_ = spty::SoundEffectsLibrary::load("Data/Sounds/Memes/yaaaaay.wav");
+
+	//Flag to enable physics debug rendering
+	//renderer_->physicsDebug_ = true;
 }
 
-//Destructor
 Game::~Game()
 {
-	_currentScene->removeObject(_player);
+	currentScene_->removeObject(player_);
 
-	delete _music;
+	delete music_;
 
-	delete _soundPlayer;
-	spty::SoundEffectsLibrary::unLoad(_newWaveSound);
-	spty::SoundEffectsLibrary::unLoad(_endWaveSound);
+	delete soundPlayer_;
+	spty::SoundEffectsLibrary::unLoad(newWaveSound_);
+	spty::SoundEffectsLibrary::unLoad(endWaveSound_);
 }
 
-//Overriding gameloop
 void Game::gameLoop(float& deltaTime)
 {
-	if (_music->isPlaying() && _music != nullptr)
-		_music->UpdateBufferStream();
+	if (music_->isPlaying() && music_ != nullptr)
+		music_->updateBufferStream();
 
-	if (_waveEnded)
+	if (!waveEnded_)
 	{
-		_waveCooldownAccum += deltaTime;
+		
+		for (int i = 0; i < zombies_.size(); i++)
+			if (zombies_[i]->transform_.getPosition().y < -0.5f)
+				zombies_[i]->disable();
 
-		if (_waveCooldownAccum >= _waveCooldown)
+		bool killedAll = std::all_of(zombies_.begin(), zombies_.end(), [](Zombie* zombie) { return !(zombie->isEnabled_); });
+
+		if (killedAll && !zombies_.empty())
 		{
-			_waveEnded = false;
-
-			for (int i = 0; i < _zombieCount; i++)
+			for (int i = 0; i < zombies_.size(); i++)
 			{
-				std::uniform_int_distribution index( 0, (int)_spawnPoints.size() - 1 );
-				std::uniform_real_distribution<float> xOffset( -0.5f, 0.5f ), zOffset( -0.5f, 0.5f );
-
-				glm::vec3 spawnPos = _spawnPoints[ index( seed ) ];
-				spawnPos += glm::vec3( xOffset(seed), 0.0f, zOffset(seed) );
-				spawnZombie( spawnPos );
+				currentScene_->removeObject(zombies_[i]);
+				delete zombies_[i];
 			}
 
-			static bool firstWave = true;
-			if (!firstWave)
-			{
-				_soundPlayer->Play(_newWaveSound);
-				firstWave = false;
-			}
+			zombies_.clear();
 
-			_waveCooldownAccum = 0.0f;
-			_wave++;
-		}
-	}
-
-	bool killedAll = true;
-	for (int i = 0; i < _zombies.size(); i++)
-	{
-		if (_zombies[i]->_transform.getPosition().y < -0.5f)
-			_zombies[i]->disable();
-
-		killedAll &= !(_zombies[i]->_isEnabled);
-	}
-	
-	if (killedAll && !_zombies.empty())
-	{
-		for (int i = 0; i < _zombies.size(); i++)
-		{
-			_currentScene->removeObject(_zombies[i]);
-			delete _zombies[i];
+			waveEnded_ = true;
+			soundPlayer_->play(endWaveSound_);
 		}
 
-		_zombies.clear();
-
-		_waveEnded = true;
-		_soundPlayer->Play(_newWaveSound);
+		return;
 	}
 
-	//TODO: display score & round number
+	waveCooldownAccum_ += deltaTime;
+
+	if (waveCooldownAccum_ < waveCooldown_) return;
+
+	waveEnded_ = false;
+
+	if (wave_ != 0)
+	{
+		soundPlayer_->play(newWaveSound_);
+	}
+
+	for (int i = 0; i < zombieCount_ + wave_; i++)
+	{
+		std::uniform_int_distribution index(0, (int)spawnPoints_.size() - 1);
+		std::uniform_real_distribution<float> xOffset(-0.5f, 0.5f), zOffset(-0.5f, 0.5f);
+
+		glm::vec3 spawnPos = spawnPoints_[index(seed)];
+		spawnPos += glm::vec3(xOffset(seed), 0.0f, zOffset(seed));
+		spawnZombie(spawnPos);
+	}
+
+	waveCooldownAccum_ = 0.0f;
+	wave_++;
 }
 
 void Game::spawnPlayer()
@@ -186,12 +192,12 @@ void Game::spawnPlayer()
 			glm::vec3(0.0f),				//rotation
 			glm::vec3(0.0005f)				//scale
 		),
-		_gunModel
+		gunModel_
 	);
 
-	_currentScene->addObject(startingWeapon);
+	currentScene_->addObject(startingWeapon);
 
-	_player = new Player(
+	player_ = new Player(
 		startingWeapon,
 		spty::Transform(
 			glm::vec3(0.0f, 0.5f, 10.0f),	//position
@@ -200,7 +206,7 @@ void Game::spawnPlayer()
 		)
 	);
 
-	_currentScene->addObject(_player);
+	currentScene_->addObject(player_);
 }
 
 void Game::spawnZombie(glm::vec3 position)
@@ -211,15 +217,14 @@ void Game::spawnZombie(glm::vec3 position)
 			glm::vec3(0.0f),	//rotation
 			glm::vec3(0.005f)	//scale
 		),
-		_zombieModel,			//Model
-		_player->_transform,	//AI target
+		zombieModel_,			//Model
+		player_->transform_,	//AI target
 		seed,					//Mersenne twister generator
-		_wave					//Health/Damage multiplier
+		wave_					//Health/Damage multiplier
 	);
 
 	zombie->enable();
-
-	_zombies.emplace_back(zombie);
-	_currentScene->addObject(zombie);
+	zombies_.emplace_back(zombie);
+	currentScene_->addObject(zombie);
 
 }
