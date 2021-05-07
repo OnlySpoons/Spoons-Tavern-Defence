@@ -2,7 +2,7 @@ Spoons: Tavern Defence
 
 Change Log 07/05/2021 - Martin
 - Refactored Codebase to be more readable
-- - **Warning** Code has memory leaks we could not locate, run non debug versions at your own risk
+- **Warning** Code has memory leaks we could not locate, run non debug versions at your own risk
 
 
 Change Log 04/05/2021 - Martin, Thomas & Harry
